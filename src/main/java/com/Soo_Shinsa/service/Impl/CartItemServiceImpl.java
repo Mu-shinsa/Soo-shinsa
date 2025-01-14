@@ -28,15 +28,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-
-        Optional<User> loginId = userRepository.findById(user.getUserId());
-
-        if(!loginId.get().getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
+        User user = checkUser(userId);
         Optional<ProductOption> findOption = procductOptionRepository.findById(optionId);
 
         CartItem cartItem = new CartItem(quantity,user,findOption.get());
@@ -47,15 +39,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-
-        Optional<User> loginId = userRepository.findById(user.getUserId());
-
-        if(!loginId.get().getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
+        User user = checkUser(userId);
         CartItem savedCart = findByIdOrElseThrow(cartId);
         return CartItemResponseDto.toDto(savedCart);
 
@@ -68,15 +52,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-
-        Optional<User> loginId = userRepository.findById(user.getUserId());
-
-        if(!loginId.get().getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
+        User user = checkUser(userId);
         CartItem findCart = findByIdOrElseThrow(cartId);
         findCart.updateCartItem(quantity);
 
@@ -98,6 +74,19 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem findCart = findByIdOrElseThrow(cartId);
         cartItemRepository.delete(findCart);
 
+    }
+
+    private User checkUser(Long userId){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
+        Optional<User> loginId = userRepository.findById(user.getUserId());
+
+        if(!loginId.get().getUserId().equals(userId)){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+        return user;
     }
 
 

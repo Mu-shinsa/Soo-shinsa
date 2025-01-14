@@ -3,7 +3,6 @@ package com.Soo_Shinsa.controller;
 import com.Soo_Shinsa.dto.CartItemRequestDto;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
 import com.Soo_Shinsa.service.CartItemService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
