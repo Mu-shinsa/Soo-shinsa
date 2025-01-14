@@ -19,7 +19,7 @@ public class AuthServiceImpl implements AuthService {
     private final GradeRepository gradeRepository;
 
     @Override
-    public UserResponseDto create(SignInRequestDto dto) {
+    public User create(SignInRequestDto dto) {
         //검증
         //중복체크
         userRepository.findByEmail(dto.getEmail())
@@ -43,6 +43,6 @@ public class AuthServiceImpl implements AuthService {
         //저장
         userRepository.save(user);
 
-        return new UserResponseDto(user);
+        return user;
     }
 }
