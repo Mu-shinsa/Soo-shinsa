@@ -60,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         return new UserResponseDto(user);
     }
 
+    @Transactional
     @Override
     public JwtAuthResponseDto login(LoginRequestDto dto) {
         //사용자 확인
