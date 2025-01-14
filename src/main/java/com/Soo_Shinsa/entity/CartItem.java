@@ -27,4 +27,8 @@ public class CartItem extends BaseTimeEntity {
     @JoinColumn(name = "users_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productoption_Id", nullable = false)
+    private ProductOption productOption;
+
 }
