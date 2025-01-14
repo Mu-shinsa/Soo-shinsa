@@ -10,6 +10,7 @@ import com.Soo_Shinsa.repository.GradeRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final GradeRepository gradeRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponseDto create(SignInRequestDto dto) {
@@ -28,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
                 });
 
         //user 생성
-        User user = dto.toEntity();
+        User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
         //customer 경우 customer grade 생성
         if (user.getRole().compareTo(Role.CUSTOMER) == 0) {

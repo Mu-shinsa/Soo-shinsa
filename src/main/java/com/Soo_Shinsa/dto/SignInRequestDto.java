@@ -34,7 +34,7 @@ public class SignInRequestDto {
 
     private String grade;
 
-    public User toEntity() {
+    public User toEntity(String password) {
         return User.builder()
                 .email(email)
                 .phoneNum(phoneNum)
