@@ -1,5 +1,7 @@
 package com.Soo_Shinsa.controller;
 
+import com.Soo_Shinsa.dto.JwtAuthResponseDto;
+import com.Soo_Shinsa.dto.LoginRequestDto;
 import com.Soo_Shinsa.dto.UserResponseDto;
 import com.Soo_Shinsa.dto.SignInRequestDto;
 import com.Soo_Shinsa.service.AuthService;
@@ -19,8 +21,8 @@ public class AuthController {
         return ResponseEntity.ok(authService.create(dto));
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<String> login() {
-        return ResponseEntity.ok("Login successful");
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthResponseDto> login(@RequestBody LoginRequestDto dto) {
+        return ResponseEntity.ok(authService.login(dto));
     }
 }
