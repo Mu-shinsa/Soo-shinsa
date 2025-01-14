@@ -41,8 +41,8 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "brand_Id", nullable = false)
     private Brand brandId;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<ProductOption> productOptions = new ArrayList<>();
+//    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+//    private List<ProductOption> productOptions = new ArrayList<>();
 
     private Product(Long id, String name, BigDecimal price, String status, Brand brandId) {
         this.id = id;
