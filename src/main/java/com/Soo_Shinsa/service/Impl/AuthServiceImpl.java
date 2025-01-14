@@ -13,6 +13,7 @@ import com.Soo_Shinsa.repository.GradeRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.AuthService;
 import com.Soo_Shinsa.utils.JwtProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
+    @Transactional
     @Override
     public UserResponseDto create(SignInRequestDto dto) {
         //검증
@@ -88,5 +90,17 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtProvider.generateToken(auth);
 
         return new JwtAuthResponseDto(AuthenticationScheme.BEARER.getName(), accessToken);
+    }
+
+    @Transactional
+    @Override
+    public void leave(String password, User user) {
+        //비밀번호 확인
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        //탈퇴
+        user.delete();
     }
 }
