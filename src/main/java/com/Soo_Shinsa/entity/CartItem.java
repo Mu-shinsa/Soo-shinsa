@@ -21,9 +21,9 @@ public class CartItem extends BaseTimeEntity {
     private Long cartItemId;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private User user;
 
@@ -31,4 +31,14 @@ public class CartItem extends BaseTimeEntity {
     @JoinColumn(name = "productoption_Id", nullable = false)
     private ProductOption productOption;
 
+
+    public CartItem(int quantity, User user, ProductOption productOption) {
+        this.quantity = quantity;
+        this.user = user;
+        this.productOption = productOption;
+    }
+
+    public void updateCartItem(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
