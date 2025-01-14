@@ -1,4 +1,7 @@
 package com.Soo_Shinsa.repository;
 
-public interface ProductRepository {
+import com.Soo_Shinsa.entity.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository  extends JpaRepository<Product, Long> {
 }
