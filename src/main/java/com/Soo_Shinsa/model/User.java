@@ -3,12 +3,16 @@ package com.Soo_Shinsa.model;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -39,4 +43,8 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "user_grade_id")
     private UserGrade userGrade;
+
+    public void updateUserGrade(UserGrade userGrade) {
+        this.userGrade = userGrade;
+    }
 }

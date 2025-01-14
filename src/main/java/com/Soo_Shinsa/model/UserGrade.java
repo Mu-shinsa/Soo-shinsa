@@ -19,4 +19,7 @@ public class UserGrade extends BaseCreatedTimeEntity{
     @JoinColumn(name = "grade_id")
     private Grade grade;
 
+    public UserGrade(Grade grade) {
+        this.grade = grade;
+    }
 }
