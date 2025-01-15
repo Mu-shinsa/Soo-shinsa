@@ -4,11 +4,9 @@ import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +25,7 @@ public class Orders extends BaseTimeEntity {
     private String orderNumber;
 
     @Column(nullable = false)
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -41,11 +39,31 @@ public class Orders extends BaseTimeEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
-    public Orders(String orderNumber, Double totalPrice, Status status, User user, List<OrderItem> orderItems) {
+    public Orders(String orderNumber, BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
         this.orderNumber = orderNumber;
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
         this.orderItems = orderItems;
     }
+
+    // 연관관계 편의 메서드
+    public void addOrderItem(OrderItem orderItem) {
+        this.orderItems.add(orderItem);
+        calculateTotalPrice();
+        // 생성자에서 이미 order 설정 완료, 별도의 set 호출 필요 없음
+    }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        this.orderItems.remove(orderItem);
+        calculateTotalPrice();
+        // 삭제 시에도 연관 관계를 직접 null로 설정하지 않아도 됨
+
+    }
+    public void calculateTotalPrice() {
+        this.totalPrice = orderItems.stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
 }

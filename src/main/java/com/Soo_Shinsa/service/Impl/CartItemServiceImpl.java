@@ -9,6 +9,7 @@ import com.Soo_Shinsa.repository.CartItemRepository;
 import com.Soo_Shinsa.repository.ProcductOptionRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.CartItemService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -74,9 +75,9 @@ public class CartItemServiceImpl implements CartItemService {
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
 
-        Optional<User> loginId = userRepository.findById(user.getUserId());
+        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
 
-        if(!loginId.get().getUserId().equals(userId)){
+        if(!loginId.getUserId().equals(userId)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
         CartItem findCart = findByIdOrElseThrow(cartId);
@@ -93,9 +94,9 @@ public class CartItemServiceImpl implements CartItemService {
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
 
-        Optional<User> loginId = userRepository.findById(user.getUserId());
+        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
 
-        if(!loginId.get().getUserId().equals(userId)){
+        if(!loginId.getUserId().equals(userId)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
         return user;

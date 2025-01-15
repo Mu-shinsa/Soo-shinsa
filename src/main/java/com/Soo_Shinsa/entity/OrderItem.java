@@ -38,4 +38,6 @@ public class OrderItem extends BaseTimeEntity {
     public void updateOrderItem(Integer quantity) {
         this.quantity = quantity;
     }
+
+
 }

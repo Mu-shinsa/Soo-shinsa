@@ -6,6 +6,8 @@ import com.Soo_Shinsa.entity.*;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -24,6 +26,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final ProductRepository productRepository ;
     private final OrdersRepository ordersRepository;
 
+    @Transactional
     @Override
     public OrderItemResponseDto createOrderItem(Long orderId, Long productId, Integer quantity,Long userId) {
         User user = checkUser(userId);
@@ -42,6 +45,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         OrderItem orderItem = new OrderItem(quantity, order, product);
 
+        order.addOrderItem(orderItem);
+        ordersRepository.save(order);
         return OrderItemResponseDto.toDto(orderItem);
     }
 
@@ -60,7 +65,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         List<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(userId);
         return orderItems.stream().map(OrderItemResponseDto::toDto).toList();
     }
-
+    @Transactional
     @Override
     public OrderItemResponseDto update(Long orderItemsId, Long userId, Integer quantity) {
         checkUser(userId);
@@ -71,10 +76,20 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
+    @Transactional
     public void delete(Long orderItemsId, Long userId) {
         checkUser(userId);
+
+        // OrderItem 조회
         OrderItem find = findByIdOrElseThrow(orderItemsId);
-        orderItemRepository.delete(find);
+
+        // Orders 조회
+        Orders order = ordersRepository.findById(find.getOrder().getId())
+                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
+
+        // OrderItem 삭제
+        order.removeOrderItem(find); // 연관 관계에서 제거
+        ordersRepository.save(order); // Order 저장 (OrderItem 자동 삭제)
 
     }
 
@@ -92,9 +107,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
 
-        Optional<User> loginId = userRepository.findById(user.getUserId());
+        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
 
-        if(!loginId.get().getUserId().equals(userId)){
+        if(!loginId.getUserId().equals(userId)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
         return user;

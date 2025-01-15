@@ -1,22 +1,23 @@
 package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.constant.Status;
-import com.Soo_Shinsa.entity.OrderItem;
 import com.Soo_Shinsa.entity.Orders;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class OrdersResponseDto {
     private Long id;
     private Long userId;
     private String orderNumber;
-    private double totalPrice;
+    private BigDecimal totalPrice;
     private Status status;
-    private List<OrderItem> orderItems;
+    private List<OrderItemResponseDto> orderItems;
 
-    public OrdersResponseDto(Long id, Long userId, String orderNumber, double totalPrice, Status status, List<OrderItem> orderItems) {
+    public OrdersResponseDto(Long id, Long userId, String orderNumber, BigDecimal totalPrice, Status status, List<OrderItemResponseDto> orderItems) {
         this.id = id;
         this.userId = userId;
         this.orderNumber = orderNumber;
@@ -32,8 +33,10 @@ public class OrdersResponseDto {
                 orders.getOrderNumber(),
                 orders.getTotalPrice(),
                 orders.getStatus(),
-                orders.getOrderItems()
-
+                orders.getOrderItems().stream()
+                        .map(OrderItemResponseDto::toDto) // OrderItemResponseDto의 toDto 사용
+                        .collect(Collectors.toList())
         );
     }
+
 }
