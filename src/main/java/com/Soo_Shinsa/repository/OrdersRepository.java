@@ -1,12 +1,10 @@
 package com.Soo_Shinsa.repository;
 
 import com.Soo_Shinsa.entity.CartItem;
+import com.Soo_Shinsa.entity.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-
-    List<CartItem> findAllByUserUserId(Long id);
+public interface OrdersRepository extends JpaRepository<Orders, Long> {
 }
