@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/carts")
@@ -30,6 +32,14 @@ public class CartItemController {
         CartItemResponseDto findCart = cartItemService.findById(cartId, userId);
         return new ResponseEntity<>(findCart, HttpStatus.OK);
     }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<CartItemResponseDto>> findById(
+            @PathVariable Long userId){
+        List<CartItemResponseDto> byAll = cartItemService.findByAll(userId);
+        return new ResponseEntity<>(byAll, HttpStatus.OK);
+    }
+
 
     @PatchMapping("/{cartId}/users/{userId}")
     public ResponseEntity<CartItemResponseDto> update(

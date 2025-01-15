@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,16 +40,23 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
 
-        User user = checkUser(userId);
+        checkUser(userId);
         CartItem savedCart = findByIdOrElseThrow(cartId);
         return CartItemResponseDto.toDto(savedCart);
 
     }
 
     @Override
-    public CartItem findByIdOrElseThrow(Long id) {
-        return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public List<CartItemResponseDto> findByAll(Long userId) {
+        checkUser(userId);
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+
+        List<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(findUser.getUserId());
+
+        return allCartItem.stream().map(CartItemResponseDto::toDto).toList();
     }
+
 
     @Override
     public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
@@ -76,6 +84,10 @@ public class CartItemServiceImpl implements CartItemService {
 
     }
 
+    @Override
+    public CartItem findByIdOrElseThrow(Long id) {
+        return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
     private User checkUser(Long userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
