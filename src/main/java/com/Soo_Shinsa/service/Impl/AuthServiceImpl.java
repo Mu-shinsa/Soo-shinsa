@@ -2,6 +2,7 @@ package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.AuthenticationScheme;
 import com.Soo_Shinsa.constant.Role;
+import com.Soo_Shinsa.constant.UserStatus;
 import com.Soo_Shinsa.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.dto.LoginRequestDto;
 import com.Soo_Shinsa.dto.SignInRequestDto;
@@ -40,9 +41,9 @@ public class AuthServiceImpl implements AuthService {
         //중복체크
         userRepository.findByEmail(dto.getEmail())
                 .ifPresent(user -> {
-                    throw new IllegalArgumentException("이미 가입된 이메일입니다.");
+                    throw new IllegalArgumentException("가입이 불가능한 이메일입니다.");
                 });
-
+         
         //user 생성
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
@@ -68,6 +69,10 @@ public class AuthServiceImpl implements AuthService {
         //사용자 확인
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if(user.getStatus().compareTo(UserStatus.DELETED) == 0){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
 
         //비밀번호 확인
         if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
