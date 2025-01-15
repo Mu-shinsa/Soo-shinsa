@@ -60,7 +60,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
-        User user = checkUser(userId);
+        checkUser(userId);
         CartItem findCart = findByIdOrElseThrow(cartId);
         findCart.updateCartItem(quantity);
 

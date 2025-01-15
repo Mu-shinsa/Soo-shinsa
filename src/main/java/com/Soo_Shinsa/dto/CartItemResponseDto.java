@@ -19,7 +19,7 @@ public class CartItemResponseDto {
 
     public static CartItemResponseDto toDto(CartItem cartItem) {
         return new CartItemResponseDto(
-                cartItem.getCartItemId(),
+                cartItem.getId(),
                 cartItem.getProductOption().getId(),
                 cartItem.getQuantity()
         );

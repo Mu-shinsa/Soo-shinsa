@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.controller;
 
+
 import com.Soo_Shinsa.dto.CartItemRequestDto;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
 import com.Soo_Shinsa.service.CartItemService;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/carts")
 public class CartItemController {
-    private CartItemService cartItemService;
+    private final CartItemService cartItemService;
 
     @PostMapping("/users/{userId}")
     public ResponseEntity<CartItemResponseDto> createCart(
@@ -53,8 +54,7 @@ public class CartItemController {
     @DeleteMapping("/{cartId}/users/{userId}")
     public String delete(
             @PathVariable Long cartId,
-            @PathVariable Long userId,
-            @RequestBody CartItemRequestDto dto){
+            @PathVariable Long userId){
         cartItemService.delete(cartId, userId);
         return "장바구니가 삭제되었습니다.";
     }

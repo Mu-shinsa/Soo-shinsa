@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class CartItem extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartItemId;
+    private Long id;
 
     @Column(nullable = false)
     private Integer quantity;

@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -18,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Orders extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long id;
 
     @Column(nullable = false)
     private String orderNumber;
@@ -34,13 +37,15 @@ public class Orders extends BaseTimeEntity {
     @JoinColumn(name = "users_id")
     private User user;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
 
-
-    public Orders(String orderNumber, Double totalPrice, Status status, User user) {
+    public Orders(String orderNumber, Double totalPrice, Status status, User user, List<OrderItem> orderItems) {
         this.orderNumber = orderNumber;
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
+        this.orderItems = orderItems;
     }
 }

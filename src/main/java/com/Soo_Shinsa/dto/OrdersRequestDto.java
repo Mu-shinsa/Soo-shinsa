@@ -6,8 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class OrdersRequestDto {
-    @NotBlank(message = "상품옵션은 필수값 입니다.")
-    private Status status;
-    @NotBlank(message = "수량 필수값 입니다.")
-    private int quantity;
+    @NotBlank(message = "주문번호는 필수값 입니다..")
+    private String orderNumber;
 }

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class OrderItem extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderItemId;
+    private Long id;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -33,5 +33,9 @@ public class OrderItem extends BaseTimeEntity {
         this.quantity = quantity;
         this.order = order;
         this.product = product;
+    }
+
+    public void updateOrderItem(Integer quantity) {
+        this.quantity = quantity;
     }
 }
