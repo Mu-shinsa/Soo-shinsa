@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
                 .ifPresent(user -> {
                     throw new IllegalArgumentException("가입이 불가능한 이메일입니다.");
                 });
-         
+
         //user 생성
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
