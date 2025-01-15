@@ -47,4 +47,8 @@ public class User {
     public void updateUserGrade(UserGrade userGrade) {
         this.userGrade = userGrade;
     }
+
+    public void delete() {
+        this.status = UserStatus.DELETED;
+    }
 }
