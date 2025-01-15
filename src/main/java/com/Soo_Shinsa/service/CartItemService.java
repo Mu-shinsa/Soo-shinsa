@@ -2,6 +2,7 @@ package com.Soo_Shinsa.service;
 
 
 import com.Soo_Shinsa.dto.CartItemResponseDto;
+import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.entity.CartItem;
 
 import java.util.List;
@@ -15,4 +16,5 @@ public interface CartItemService {
     CartItemResponseDto update(Long cartId,Long userId,Integer quantity);
 
     void delete(Long cartId,Long userId);
+    OrdersResponseDto createOrderFromCart(Long userId);
 }

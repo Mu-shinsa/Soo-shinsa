@@ -3,6 +3,7 @@ package com.Soo_Shinsa.controller;
 
 import com.Soo_Shinsa.dto.CartItemRequestDto;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
+import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.service.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,13 @@ public class CartItemController {
 
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
+    @PostMapping("/users/{userId}/order")
+    public ResponseEntity<OrdersResponseDto> createOrderFromCart(@PathVariable Long userId) {
+        OrdersResponseDto response = cartItemService.createOrderFromCart(userId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
     @GetMapping("/{cartId}/users/{userId}")
     public ResponseEntity<CartItemResponseDto> findById(
             @PathVariable Long cartId,

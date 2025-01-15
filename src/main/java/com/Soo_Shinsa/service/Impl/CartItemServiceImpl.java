@@ -1,15 +1,19 @@
 package com.Soo_Shinsa.service.Impl;
 
+import java.util.UUID;
 import com.Soo_Shinsa.auth.UserDetailsImp;
+import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
-import com.Soo_Shinsa.entity.CartItem;
-import com.Soo_Shinsa.entity.ProductOption;
+import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.entity.*;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.CartItemRepository;
+import com.Soo_Shinsa.repository.OrdersRepository;
 import com.Soo_Shinsa.repository.ProcductOptionRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -17,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final UserRepository userRepository;
     private final CartItemRepository cartItemRepository;
     private final ProcductOptionRepository procductOptionRepository;
+    private final OrdersRepository ordersRepository;
 
     @Override
     public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
@@ -38,6 +45,38 @@ public class CartItemServiceImpl implements CartItemService {
         return CartItemResponseDto.toDto(cartItem);
     }
 
+    @Transactional
+    public OrdersResponseDto createOrderFromCart(Long userId) {
+        // 사용자 확인
+        User user = checkUser(userId);
+
+        // 사용자 카트 항목 조회
+        List<CartItem> cartItems = cartItemRepository.findByUserUserId(userId);
+        if (cartItems.isEmpty()) {
+            throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
+        }
+        String orderNumber = "ORD-" + UUID.randomUUID();
+        // Orders 생성
+        Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+
+        // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
+        for (CartItem cartItem : cartItems) {
+            Product product = cartItem.getProductOption().getProductId();
+            Integer quantity = cartItem.getQuantity();
+
+            OrderItem orderItem = new OrderItem(quantity, order, product);
+            order.addOrderItem(orderItem);
+        }
+
+        // Orders 저장
+        ordersRepository.save(order);
+
+        // 카트 비우기
+        cartItemRepository.deleteAll(cartItems);
+
+        // OrdersResponseDto로 변환하여 반환
+        return OrdersResponseDto.toDto(order);
+    }
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
 

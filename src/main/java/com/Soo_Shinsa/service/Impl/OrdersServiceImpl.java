@@ -26,6 +26,7 @@ public class OrdersServiceImpl implements OrdersService {
     private final ProcductOptionRepository procductOptionRepository;
     private final OrdersRepository ordersRepository;
 
+
     public OrdersResponseDto getOrderById(Long orderId,Long userId) {
         checkUser(userId);
         // Orders와 OrderItems를 함께 조회
@@ -48,6 +49,7 @@ public class OrdersServiceImpl implements OrdersService {
         if(!loginId.getUserId().equals(userId)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
+
         return user;
     }
 }

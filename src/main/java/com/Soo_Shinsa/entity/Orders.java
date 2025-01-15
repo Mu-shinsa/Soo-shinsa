@@ -25,7 +25,7 @@ public class Orders extends BaseTimeEntity {
     private String orderNumber;
 
     @Column(nullable = false)
-    private BigDecimal totalPrice;
+    private BigDecimal totalPrice= BigDecimal.ZERO;;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
