@@ -7,7 +7,7 @@ import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -48,7 +48,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         ordersRepository.save(order);
         return OrderItemResponseDto.toDto(orderItem);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public OrderItemResponseDto findById(Long orderItemsId, Long userId) {
         checkUser(userId);
@@ -56,7 +56,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem byIdOrElseThrow = findByIdOrElseThrow(orderItemsId);
         return OrderItemResponseDto.toDto(byIdOrElseThrow);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<OrderItemResponseDto> findByAll(Long userId) {
         checkUser(userId);
@@ -93,7 +93,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public OrderItem findByIdOrElseThrow(Long id) {
         return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -101,8 +101,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
 
 
-
-    private User checkUser(Long userId){
+    @Transactional(readOnly = true)
+    protected User checkUser(Long userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();

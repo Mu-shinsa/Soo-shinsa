@@ -11,7 +11,7 @@ import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import com.Soo_Shinsa.service.OrdersService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -30,7 +30,7 @@ public class OrdersServiceImpl implements OrdersService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public OrdersResponseDto getOrderById(Long orderId,Long userId) {
         checkUser(userId);
@@ -43,12 +43,12 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto의 toDto 메서드 사용
         return OrdersResponseDto.toDto(order);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity) {
         // 사용자 조회
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        User user = checkUser(userId);
+
         // 상품 확인
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
@@ -67,7 +67,8 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto로 변환 후 반환
         return OrdersResponseDto.toDto(order);
     }
-    private User checkUser(Long userId){
+    @Transactional(readOnly = true)
+    protected User checkUser(Long userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();

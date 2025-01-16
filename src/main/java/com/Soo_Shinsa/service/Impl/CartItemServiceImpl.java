@@ -13,14 +13,13 @@ import com.Soo_Shinsa.repository.ProcductOptionRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +32,8 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProcductOptionRepository procductOptionRepository;
     private final OrdersRepository ordersRepository;
+
+
     @Transactional
     @Override
     public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
@@ -78,7 +79,7 @@ public class CartItemServiceImpl implements CartItemService {
         // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
 
@@ -87,7 +88,7 @@ public class CartItemServiceImpl implements CartItemService {
         return CartItemResponseDto.toDto(savedCart);
 
     }
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<CartItemResponseDto> findByAll(Long userId) {
         checkUser(userId);
@@ -112,26 +113,19 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     @Override
     public CartItemResponseDto delete(Long cartId, Long userId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-
-        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
-
-        if(!loginId.getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
+        checkUser(userId);
         CartItem findCart = findByIdOrElseThrow(cartId);
         cartItemRepository.delete(findCart);
         return CartItemResponseDto.toDto(findCart);
 
     }
-
+    @Transactional(readOnly = true)
     @Override
     public CartItem findByIdOrElseThrow(Long id) {
         return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
-    private User checkUser(Long userId){
+    @Transactional(readOnly = true)
+    protected User checkUser(Long userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
