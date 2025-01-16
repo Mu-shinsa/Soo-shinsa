@@ -12,5 +12,4 @@ public interface AuthService {
 
     JwtAuthResponseDto login(LoginRequestDto dto);
 
-    void leave(String password, User user);
 }

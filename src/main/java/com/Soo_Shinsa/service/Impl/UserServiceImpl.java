@@ -7,9 +7,11 @@ import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +40,17 @@ public class UserServiceImpl implements UserService {
 
         return new UserDetailResponseDto(userById);
 
+    }
+
+    @Transactional
+    @Override
+    public void leave(String password, User user) {
+        //비밀번호 확인
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        //탈퇴
+        user.delete();
     }
 }

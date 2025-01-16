@@ -105,15 +105,5 @@ public class AuthServiceImpl implements AuthService {
         return new JwtAuthResponseDto(AuthenticationScheme.BEARER.getName(), accessToken);
     }
 
-    @Transactional
-    @Override
-    public void leave(String password, User user) {
-        //비밀번호 확인
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
 
-        //탈퇴
-        user.delete();
-    }
 }
