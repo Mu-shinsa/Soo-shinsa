@@ -51,12 +51,16 @@ public class AuthServiceImpl implements AuthService {
 
         //customer 경우 customer grade 생성
         if (user.getRole().compareTo(Role.CUSTOMER) == 0) {
+            //grade 검증
             Grade grade = gradeRepository.findByName("rookie")
-                    .orElseThrow(() -> new IllegalArgumentException("등급이 존재하지 않습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
 
+            //userGrade 생성
             UserGrade userGrade = new UserGrade(grade);
 
+            //저장
             userGradeRepository.save(userGrade);
+
             user.updateUserGrade(userGrade);
 
         }
@@ -101,15 +105,5 @@ public class AuthServiceImpl implements AuthService {
         return new JwtAuthResponseDto(AuthenticationScheme.BEARER.getName(), accessToken);
     }
 
-    @Transactional
-    @Override
-    public void leave(String password, User user) {
-        //비밀번호 확인
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
 
-        //탈퇴
-        user.delete();
-    }
 }

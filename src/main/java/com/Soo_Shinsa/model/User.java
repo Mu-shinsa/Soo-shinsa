@@ -2,6 +2,7 @@ package com.Soo_Shinsa.model;
 
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
+import com.Soo_Shinsa.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,5 +51,13 @@ public class User {
 
     public void delete() {
         this.status = UserStatus.DELETED;
+    }
+
+    public void update(UserUpdateRequestDto userUpdateRequestDto) {
+        this.name = userUpdateRequestDto.getName();
+        this.phoneNum = userUpdateRequestDto.getPhoneNum();
+    }
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
