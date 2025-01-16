@@ -11,6 +11,7 @@ import com.Soo_Shinsa.model.Grade;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.model.UserGrade;
 import com.Soo_Shinsa.repository.GradeRepository;
+import com.Soo_Shinsa.repository.UserGradeRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.AuthService;
 import com.Soo_Shinsa.utils.JwtProvider;
@@ -30,6 +31,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final GradeRepository gradeRepository;
+    private final UserGradeRepository userGradeRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
@@ -49,12 +51,14 @@ public class AuthServiceImpl implements AuthService {
 
         //customer 경우 customer grade 생성
         if (user.getRole().compareTo(Role.CUSTOMER) == 0) {
-            //grade 검증
-            Grade grade = gradeRepository.findByName(dto.getGrade())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
+            Grade grade = gradeRepository.findByName("rookie")
+                    .orElseThrow(() -> new IllegalArgumentException("등급이 존재하지 않습니다."));
 
             UserGrade userGrade = new UserGrade(grade);
+
+            userGradeRepository.save(userGrade);
             user.updateUserGrade(userGrade);
+
         }
 
         //저장
@@ -70,12 +74,12 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if(user.getStatus().compareTo(UserStatus.DELETED) == 0){
+        if (user.getStatus().compareTo(UserStatus.DELETED) == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
         //비밀번호 확인
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -101,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void leave(String password, User user) {
         //비밀번호 확인
-        if(!passwordEncoder.matches(password, user.getPassword())){
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
