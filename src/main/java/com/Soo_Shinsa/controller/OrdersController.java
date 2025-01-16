@@ -15,13 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     private final OrdersService ordersService;
 
-//    @PostMapping
-//    public ResponseEntity<OrdersResponseDto> createOrder(
-//            @RequestBody OrdersRequestDto requestDto,
-//            @PathVariable Long userId) {
-//        ordersService.create(requestDto.getOrderNumber(), userId);
-//
-//    }
 
     @GetMapping("/{orderId}/users/{userId}")
     public ResponseEntity<OrdersResponseDto> getOrderById(
