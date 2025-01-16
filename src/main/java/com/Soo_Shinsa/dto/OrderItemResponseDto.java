@@ -2,8 +2,12 @@ package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class OrderItemResponseDto {
     private Long id;
@@ -11,12 +15,7 @@ public class OrderItemResponseDto {
     private Long productId;
     private Integer quantity;
 
-    public OrderItemResponseDto(Long id, Long orderId, Long productId, Integer quantity) {
-        this.id = id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.quantity = quantity;
-    }
+
 
     public static OrderItemResponseDto toDto(OrderItem orderItem) {
         return new OrderItemResponseDto(

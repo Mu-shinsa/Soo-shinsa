@@ -3,7 +3,6 @@ package com.Soo_Shinsa.entity;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "orderItems")
 public class OrderItem extends BaseTimeEntity {
     @Id

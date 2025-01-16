@@ -2,12 +2,15 @@ package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.entity.Orders;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class OrdersResponseDto {
     private Long id;
@@ -17,14 +20,7 @@ public class OrdersResponseDto {
     private Status status;
     private List<OrderItemResponseDto> orderItems;
 
-    public OrdersResponseDto(Long id, Long userId, String orderNumber, BigDecimal totalPrice, Status status, List<OrderItemResponseDto> orderItems) {
-        this.id = id;
-        this.userId = userId;
-        this.orderNumber = orderNumber;
-        this.totalPrice = totalPrice;
-        this.status = status;
-        this.orderItems = orderItems;
-    }
+
 
     public static OrdersResponseDto toDto(Orders orders) {
         return new OrdersResponseDto(

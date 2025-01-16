@@ -1,16 +1,17 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
+import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.entity.OrderItem;
 import com.Soo_Shinsa.entity.Orders;
+import com.Soo_Shinsa.entity.Product;
 import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.repository.CartItemRepository;
-import com.Soo_Shinsa.repository.OrdersRepository;
-import com.Soo_Shinsa.repository.ProcductOptionRepository;
-import com.Soo_Shinsa.repository.UserRepository;
+import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import com.Soo_Shinsa.service.OrdersService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -18,15 +19,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService {
     private final UserRepository userRepository;
-    private final CartItemRepository cartItemRepository;
-    private final ProcductOptionRepository procductOptionRepository;
+    private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
 
-
+    @Transactional
+    @Override
     public OrdersResponseDto getOrderById(Long orderId,Long userId) {
         checkUser(userId);
         // Orders와 OrderItems를 함께 조회
@@ -38,7 +42,29 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto의 toDto 메서드 사용
         return OrdersResponseDto.toDto(order);
     }
+    @Transactional
+    @Override
+    public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity) {
+        // 사용자 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        // 상품 확인
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
+        // Orders 생성
+        Orders order = new Orders("ORD" + System.currentTimeMillis(), BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+
+        // OrderItem 생성
+        OrderItem orderItem = new OrderItem(quantity, order, product);
+        order.addOrderItem(orderItem);
+
+        // Orders 저장
+        ordersRepository.save(order);
+
+        // OrdersResponseDto로 변환 후 반환
+        return OrdersResponseDto.toDto(order);
+    }
     private User checkUser(Long userId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();

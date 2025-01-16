@@ -33,7 +33,7 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProcductOptionRepository procductOptionRepository;
     private final OrdersRepository ordersRepository;
-
+    @Transactional
     @Override
     public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
 
@@ -46,6 +46,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Transactional
+    @Override
     public OrdersResponseDto createOrderFromCart(Long userId) {
         // 사용자 확인
         User user = checkUser(userId);
@@ -77,6 +78,7 @@ public class CartItemServiceImpl implements CartItemService {
         // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
     }
+    @Transactional
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
 
@@ -85,7 +87,7 @@ public class CartItemServiceImpl implements CartItemService {
         return CartItemResponseDto.toDto(savedCart);
 
     }
-
+    @Transactional
     @Override
     public List<CartItemResponseDto> findByAll(Long userId) {
         checkUser(userId);
@@ -97,7 +99,7 @@ public class CartItemServiceImpl implements CartItemService {
         return allCartItem.stream().map(CartItemResponseDto::toDto).toList();
     }
 
-
+    @Transactional
     @Override
     public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
         checkUser(userId);
@@ -107,7 +109,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem saved = cartItemRepository.save(findCart);
         return CartItemResponseDto.toDto(saved);
     }
-
+    @Transactional
     @Override
     public void delete(Long cartId, Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

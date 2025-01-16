@@ -1,8 +1,11 @@
 package com.Soo_Shinsa.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class OrderItemRequestDto {
     @NotNull(message = "주문Id는 필수값 입니다.")

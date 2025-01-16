@@ -2,8 +2,11 @@ package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.entity.ProductOption;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class CartItemRequestDto {
 

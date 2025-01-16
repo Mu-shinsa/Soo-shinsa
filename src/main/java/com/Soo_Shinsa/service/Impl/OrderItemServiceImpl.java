@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +48,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         ordersRepository.save(order);
         return OrderItemResponseDto.toDto(orderItem);
     }
-
+    @Transactional
     @Override
     public OrderItemResponseDto findById(Long orderItemsId, Long userId) {
         checkUser(userId);
@@ -57,7 +56,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem byIdOrElseThrow = findByIdOrElseThrow(orderItemsId);
         return OrderItemResponseDto.toDto(byIdOrElseThrow);
     }
-
+    @Transactional
     @Override
     public List<OrderItemResponseDto> findByAll(Long userId) {
         checkUser(userId);

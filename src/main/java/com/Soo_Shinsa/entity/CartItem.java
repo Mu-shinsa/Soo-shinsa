@@ -1,11 +1,9 @@
 package com.Soo_Shinsa.entity;
 
-import com.Soo_Shinsa.constant.UserStatus;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "cartitems")
 public class CartItem extends BaseTimeEntity {
     @Id
