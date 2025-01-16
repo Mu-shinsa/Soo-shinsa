@@ -43,7 +43,7 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto의 toDto 메서드 사용
         return OrdersResponseDto.toDto(order);
     }
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity) {
         // 사용자 조회
