@@ -88,7 +88,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem save = orderItemRepository.save(find);
         // OrderItem 삭제
         order.removeOrderItem(find); // 연관 관계에서 제거
-        Orders saved = ordersRepository.save(order);// Order 저장 (OrderItem 자동 삭제)
+        ordersRepository.save(order);// Order 저장 (OrderItem 자동 삭제)
         return OrderItemResponseDto.toDto(save);
 
     }
