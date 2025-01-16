@@ -51,12 +51,16 @@ public class AuthServiceImpl implements AuthService {
 
         //customer 경우 customer grade 생성
         if (user.getRole().compareTo(Role.CUSTOMER) == 0) {
+            //grade 검증
             Grade grade = gradeRepository.findByName("rookie")
-                    .orElseThrow(() -> new IllegalArgumentException("등급이 존재하지 않습니다."));
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
 
+            //userGrade 생성
             UserGrade userGrade = new UserGrade(grade);
 
+            //저장
             userGradeRepository.save(userGrade);
+
             user.updateUserGrade(userGrade);
 
         }
