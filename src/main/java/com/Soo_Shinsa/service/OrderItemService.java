@@ -14,5 +14,5 @@ public interface OrderItemService {
     List<OrderItemResponseDto> findByAll(Long userId);
 
     OrderItemResponseDto update(Long orderItemsId,Long userId,Integer quantity);
-    void delete(Long orderItemsId,Long userId);
+    OrderItemResponseDto delete(Long orderItemsId,Long userId);
 }

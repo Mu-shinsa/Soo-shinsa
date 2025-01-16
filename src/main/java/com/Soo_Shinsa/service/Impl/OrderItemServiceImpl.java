@@ -76,7 +76,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     @Transactional
-    public void delete(Long orderItemsId, Long userId) {
+    public OrderItemResponseDto delete(Long orderItemsId, Long userId) {
         checkUser(userId);
 
         // OrderItem 조회
@@ -85,10 +85,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         // Orders 조회
         Orders order = ordersRepository.findById(find.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
-
+        OrderItem save = orderItemRepository.save(find);
         // OrderItem 삭제
         order.removeOrderItem(find); // 연관 관계에서 제거
-        ordersRepository.save(order); // Order 저장 (OrderItem 자동 삭제)
+        Orders saved = ordersRepository.save(order);// Order 저장 (OrderItem 자동 삭제)
+        return OrderItemResponseDto.toDto(save);
 
     }
 

@@ -15,6 +15,6 @@ public interface CartItemService {
     CartItem findByIdOrElseThrow(Long id);
     CartItemResponseDto update(Long cartId,Long userId,Integer quantity);
 
-    void delete(Long cartId,Long userId);
+    CartItemResponseDto delete(Long cartId,Long userId);
     OrdersResponseDto createOrderFromCart(Long userId);
 }

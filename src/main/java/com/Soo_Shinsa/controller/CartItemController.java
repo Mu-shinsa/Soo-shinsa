@@ -60,10 +60,10 @@ public class CartItemController {
     }
 
     @DeleteMapping("/{cartId}/users/{userId}")
-    public String delete(
+    public ResponseEntity<CartItemResponseDto> delete(
             @PathVariable Long cartId,
             @PathVariable Long userId){
-        cartItemService.delete(cartId, userId);
-        return "장바구니가 삭제되었습니다.";
+        CartItemResponseDto deleteCartItem = cartItemService.delete(cartId, userId);
+        return new ResponseEntity<>(deleteCartItem,HttpStatus.OK);
     }
 }

@@ -47,10 +47,10 @@ public class OrderItemController {
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
     @DeleteMapping("/{orderItemsId}/users/{userId}")
-    public String delete(
+    public ResponseEntity<OrderItemResponseDto> delete(
             @PathVariable Long orderItemsId,
             @PathVariable Long userId){
-        orderItemService.delete(orderItemsId, userId);
-        return "주문아이템이 삭제되었습니다.";
+        OrderItemResponseDto delete = orderItemService.delete(orderItemsId, userId);
+        return new ResponseEntity<>(delete, HttpStatus.OK);
     }
 }

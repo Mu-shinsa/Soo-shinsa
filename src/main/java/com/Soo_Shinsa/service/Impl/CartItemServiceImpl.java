@@ -111,7 +111,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
     @Transactional
     @Override
-    public void delete(Long cartId, Long userId) {
+    public CartItemResponseDto delete(Long cartId, Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
@@ -123,6 +123,7 @@ public class CartItemServiceImpl implements CartItemService {
         }
         CartItem findCart = findByIdOrElseThrow(cartId);
         cartItemRepository.delete(findCart);
+        return CartItemResponseDto.toDto(findCart);
 
     }
 

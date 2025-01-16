@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +53,9 @@ public class OrdersServiceImpl implements OrdersService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
+        String orderNumber = "ORD-" + UUID.randomUUID();
         // Orders 생성
-        Orders order = new Orders("ORD" + System.currentTimeMillis(), BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
 
         // OrderItem 생성
         OrderItem orderItem = new OrderItem(quantity, order, product);
