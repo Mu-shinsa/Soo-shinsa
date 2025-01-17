@@ -8,7 +8,6 @@ import com.Soo_Shinsa.entity.Orders;
 import com.Soo_Shinsa.entity.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
-import com.Soo_Shinsa.service.OrderItemService;
 import com.Soo_Shinsa.service.OrdersService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
