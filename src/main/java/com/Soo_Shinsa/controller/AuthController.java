@@ -48,11 +48,5 @@ public class AuthController {
         throw new UsernameNotFoundException("로그인이 먼저 필요합니다.");
     }
 
-    @PostMapping("/leave")
-    public ResponseEntity<Void> leave(@RequestBody LeaveRequestDto dto,
-            @AuthenticationPrincipal UserDetailsImp authenticatedPrincipal) {
-        authService.leave(dto.getPassword(),authenticatedPrincipal.getUser());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 
 }
