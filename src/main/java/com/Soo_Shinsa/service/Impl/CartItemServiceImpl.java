@@ -87,12 +87,12 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem savedCart = findByIdOrElseThrow(cartId);
         return CartItemResponseDto.toDto(savedCart);
 
+
     }
     @Transactional(readOnly = true)
     @Override
     public List<CartItemResponseDto> findByAll(Long userId) {
-        checkUser(userId);
-        User findUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User findUser = checkUser(userId);
 
 
         List<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(findUser.getUserId());
