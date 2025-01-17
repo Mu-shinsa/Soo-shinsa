@@ -60,14 +60,15 @@ public class OrdersServiceImpl implements OrdersService {
         //주문번호를 생성 후 주문을 만들고
         String orderNumber = "ORD-" + UUID.randomUUID();
         // Orders 생성
-        Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(orderNumber, product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
 
 
-        //주문아이템에 물건을 담음
+        //주문아이템을생성
         OrderItem orderItem = new OrderItem(quantity, order, product);
+        //오더에 오더아이템을 담음
         order.addOrderItem(orderItem);
 
-        // Orders 저장
+        // Orders 저장함
         ordersRepository.save(order);
 
         // OrdersResponseDto로 변환 후 반환
