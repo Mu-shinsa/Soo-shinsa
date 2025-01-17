@@ -47,19 +47,20 @@ public class Orders extends BaseTimeEntity {
         this.orderItems = orderItems;
     }
 
-    // 연관관계 편의 메서드
+    // 연관관계 오더 아이템 추가
     public void addOrderItem(OrderItem orderItem) {
         this.orderItems.add(orderItem);
         calculateTotalPrice();
         // 생성자에서 이미 order 설정 완료, 별도의 set 호출 필요 없음
     }
-
+    //연관관계 오더 아이템 제거
     public void removeOrderItem(OrderItem orderItem) {
         this.orderItems.remove(orderItem);
         calculateTotalPrice();
         // 삭제 시에도 연관 관계를 직접 null로 설정하지 않아도 됨
 
     }
+    //총 결제 금액 계산
     public void calculateTotalPrice() {
         this.totalPrice = orderItems.stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
