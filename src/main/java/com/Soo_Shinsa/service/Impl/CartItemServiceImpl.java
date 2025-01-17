@@ -9,7 +9,6 @@ import com.Soo_Shinsa.entity.*;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.CartItemRepository;
 import com.Soo_Shinsa.repository.OrdersRepository;
-import com.Soo_Shinsa.repository.ProcductOptionRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.CartItemService;
 import jakarta.persistence.EntityNotFoundException;

@@ -5,7 +5,9 @@ import com.Soo_Shinsa.dto.CartItemRequestDto;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.service.CartItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +22,9 @@ public class CartItemController {
 
     @PostMapping("/users/{userId}")
     public ResponseEntity<CartItemResponseDto> createCart(
-        @RequestBody CartItemRequestDto dto,
-        @PathVariable Long userId) {
+            @Valid
+            @RequestBody CartItemRequestDto dto,
+            @PathVariable Long userId) {
 
         CartItemResponseDto saved = cartItemService.create(dto.getOptionId(), dto.getQuantity(), userId);
 
@@ -29,7 +32,8 @@ public class CartItemController {
     }
 
     @PostMapping("/users/{userId}/order")
-    public ResponseEntity<OrdersResponseDto> createOrderFromCart(@PathVariable Long userId) {
+    public ResponseEntity<OrdersResponseDto> createOrderFromCart(
+            @PathVariable Long userId) {
         OrdersResponseDto response = cartItemService.createOrderFromCart(userId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -54,6 +58,7 @@ public class CartItemController {
     public ResponseEntity<CartItemResponseDto> update(
             @PathVariable Long cartId,
             @PathVariable Long userId,
+            @Valid
             @RequestBody CartItemRequestDto dto){
         CartItemResponseDto saved = cartItemService.update(cartId, userId, dto.getQuantity());
         return new ResponseEntity<>(saved, HttpStatus.OK);

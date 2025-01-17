@@ -4,6 +4,7 @@ package com.Soo_Shinsa.controller;
 import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.service.OrderItemService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class OrderItemController {
 
     @PostMapping("/users/{userId}")
     public ResponseEntity<OrderItemResponseDto> createOrderItem(
+            @Valid
             @RequestBody OrderItemRequestDto requestDto,
             @PathVariable Long userId) {
         OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto.getOrderId(), requestDto.getProductId(), requestDto.getQuantity(), userId);
@@ -42,6 +44,7 @@ public class OrderItemController {
     public ResponseEntity<OrderItemResponseDto> updateOrderItem(
             @PathVariable Long orderItemsId,
             @PathVariable Long userId,
+            @Valid
             @RequestBody OrderItemRequestDto dto) {
         OrderItemResponseDto update = orderItemService.update(orderItemsId, userId, dto.getQuantity());
         return new ResponseEntity<>(update, HttpStatus.OK);

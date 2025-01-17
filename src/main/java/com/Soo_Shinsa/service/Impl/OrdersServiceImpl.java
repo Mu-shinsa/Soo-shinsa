@@ -5,7 +5,6 @@ import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.entity.OrderItem;
 import com.Soo_Shinsa.entity.Orders;
-import com.Soo_Shinsa.entity.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrdersService;

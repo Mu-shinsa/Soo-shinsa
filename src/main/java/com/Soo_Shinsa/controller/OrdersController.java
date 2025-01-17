@@ -4,6 +4,7 @@ package com.Soo_Shinsa.controller;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
 import com.Soo_Shinsa.service.OrdersService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class OrdersController {
     @PostMapping("/users/{userId}/single-order")
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @PathVariable Long userId,
+            @Valid
             @RequestBody SingleProductOrderRequestDto requestDto) {
         OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
