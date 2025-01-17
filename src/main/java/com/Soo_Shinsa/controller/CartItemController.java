@@ -20,6 +20,7 @@ import java.util.List;
 public class CartItemController {
     private final CartItemService cartItemService;
 
+    //카트 생성
     @PostMapping("/users/{userId}")
     public ResponseEntity<CartItemResponseDto> createCart(
             @Valid
@@ -31,13 +32,14 @@ public class CartItemController {
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
+    //특정 카트를 주문으로 바꿈
     @PostMapping("/users/{userId}/order")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @PathVariable Long userId) {
         OrdersResponseDto response = cartItemService.createOrderFromCart(userId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    //해당 유저의 특정카트를 읽음
     @GetMapping("/{cartId}/users/{userId}")
     public ResponseEntity<CartItemResponseDto> findById(
             @PathVariable Long cartId,
@@ -46,14 +48,17 @@ public class CartItemController {
         return new ResponseEntity<>(findCart, HttpStatus.OK);
     }
 
+
+    //유저의 카트들을 모두 검색
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<CartItemResponseDto>> findById(
+    public ResponseEntity<List<CartItemResponseDto>> findByIdAll(
             @PathVariable Long userId){
         List<CartItemResponseDto> byAll = cartItemService.findByAll(userId);
         return new ResponseEntity<>(byAll, HttpStatus.OK);
     }
 
 
+    //특정 유저의 특정 카트 변경
     @PatchMapping("/{cartId}/users/{userId}")
     public ResponseEntity<CartItemResponseDto> update(
             @PathVariable Long cartId,
@@ -63,7 +68,7 @@ public class CartItemController {
         CartItemResponseDto saved = cartItemService.update(cartId, userId, dto.getQuantity());
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
-
+    //특정 유저의 특정카트 삭제
     @DeleteMapping("/{cartId}/users/{userId}")
     public ResponseEntity<CartItemResponseDto> delete(
             @PathVariable Long cartId,

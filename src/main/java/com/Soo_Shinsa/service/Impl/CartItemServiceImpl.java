@@ -32,19 +32,22 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProcductOptionRepository procductOptionRepository;
     private final OrdersRepository ordersRepository;
 
-
+    //카트아이템을 생성
     @Transactional
     @Override
     public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
-
+        //로그인 회원정보를 받아옴
         User user = checkUser(userId);
+        //상품 옵션을 찾아옴
         Optional<ProductOption> findOption = procductOptionRepository.findById(optionId);
-
+        //카트를 생성
         CartItem cartItem = new CartItem(quantity,user,findOption.get());
+
+        cartItemRepository.save(cartItem);
 
         return CartItemResponseDto.toDto(cartItem);
     }
-
+    //카트 상품을 구매로 변환
     @Transactional
     @Override
     public OrdersResponseDto createOrderFromCart(Long userId) {
@@ -56,6 +59,7 @@ public class CartItemServiceImpl implements CartItemService {
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }
+        //주문번호 생성
         String orderNumber = "ORD-" + UUID.randomUUID();
         // Orders 생성
         Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
@@ -65,7 +69,9 @@ public class CartItemServiceImpl implements CartItemService {
             Product product = cartItem.getProductOption().getProductId();
             Integer quantity = cartItem.getQuantity();
 
+            //오더아이템에 저장
             OrderItem orderItem = new OrderItem(quantity, order, product);
+            //주문에 오더아이템을 저장
             order.addOrderItem(orderItem);
         }
 
@@ -78,62 +84,82 @@ public class CartItemServiceImpl implements CartItemService {
         // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
     }
+    //카트아이템 찾아옴
     @Transactional(readOnly = true)
     @Override
     public CartItemResponseDto findById(Long cartId, Long userId) {
-
+        // 사용자 확인
         checkUser(userId);
+        //카트 아이템 찾아옴
         CartItem savedCart = findByIdOrElseThrow(cartId);
+        //저장
         return CartItemResponseDto.toDto(savedCart);
 
 
     }
+    //유저의 카트들을 다 가져옴
     @Transactional(readOnly = true)
     @Override
     public List<CartItemResponseDto> findByAll(Long userId) {
+        // 사용자 확인
         User findUser = checkUser(userId);
 
-
+        //로그인 유저의 카트목록들을 다 가져옴
         List<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(findUser.getUserId());
-
+        //dto 저장
         return allCartItem.stream().map(CartItemResponseDto::toDto).toList();
     }
 
+    //카트 수정
     @Transactional
     @Override
     public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
+        // 사용자 확인
         checkUser(userId);
+        //카트 아이템 검색
         CartItem findCart = findByIdOrElseThrow(cartId);
+        //가져온 카트 아이템 수량 변경
         findCart.updateCartItem(quantity);
-
+        //저장
         CartItem saved = cartItemRepository.save(findCart);
+        //dto 변환
         return CartItemResponseDto.toDto(saved);
     }
+    //카트 아이템 삭제
     @Transactional
     @Override
     public CartItemResponseDto delete(Long cartId, Long userId) {
+        // 사용자 확인
         checkUser(userId);
+        //카트를 가져옴
         CartItem findCart = findByIdOrElseThrow(cartId);
+        //삭제함
         cartItemRepository.delete(findCart);
+        //dto로 변환
         return CartItemResponseDto.toDto(findCart);
 
     }
+    //카트 아이템을 찾아옴
     @Transactional(readOnly = true)
     @Override
     public CartItem findByIdOrElseThrow(Long id) {
         return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+    //로그인 정보를 받아와서 현재의 아이디랑 비교해서 맞으면 유저를 리턴하고 다르면 예외를 던짐
     @Transactional(readOnly = true)
     protected User checkUser(Long userId){
+        //로그인 회원정보를 받아옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
         User user = userDetails.getUser();
-
+        //회원 정보를 받아옴
         User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
-
+        //로그인 회원정보와 회원정보를 비교함
+        //실패시 예외 던짐
         if(!loginId.getUserId().equals(userId)){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
+        //같을시 user 리턴
         return user;
     }
 }
