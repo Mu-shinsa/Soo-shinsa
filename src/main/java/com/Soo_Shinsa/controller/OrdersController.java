@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrdersController {
     private final OrdersService ordersService;
 
-
+    //특정유저의 특정 오더 읽기
     @GetMapping("/{orderId}/users/{userId}")
     public ResponseEntity<OrdersResponseDto> getOrderById(
             @PathVariable Long userId,
@@ -24,7 +24,7 @@ public class OrdersController {
         OrdersResponseDto responseDto = ordersService.getOrderById(userId,orderId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
-
+    //단품 구매 생성
     @PostMapping("/users/{userId}/single-order")
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @PathVariable Long userId,
