@@ -1,14 +1,17 @@
 package com.Soo_Shinsa.dto;
 
-import com.Soo_Shinsa.constant.Status;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+import java.util.List;
+
 @Getter
+@NoArgsConstructor
 public class OrdersRequestDto {
-    @NotBlank(message = "주문번호는 필수값 입니다..")
-    private String orderNumber;
+    private List<OrderItemRequestDto> orderItems; // 주문 항목 리스트
+
+    public OrdersRequestDto(List<OrderItemRequestDto> orderItems) {
+        this.orderItems = orderItems;
+    }
 }

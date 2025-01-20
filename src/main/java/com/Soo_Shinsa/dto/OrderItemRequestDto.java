@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class OrderItemRequestDto {
-    @NotNull(message = "주문Id는 필수값 입니다.")
+
+    @NotNull(message = "오더Id는 필수값 입니다.")
     private Long orderId;
 
     @NotNull(message = "상품Id는 필수값 입니다.")

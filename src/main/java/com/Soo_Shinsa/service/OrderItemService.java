@@ -7,7 +7,7 @@ import com.Soo_Shinsa.model.User;
 import java.util.List;
 
 public interface OrderItemService {
-    OrderItemResponseDto createOrderItem(Long orderId, Long productId, Integer quantity, Long userId, User user);
+    OrderItemResponseDto createOrderItem(Long orderId,Long productId, Integer quantity, Long userId, User user);
 
     OrderItem findByIdOrElseThrow(Long id);
 

@@ -1,7 +1,10 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Status;
+import com.Soo_Shinsa.dto.OrderItemRequestDto;
+import com.Soo_Shinsa.dto.OrdersRequestDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
 import com.Soo_Shinsa.entity.Orders;
 import com.Soo_Shinsa.entity.Product;
@@ -16,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +27,7 @@ import java.util.UUID;
 public class OrdersServiceImpl implements OrdersService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
+    private final CartItemRepository cartItemRepository;
 
 
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
@@ -30,6 +35,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto getOrderById(Long orderId, Long userId, User user) {
         //오더를 찾아옴
+
         Orders order = ordersRepository.findOrderWithItems(orderId);
 
         //주문이 없을시 예외 던짐
@@ -64,6 +70,39 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.save(order);
 
         // OrdersResponseDto로 변환 후 반환
+        return OrdersResponseDto.toDto(order);
+    }
+
+    @Transactional
+    public OrdersResponseDto createOrderFromCart(Long userId,User user) {
+        // 사용자 확인
+        // 사용자 카트 항목 조회
+        List<CartItem> cartItems = cartItemRepository.findByUserUserId(userId);
+        if (cartItems.isEmpty()) {
+            throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
+        }
+
+        // Orders 생성
+        String orderNumber = "ORD-" + UUID.randomUUID();
+        Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+
+        // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
+        for (CartItem cartItem : cartItems) {
+            Product product = cartItem.getProductOption().getProduct();
+            Integer quantity = cartItem.getQuantity();
+
+            // OrderItem 생성
+            OrderItem orderItem = new OrderItem(quantity, order, product);
+            order.addOrderItem(orderItem); // Order에 추가 및 총 금액 계산
+        }
+
+        // Orders 저장
+        ordersRepository.save(order);
+
+        // 카트 비우기
+        cartItemRepository.deleteAll(cartItems);
+
+        // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
     }
 

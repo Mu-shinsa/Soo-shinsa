@@ -6,12 +6,9 @@ import com.Soo_Shinsa.entity.*;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,14 +17,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
-    private final UserRepository userRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository ;
     private final OrdersRepository ordersRepository;
     //오더 아이템 생성
     @Transactional
     @Override
-    public OrderItemResponseDto createOrderItem(Long orderId, Long productId, Integer quantity,Long userId,User user) {
+    public OrderItemResponseDto createOrderItem(Long orderId,Long productId, Integer quantity,Long userId,User user) {
         // 주문을 찾아옴 없을시 예외 던짐
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));

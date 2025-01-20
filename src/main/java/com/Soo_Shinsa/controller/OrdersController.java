@@ -1,6 +1,8 @@
 package com.Soo_Shinsa.controller;
 
 
+import com.Soo_Shinsa.dto.OrderItemRequestDto;
+import com.Soo_Shinsa.dto.OrdersRequestDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
 import com.Soo_Shinsa.service.CartItemService;
@@ -13,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,15 +33,23 @@ public class OrdersController {
         OrdersResponseDto responseDto = ordersService.getOrderById(userId,orderId, UserUtils.getUser(userDetails));
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
+
     //단품 구매 생성
-    @PostMapping("/users/{userId}/single-order")
-    public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
+//    @PostMapping("/users/{userId}/single-order")
+//    public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
+//            @AuthenticationPrincipal UserDetails userDetails,
+//            @PathVariable Long userId,
+//            @Valid
+//            @RequestBody SingleProductOrderRequestDto requestDto) {
+//        OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity(),UserUtils.getUser(userDetails));
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
+//    }
+    @PostMapping("/users/{userId}/from-cart")
+    public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId,
-            @Valid
-            @RequestBody SingleProductOrderRequestDto requestDto) {
-        OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity(),UserUtils.getUser(userDetails));
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            @PathVariable Long userId) {
+        OrdersResponseDto responseDto = ordersService.createOrderFromCart(userId,UserUtils.getUser(userDetails));
+        return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 
 }
