@@ -51,7 +51,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewResponseDto>> getAllReviewByProductId(@PathVariable Long productId,
                                                                           @RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "10") int size) {
-        Page<ReviewResponseDto> reviews = reviewService.getAllReviewByProductId(productId, page, size);
+        Page<ReviewResponseDto> reviews = reviewService.getAllReviewProduct(productId, page, size);
         return ResponseEntity.ok(reviews);
     }
 
