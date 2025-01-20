@@ -35,16 +35,17 @@ public class OrdersController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    //단품 구매 생성
-//    @PostMapping("/users/{userId}/single-order")
-//    public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @PathVariable Long userId,
-//            @Valid
-//            @RequestBody SingleProductOrderRequestDto requestDto) {
-//        OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity(),UserUtils.getUser(userDetails));
-//        return new ResponseEntity<>(response, HttpStatus.CREATED);
-//    }
+//    단품 구매 생성
+    @PostMapping("/users/{userId}/single-order")
+    public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long userId,
+            @Valid
+            @RequestBody SingleProductOrderRequestDto requestDto) {
+        UserUtils.getUser(userDetails);
+        OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
     @PostMapping("/users/{userId}/from-cart")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @AuthenticationPrincipal UserDetails userDetails,

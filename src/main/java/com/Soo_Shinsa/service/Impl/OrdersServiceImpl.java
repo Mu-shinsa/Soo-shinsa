@@ -47,32 +47,32 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto의 toDto 메서드 사용
         return OrdersResponseDto.toDto(orderWithItems);
     }
+//
+//    단일 상품 구매
+//    상품을 찾아와서 주문번호를 생성 후 주문을 만들고 거기에 주문아이템에 물건을 담음
+    @Transactional
+    @Override
+    public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        //상품을 찾아와서 옴
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        //주문번호를 생성 후 주문을 만들고
+        // Orders 생성
+        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
 
-    //단일 상품 구매
-    //상품을 찾아와서 주문번호를 생성 후 주문을 만들고 거기에 주문아이템에 물건을 담음
-//    @Transactional
-//    @Override
-//    public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity, User user) {
-//
-//        //상품을 찾아와서 옴
-//        Product product = productRepository.findById(productId)
-//                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
-//        //주문번호를 생성 후 주문을 만들고
-//        // Orders 생성
-//        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
-//
-//
-//        //주문아이템을생성
-//        OrderItem orderItem = new OrderItem(quantity, order, product);
-//        //오더에 오더아이템을 담음
-//        order.addOrderItem(orderItem);
-//
-//        // Orders 저장함
-//        ordersRepository.save(order);
-//
-//        // OrdersResponseDto로 변환 후 반환
-//        return OrdersResponseDto.toDto(order);
-//    }
+
+        //주문아이템을생성
+        OrderItem orderItem = new OrderItem(quantity, order, product);
+        //오더에 오더아이템을 담음
+        order.addOrderItem(orderItem);
+
+        // Orders 저장함
+        ordersRepository.save(order);
+
+        // OrdersResponseDto로 변환 후 반환
+        return OrdersResponseDto.toDto(order);
+    }
 
     @Transactional
     public OrdersResponseDto createOrderFromCart(Long userId) {
