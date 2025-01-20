@@ -27,9 +27,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 생성
     @Transactional
     @Override
-    public OrderItemResponseDto createOrderItem(Long orderId, Long productId, Integer quantity,Long userId) {
-        //로그인 회원정보를 받아옴
-        User user = checkUser(userId);
+    public OrderItemResponseDto createOrderItem(Long orderId, Long productId, Integer quantity,Long userId,User user) {
         // 주문을 찾아옴 없을시 예외 던짐
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
@@ -49,9 +47,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 찾아오고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrderItemResponseDto findById(Long orderItemsId, Long userId) {
-        //로그인 회원정보를 받아옴
-        checkUser(userId);
+    public OrderItemResponseDto findById(Long orderItemsId, Long userId,User user) {
+
         //오더 아이템을 찾아옴
         OrderItem byIdOrElseThrow = findByIdOrElseThrow(orderItemsId);
         //dto로 변환
@@ -60,9 +57,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     //유저 오더아이템들을 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public List<OrderItemResponseDto> findByAll(Long userId) {
-        //로그인 회원정보를 받아옴
-        checkUser(userId);
+    public List<OrderItemResponseDto> findByAll(Long userId,User user) {
+
 
         //회원의 모든 아이템 오더를 리스트르 받아옴
         List<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(userId);
@@ -72,9 +68,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 수정
     @Transactional
     @Override
-    public OrderItemResponseDto update(Long orderItemsId, Long userId, Integer quantity) {
-        //로그인 회원정보를 받아옴
-        checkUser(userId);
+    public OrderItemResponseDto update(Long orderItemsId, Long userId, Integer quantity,User user) {
+
         //오더 아이템을 찾아옴
         OrderItem findOrder = findByIdOrElseThrow(orderItemsId);
         //찾아옴 오더아이템 수량을 변경
@@ -86,9 +81,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 삭제
     @Override
     @Transactional
-    public OrderItemResponseDto delete(Long orderItemsId, Long userId) {
-        //로그인 회원정보를 받아옴
-        checkUser(userId);
+    public OrderItemResponseDto delete(Long orderItemsId, Long userId,User user) {
+
 
         // OrderItem 조회
         OrderItem find = findByIdOrElseThrow(orderItemsId);
@@ -96,12 +90,11 @@ public class OrderItemServiceImpl implements OrderItemService {
         // Orders 조회
         Orders order = ordersRepository.findById(find.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
-        OrderItem save = orderItemRepository.save(find);
         // OrderItem 삭제
         order.removeOrderItem(find); // 연관 관계에서 제거
-        ordersRepository.save(order);// Order 저장 (OrderItem 자동 삭제)
+        ordersRepository.delete(order);// Order 저장 (OrderItem 자동 삭제)
         //dto 변환
-        return OrderItemResponseDto.toDto(save);
+        return OrderItemResponseDto.toDto(find);
 
     }
     //오더 아이템을 찾아옴
@@ -109,24 +102,5 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItem findByIdOrElseThrow(Long id) {
         return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-
-    //로그인 정보를 받아와서 현재의 아이디랑 비교해서 맞으면 유저를 리턴하고 다르면 예외를 던짐
-    @Transactional(readOnly = true)
-    protected User checkUser(Long userId){
-        //로그인 회원정보를 받아옴
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-        //회원 정보를 받아옴
-        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
-        //로그인 회원정보와 회원정보를 비교함
-        //실패시 예외 던짐
-        if(!loginId.getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
-        //같을시 user 리턴
-        return user;
     }
 }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class OrderItemResponseDto {
     private Long id;
@@ -16,6 +15,12 @@ public class OrderItemResponseDto {
     private Integer quantity;
 
 
+    public OrderItemResponseDto(Long id, Long orderId, Long productId, Integer quantity) {
+        this.id = id;
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 
     public static OrderItemResponseDto toDto(OrderItem orderItem) {
         return new OrderItemResponseDto(

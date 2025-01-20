@@ -13,8 +13,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "orders")
 public class Orders extends BaseTimeEntity {
     @Id
@@ -45,6 +43,12 @@ public class Orders extends BaseTimeEntity {
         this.status = status;
         this.user = user;
         this.orderItems = orderItems;
+    }
+
+    public Orders(String orderNumber, Status status, User user) {
+        this.orderNumber = orderNumber;
+        this.status = status;
+        this.user = user;
     }
 
     // 연관관계 오더 아이템 추가
