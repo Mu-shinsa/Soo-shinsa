@@ -34,10 +34,11 @@ public class OrdersServiceImpl implements OrdersService {
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrdersResponseDto getOrderById(Long orderId) {
+    public OrdersResponseDto getOrderById(Long orderId,Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         //오더를 찾아옴
-        Orders orderWithItems = ordersRepository.findOrderWithItems(orderId);
+        Orders orderWithItems = ordersRepository.findOrderWithItemsByUserIdAndOrderId(orderId,userId);
 
         //주문이 없을시 예외 던짐
         if (orderWithItems == null) {
@@ -74,8 +75,9 @@ public class OrdersServiceImpl implements OrdersService {
 //    }
 
     @Transactional
-    public OrdersResponseDto createOrderFromCart(Long userId,User user) {
+    public OrdersResponseDto createOrderFromCart(Long userId) {
         // 사용자 확인
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // 사용자 카트 항목 조회
         List<CartItem> cartItems = cartItemRepository.findByUserUserId(userId);
         if (cartItems.isEmpty()) {

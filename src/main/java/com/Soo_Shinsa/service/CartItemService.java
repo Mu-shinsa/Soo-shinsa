@@ -11,11 +11,11 @@ import java.util.List;
 
 
 public interface CartItemService {
-    CartItemResponseDto create(Long optionId,Integer quantity,Long userId,User user);
-    CartItemResponseDto findById(Long cartId, Long userId, User user);
-    List<CartItemResponseDto> findByAll(Long userId,User user);
+    CartItemResponseDto create(Long optionId,Integer quantity,Long userId);
+    CartItemResponseDto findById(Long cartId, Long userId);
+    List<CartItemResponseDto> findByAll(Long userId);
     CartItem findByIdOrElseThrow(Long id);
-    CartItemResponseDto update(Long cartId,Long userId,Integer quantity,User uer);
+    CartItemResponseDto update(Long cartId,Long userId,Integer quantity);
 
-    CartItemResponseDto delete(Long cartId,Long userId,User user);
+    CartItemResponseDto delete(Long cartId,Long userId);
 }

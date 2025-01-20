@@ -21,9 +21,13 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository ;
     private final OrdersRepository ordersRepository;
+    private final UserRepository userRepository;
     //오더 아이템 생성
     @Transactional
     public OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto,Long userId) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // 주문 조회
         Orders order = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
@@ -52,8 +56,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 찾아오고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrderItemResponseDto findById(Long orderItemsId, Long userId,User user) {
-
+    public OrderItemResponseDto findById(Long orderItemsId, Long userId) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더 아이템을 찾아옴
         OrderItem byIdOrElseThrow = findByIdOrElseThrow(orderItemsId);
         //dto로 변환
@@ -62,7 +68,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     //유저 오더아이템들을 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public List<OrderItemResponseDto> findByAll(Long userId,User user) {
+    public List<OrderItemResponseDto> findByAll(Long userId) {
 
 
         //회원의 모든 아이템 오더를 리스트르 받아옴
@@ -73,8 +79,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 수정
     @Transactional
     @Override
-    public OrderItemResponseDto update(Long orderItemsId, Long userId, Integer quantity,User user) {
-
+    public OrderItemResponseDto update(Long orderItemsId, Long userId, Integer quantity) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더 아이템을 찾아옴
         OrderItem findOrder = findByIdOrElseThrow(orderItemsId);
         //찾아옴 오더아이템 수량을 변경
@@ -86,8 +94,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 삭제
     @Override
     @Transactional
-    public OrderItemResponseDto delete(Long orderItemsId, Long userId,User user) {
-
+    public OrderItemResponseDto delete(Long orderItemsId, Long userId) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         // OrderItem 조회
         OrderItem find = findByIdOrElseThrow(orderItemsId);

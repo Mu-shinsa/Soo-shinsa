@@ -32,8 +32,8 @@ public class CartItemController {
             @Valid
             @RequestBody CartItemRequestDto dto,
             @PathVariable Long userId) {
-
-        CartItemResponseDto saved = cartItemService.create(dto.getOptionId(), dto.getQuantity(), userId,UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        CartItemResponseDto saved = cartItemService.create(dto.getOptionId(), dto.getQuantity(), userId);
 
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -45,7 +45,8 @@ public class CartItemController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long cartId,
             @PathVariable Long userId){
-        CartItemResponseDto findCart = cartItemService.findById(cartId, userId,UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        CartItemResponseDto findCart = cartItemService.findById(cartId, userId);
         return new ResponseEntity<>(findCart, HttpStatus.OK);
     }
 
@@ -55,7 +56,8 @@ public class CartItemController {
     public ResponseEntity<List<CartItemResponseDto>> findByIdAll(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long userId){
-        List<CartItemResponseDto> byAll = cartItemService.findByAll(userId,UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        List<CartItemResponseDto> byAll = cartItemService.findByAll(userId);
         return new ResponseEntity<>(byAll, HttpStatus.OK);
     }
 
@@ -68,7 +70,8 @@ public class CartItemController {
             @PathVariable Long userId,
             @Valid
             @RequestBody CartItemRequestDto dto){
-        CartItemResponseDto saved = cartItemService.update(cartId, userId, dto.getQuantity(),UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        CartItemResponseDto saved = cartItemService.update(cartId, userId, dto.getQuantity());
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
     //특정 유저의 특정카트 삭제
@@ -77,7 +80,8 @@ public class CartItemController {
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long cartId,
             @PathVariable Long userId){
-        CartItemResponseDto deleteCartItem = cartItemService.delete(cartId, userId,UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        CartItemResponseDto deleteCartItem = cartItemService.delete(cartId, userId);
         return new ResponseEntity<>(deleteCartItem,HttpStatus.OK);
     }
 }

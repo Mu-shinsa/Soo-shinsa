@@ -28,9 +28,10 @@ public class OrdersController {
     @GetMapping("/{orderId}/users/{userId}")
     public ResponseEntity<OrdersResponseDto> getOrderById(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long orderId) {
+            @PathVariable Long orderId,
+            @PathVariable Long userId) {
         UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.getOrderById(orderId);
+        OrdersResponseDto responseDto = ordersService.getOrderById(orderId,userId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
@@ -48,15 +49,17 @@ public class OrdersController {
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long userId) {
-        OrdersResponseDto responseDto = ordersService.createOrderFromCart(userId,UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.createOrderFromCart(userId);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 
-    @PostMapping("/orders")
+    @PostMapping()
     public ResponseEntity<OrdersResponseDto> createOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
             @RequestBody OrdersRequestDto requestDto) {
+        UserUtils.getUser(userDetails);
         OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId());
         return ResponseEntity.ok(responseDto);
     }

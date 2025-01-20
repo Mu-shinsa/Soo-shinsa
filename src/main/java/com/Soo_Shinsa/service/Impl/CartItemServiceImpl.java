@@ -25,11 +25,15 @@ import java.util.List;
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final UserRepository userRepository;
 
     //카트아이템을 생성
     @Transactional
     @Override
-    public CartItemResponseDto create(Long optionId,Integer quantity,Long userId,User user) {
+    public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
+        // 사용자 정보 가져오기
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //상품 옵션을 찾아옴
         ProductOption findOption = productOptionRepository.findById(optionId).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));
         //카트를 생성
@@ -44,8 +48,10 @@ public class CartItemServiceImpl implements CartItemService {
 //    //카트아이템 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public CartItemResponseDto findById(Long cartId, Long userId, User user) {
-
+    public CartItemResponseDto findById(Long cartId, Long userId) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
 //        //카트 아이템 찾아옴
         CartItem savedCart = findByIdOrElseThrow(cartId);
@@ -55,8 +61,9 @@ public class CartItemServiceImpl implements CartItemService {
     //유저의 카트들을 다 가져옴
     @Transactional(readOnly = true)
     @Override
-    public List<CartItemResponseDto> findByAll(Long userId,User user) {
-
+    public List<CartItemResponseDto> findByAll(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         //로그인 유저의 카트목록들을 다 가져옴
         List<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId());
@@ -67,8 +74,9 @@ public class CartItemServiceImpl implements CartItemService {
     //카트 수정
     @Transactional
     @Override
-    public CartItemResponseDto update(Long cartId, Long userId,Integer quantity,User user) {
-
+    public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //카트 아이템 검색
         CartItem findCart = findByIdOrElseThrow(cartId);
         //가져온 카트 아이템 수량 변경
@@ -81,7 +89,9 @@ public class CartItemServiceImpl implements CartItemService {
     //카트 아이템 삭제
     @Transactional
     @Override
-    public CartItemResponseDto delete(Long cartId, Long userId,User user) {
+    public CartItemResponseDto delete(Long cartId, Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //카트를 가져옴
         CartItem findCart = findByIdOrElseThrow(cartId);
         //삭제함

@@ -12,9 +12,9 @@ public interface OrderItemService {
 
     OrderItem findByIdOrElseThrow(Long id);
 
-    OrderItemResponseDto findById(Long orderItemsId, Long userId,User user);
-    List<OrderItemResponseDto> findByAll(Long userId,User user);
+    OrderItemResponseDto findById(Long orderItemsId, Long userId);
+    List<OrderItemResponseDto> findByAll(Long userId);
 
-    OrderItemResponseDto update(Long orderItemsId,Long userId,Integer quantity,User user);
-    OrderItemResponseDto delete(Long orderItemsId,Long userId,User user);
+    OrderItemResponseDto update(Long orderItemsId,Long userId,Integer quantity);
+    OrderItemResponseDto delete(Long orderItemsId,Long userId);
 }
