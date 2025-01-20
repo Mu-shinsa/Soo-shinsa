@@ -16,6 +16,11 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
 
+    /**
+     * 신고 생성
+     * @param requestDto
+     * @return ReportResponseDto.toDto(report)
+     */
     @Transactional
     @Override
     public ReportResponseDto createReport(ReportRequestDto requestDto) {
@@ -23,6 +28,11 @@ public class ReportServiceImpl implements ReportService {
         return ReportResponseDto.toDto(report);
     }
 
+    /**
+     * 신고 처리
+     * @param reportId
+     * @param processDto
+     */
     @Transactional
     @Override
     public void processReport(Long reportId, ReportProcessDto processDto) {
@@ -38,6 +48,11 @@ public class ReportServiceImpl implements ReportService {
         }
     }
 
+    /**
+     * 신고 조회
+     * @param reportId
+     * @return ReportResponseDto.toDto(report)
+     */
     @Transactional(readOnly = true)
     @Override
     public ReportResponseDto getReport(Long reportId) {
@@ -47,6 +62,10 @@ public class ReportServiceImpl implements ReportService {
         return ReportResponseDto.toDto(report);
     }
 
+    /**
+     * 신고 삭제
+     * @param reportId
+     */
     @Transactional
     @Override
     public void deleteReport(Long reportId) {
