@@ -8,8 +8,8 @@ import com.Soo_Shinsa.model.User;
 import java.util.List;
 
 public interface OrdersService {
-    OrdersResponseDto getOrderById(Long orderId, Long userId, User user);
-    OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity,User user);
+    OrdersResponseDto getOrderById(Long orderId);
+//    OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity,User user);
     OrdersResponseDto createOrderFromCart(Long userId,User user);
 
     OrdersResponseDto createOrder (Long userId,List<OrderItemRequestDto> orderItems);

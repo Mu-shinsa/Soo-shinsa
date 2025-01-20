@@ -28,9 +28,9 @@ public class OrdersController {
     @GetMapping("/{orderId}/users/{userId}")
     public ResponseEntity<OrdersResponseDto> getOrderById(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId,
             @PathVariable Long orderId) {
-        OrdersResponseDto responseDto = ordersService.getOrderById(userId,orderId, UserUtils.getUser(userDetails));
+        UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.getOrderById(orderId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
