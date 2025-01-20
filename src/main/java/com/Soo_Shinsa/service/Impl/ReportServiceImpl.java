@@ -46,6 +46,8 @@ public class ReportServiceImpl implements ReportService {
         } else {
             report.addRejectReason(null); // 반려 사유 초기화
         }
+
+        reportRepository.save(report);
     }
 
     /**
