@@ -9,6 +9,7 @@ import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,8 +76,22 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 
         review.update(updateDto.getRate(), updateDto.getContent());
+        Review saveReview = reviewRepository.save(review);
 
-        return updateDto;
+        return ReviewUpdateDto.toDto(saveReview);
+    }
+
+    /**
+     * 상품 리뷰 조회
+     * @param productId
+     * @param page
+     * @param size
+     * @return reviews.map(ReviewResponseDto::toDto);
+     */
+    @Transactional(readOnly = true)
+    public Page<ReviewResponseDto> getAllReviewProduct (Long productId, int page, int size) {
+        Page<Review> reviews = reviewRepository.findByProductId(productId, page, size);
+        return reviews.map(ReviewResponseDto::toDto);
     }
 
     /**
