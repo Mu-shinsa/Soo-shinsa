@@ -8,6 +8,7 @@ import com.Soo_Shinsa.service.ReviewService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,6 +43,14 @@ public class ReviewController {
         UserUtils.getUser(userDetails);
         ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto);
         return ResponseEntity.ok(review);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Page<ReviewResponseDto>> getAllReviewByProductId(@PathVariable Long productId,
+                                                                          @RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "10") int size) {
+        Page<ReviewResponseDto> reviews = reviewService.getAllReviewByProductId(productId, page, size);
+        return ResponseEntity.ok(reviews);
     }
 
     @DeleteMapping("/{reviewId}")
