@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.dto.review.ReviewRequestDto;
-import com.Soo_Shinsa.dto.review.ReviewResponseDto;
-import com.Soo_Shinsa.dto.review.ReviewUpdateDto;
+import com.Soo_Shinsa.dto.ReviewRequestDto;
+import com.Soo_Shinsa.dto.ReviewResponseDto;
+import com.Soo_Shinsa.dto.ReviewUpdateDto;
 import com.Soo_Shinsa.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
