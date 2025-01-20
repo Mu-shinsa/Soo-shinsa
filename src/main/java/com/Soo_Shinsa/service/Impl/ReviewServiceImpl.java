@@ -65,6 +65,13 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResponseDto.toDto(review);
     }
 
+    /**
+     * 상품별 리뷰 조회
+     * @param productId
+     * @param page
+     * @param size
+     * @return
+     */
     @Transactional
     public Page<ReviewResponseDto> getAllReviewByProductId(Long productId, int page, int size) {
         if (productId == null) {
