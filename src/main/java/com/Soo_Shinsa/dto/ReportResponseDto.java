@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.dto.dto;
+package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;

@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.dto.dto.ReportProcessDto;
-import com.Soo_Shinsa.dto.dto.ReportRequestDto;
-import com.Soo_Shinsa.dto.dto.ReportResponseDto;
+import com.Soo_Shinsa.dto.ReportProcessDto;
+import com.Soo_Shinsa.dto.ReportRequestDto;
+import com.Soo_Shinsa.dto.ReportResponseDto;
 import com.Soo_Shinsa.entity.Report;
 import com.Soo_Shinsa.repository.ReportRepository;
 import com.Soo_Shinsa.service.ReportService;

@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.dto.dto.ReportProcessDto;
-import com.Soo_Shinsa.dto.dto.ReportRequestDto;
-import com.Soo_Shinsa.dto.dto.ReportResponseDto;
+import com.Soo_Shinsa.dto.ReportProcessDto;
+import com.Soo_Shinsa.dto.ReportRequestDto;
+import com.Soo_Shinsa.dto.ReportResponseDto;
 import com.Soo_Shinsa.service.ReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
