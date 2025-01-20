@@ -11,7 +11,6 @@ import com.Soo_Shinsa.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,37 +66,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     /**
-     * 상품별 리뷰 조회
-     * @param productId
-     * @param page
-     * @param size
-     * @return
-     */
-    @Transactional
-    public Page<ReviewResponseDto> getAllReviewProduct(Long productId, int page, int size) {
-        if (productId == null) {
-            throw new IllegalArgumentException("상품 ID를 입력해주세요.");
-        }
-
-        if (page < 0) {
-            throw new IllegalArgumentException("페이지 번호는 0보다 작을 수 없습니다.");
-        }
-
-        if (size < 1) {
-            throw new IllegalArgumentException("페이지 크기는 1보다 작을 수 없습니다.");
-        }
-
-        Pageable pageable = PageRequest.of(page, size);
-        return reviewRepository.findAllByProductId(productId, pageable)
-                .map(review -> new ReviewResponseDto(
-                        review.getId(),
-                        review.getUser().getUserId(),
-                        review.getOrderItem().getId(),
-                        review.getRate(),
-                        review.getContent()));
-    }
-
-    /**
      * 리뷰 수정
      * @param reviewId
      * @param updateDto
@@ -118,15 +86,19 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * 상품 리뷰 조회
      * @param productId
-     * @param page
-     * @param size
+     * @param productId 상품 ID
+     * @param pageable  페이징 및 정렬 정보
      * @return reviews.map(ReviewResponseDto::toDto);
      */
     @Transactional(readOnly = true)
-    public Page<ReviewResponseDto> getAllReviewProduct (Long productId, int page, int size) {
-        Page<Review> reviews = reviewRepository.findByProductId(productId, page, size);
+    public Page<ReviewResponseDto> getAllReviewProduct(Long productId, Pageable pageable) {
+        // 상품 ID를 기반으로 리뷰 조회 (페이징 적용)
+        Page<Review> reviews = reviewRepository.findAllByProductId(productId, pageable);
+
+        // Review -> ReviewResponseDto 변환
         return reviews.map(ReviewResponseDto::toDto);
     }
+
 
     /**
      * 리뷰 삭제
