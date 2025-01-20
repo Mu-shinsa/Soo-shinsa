@@ -10,5 +10,9 @@ public interface ReviewService {
     ReviewResponseDto getReview(Long reviewId);
     ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto);
     void delete(Long reviewId);
+
     Page<ReviewResponseDto> getAllReviewProduct (Long productId, int page, int size);
+
+    Page<ReviewResponseDto> getAllReviewProduct(Long productId, int page, int size);
+
 }

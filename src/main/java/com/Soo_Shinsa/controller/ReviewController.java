@@ -35,6 +35,9 @@ public class ReviewController {
                                                        @AuthenticationPrincipal UserDetailsImp userDetails) {
 
         UserUtils.getUser(userDetails);
+
+       
+
         ReviewResponseDto review = reviewService.getReview(reviewId);
         return ResponseEntity.ok(review);
     }
@@ -54,6 +57,14 @@ public class ReviewController {
         UserUtils.getUser(userDetails);
         ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto);
         return ResponseEntity.ok(review);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Page<ReviewResponseDto>> getAllReviewByProductId(@PathVariable Long productId,
+                                                                          @RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "10") int size) {
+        Page<ReviewResponseDto> reviews = reviewService.getAllReviewProduct(productId, page, size);
+        return ResponseEntity.ok(reviews);
     }
 
     @DeleteMapping("/{reviewId}")
