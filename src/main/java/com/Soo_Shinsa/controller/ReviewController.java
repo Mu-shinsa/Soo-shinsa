@@ -32,10 +32,22 @@ public class ReviewController {
 
     @GetMapping("/{reviewId}")
     public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Long reviewId,
-                                                       @AuthenticationPrincipal UserDetailsImp userDetailsImp) {
-        UserUtils.getUser(userDetailsImp);
+                                                       @AuthenticationPrincipal UserDetailsImp userDetails) {
+
+        UserUtils.getUser(userDetails);
+
+       
+
         ReviewResponseDto review = reviewService.getReview(reviewId);
         return ResponseEntity.ok(review);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Page<ReviewResponseDto>> getReviewProduct(@PathVariable Long productId,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+        Page<ReviewResponseDto> reviews = reviewService.getAllReviewProduct(productId, page, size);
+        return ResponseEntity.ok(reviews);
     }
 
     @PatchMapping("/{reviewId}")
