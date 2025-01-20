@@ -13,10 +13,14 @@ import com.Soo_Shinsa.repository.ProductOptionRepository;
 import com.Soo_Shinsa.repository.ProductRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.ProductOptionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class ProductOptionServiceImpl implements ProductOptionService {
 
     ProductOptionRepository productOptionRepository;
