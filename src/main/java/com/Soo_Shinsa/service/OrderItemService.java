@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.service;
 
+import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.entity.OrderItem;
 import com.Soo_Shinsa.model.User;
@@ -7,7 +8,7 @@ import com.Soo_Shinsa.model.User;
 import java.util.List;
 
 public interface OrderItemService {
-    OrderItemResponseDto createOrderItem(Long orderId,Long productId, Integer quantity, Long userId, User user);
+    OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto ,Long userId);
 
     OrderItem findByIdOrElseThrow(Long id);
 

@@ -57,7 +57,7 @@ public class OrdersController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
             @RequestBody OrdersRequestDto requestDto) {
-        OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId(),requestDto.getOrderItems());
+        OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId());
         return ResponseEntity.ok(responseDto);
     }
 

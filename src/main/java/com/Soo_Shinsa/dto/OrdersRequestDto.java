@@ -15,10 +15,7 @@ public class OrdersRequestDto {
 
     private Long userId;
 
-    private List<OrderItemRequestDto> orderItems;
-
-    public OrdersRequestDto(Long userId, List<OrderItemRequestDto> orderItems) {
+    public OrdersRequestDto(Long userId) {
         this.userId = userId;
-        this.orderItems = orderItems;
     }
 }

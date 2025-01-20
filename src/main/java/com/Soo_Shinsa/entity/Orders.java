@@ -37,10 +37,15 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-
     public Orders(BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
         this.totalPrice = totalPrice;
         this.status = status;
+        this.user = user;
+        this.orderItems = orderItems;
+    }
+
+    public Orders(BigDecimal totalPrice, User user, List<OrderItem> orderItems) {
+        this.totalPrice = totalPrice;
         this.user = user;
         this.orderItems = orderItems;
     }

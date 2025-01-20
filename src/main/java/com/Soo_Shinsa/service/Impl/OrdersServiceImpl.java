@@ -106,27 +106,15 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Transactional
-    public OrdersResponseDto createOrder(Long userId,List<OrderItemRequestDto> orderItems) {
+    public OrdersResponseDto createOrder(Long userId) {
         // 사용자 정보 가져오기
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
-        Orders order = new Orders(BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
-
-        // OrderItems 추가
-        orderItems.forEach(orderItemDto -> {
-            Product product = productRepository.findById(orderItemDto.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
-            OrderItem orderItem = new OrderItem(
-                    orderItemDto.getQuantity(),
-                    order,
-                    product
-            );
-            order.addOrderItem(orderItem);
-        });
-
+        Orders order = new Orders(BigDecimal.ZERO, Status.ACTIVE,user, new ArrayList<>());
         // 주문 저장
         Orders savedOrder = ordersRepository.save(order);
+
 
         // ResponseDto로 변환
         return OrdersResponseDto.toDto(savedOrder);

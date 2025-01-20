@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
+import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.entity.*;
 import com.Soo_Shinsa.model.User;
@@ -22,23 +23,31 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrdersRepository ordersRepository;
     //오더 아이템 생성
     @Transactional
-    @Override
-    public OrderItemResponseDto createOrderItem(Long orderId,Long productId, Integer quantity,Long userId,User user) {
-        // 주문을 찾아옴 없을시 예외 던짐
-        Orders order = ordersRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
+    public OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto,Long userId) {
+        // 주문 조회
+        Orders order = ordersRepository.findById(requestDto.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
 
+        // 상품 조회
+        Product product = productRepository.findById(requestDto.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다.: " + requestDto.getProductId()));
 
-        // 상품 확인 찾아옴 없을시 예외 던짐
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
-        //오더 아이템 생성
-        OrderItem orderItem = new OrderItem(quantity, order, product);
-        //오더에 오더 아이템을 담음
+        // OrderItem 생성 및 저장
+        OrderItem orderItem = new OrderItem(
+                requestDto.getQuantity(),
+                order,
+                product
+        );
+        // OrderItem을 Order에 추가
         order.addOrderItem(orderItem);
+
+        // OrderItem 저장
+        OrderItem savedOrderItem = orderItemRepository.save(orderItem);
+
+        // 변경된 Order도 저장 (CascadeType.ALL로 인해 필요하지 않을 수도 있음)
         ordersRepository.save(order);
-        //dto로 변환
-        return OrderItemResponseDto.toDto(orderItem);
+
+        return OrderItemResponseDto.toDto(savedOrderItem);
     }
     //오더 아이템 찾아오고 dto로 변환
     @Transactional(readOnly = true)

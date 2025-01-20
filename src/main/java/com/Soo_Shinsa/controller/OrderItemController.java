@@ -28,7 +28,7 @@ public class OrderItemController {
             @Valid
             @RequestBody OrderItemRequestDto requestDto,
             @PathVariable Long userId) {
-        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto.getOrderId(),requestDto.getOrderId(),requestDto.getQuantity(), userId, UserUtils.getUser(userDetails));
+        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto,userId);
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
     //특정유저의 특정 오더아이템 읽기
