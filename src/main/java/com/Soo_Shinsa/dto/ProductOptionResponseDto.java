@@ -18,14 +18,14 @@ public class ProductOptionResponseDto {
     private String size;
     private String color;
     private String status;
-    private Product productId;
+    private Product product;
 
-    public ProductOptionResponseDto(Long id, String size, String color, String status, Product productId) {
+    public ProductOptionResponseDto(Long id, String size, String color, String status, Product product) {
         this.id = id;
         this.size = size;
         this.color = color;
         this.status = status;
-        this.productId = productId;
+        this.product = product;
     }
 
     public static ProductOptionResponseDto toDto(ProductOption productoption) {
@@ -34,7 +34,7 @@ public class ProductOptionResponseDto {
                 productoption.getSize(),
                 productoption.getColor(),
                 productoption.getStatus(),
-                productoption.getProductId()
+                productoption.getProduct()
         );
     }
 }

@@ -15,14 +15,14 @@ public class ProductResponseDto {
     private String name;
     private BigDecimal price;
     private String status;
-    private Brand brandId;
+    private Brand brand;
 
-    public ProductResponseDto(Long id, String name, BigDecimal price, String status, Brand brandId) {
+    public ProductResponseDto(Long id, String name, BigDecimal price, String status, Brand brand) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.status = status;
-        this.brandId = brandId;
+        this.brand = brand;
     }
 
     public static ProductResponseDto toDto(Product product) {
@@ -31,7 +31,7 @@ public class ProductResponseDto {
                 product.getName(),
                 product.getPrice(),
                 product.getStatus(),
-                product.getBrandId()
+                product.getBrand()
                 );
     }
 }
