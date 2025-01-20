@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.dto.review;
+package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.entity.Review;
 import lombok.Builder;

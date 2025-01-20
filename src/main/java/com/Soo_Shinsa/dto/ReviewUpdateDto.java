@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.dto.review;
+package com.Soo_Shinsa.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
