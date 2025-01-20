@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
      * @return
      */
     @Transactional
-    public Page<ReviewResponseDto> getAllReviewByProductId(Long productId, int page, int size) {
+    public Page<ReviewResponseDto> getAllReviewProduct(Long productId, int page, int size) {
         if (productId == null) {
             throw new IllegalArgumentException("상품 ID를 입력해주세요.");
         }
