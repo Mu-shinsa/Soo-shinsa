@@ -38,7 +38,9 @@ public class BrandServiceImpl implements BrandService {
 
         Brand brand = new Brand(registrationNum, name, context, "입점신청", user);
 
-        return BrandResponseDto.toDto(brand);
+        Brand savedBrand = brandRepository.save(brand);
+
+        return BrandResponseDto.toDto(savedBrand);
     }
 
     @Transactional
