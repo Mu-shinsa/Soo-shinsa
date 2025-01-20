@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
         Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        findProduct.update(dto.getName(), dto.getPrice(),  dto.getStatus());
+        findProduct.update(dto.getName(), dto.getPrice(), dto.getStatus());
 
         Product savedProduct = productRepository.save(findProduct);
 
