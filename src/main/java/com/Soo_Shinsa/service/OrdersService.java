@@ -11,4 +11,6 @@ public interface OrdersService {
     OrdersResponseDto getOrderById(Long orderId, Long userId, User user);
     OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity,User user);
     OrdersResponseDto createOrderFromCart(Long userId,User user);
+
+    OrdersResponseDto createOrder (Long userId,List<OrderItemRequestDto> orderItems);
 }

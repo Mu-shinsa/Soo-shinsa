@@ -9,6 +9,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String orderNumber;
+    private String orderNumber=createOrderNumber();
 
     @Column(nullable = false)
     private BigDecimal totalPrice= BigDecimal.ZERO;;
@@ -37,18 +38,17 @@ public class Orders extends BaseTimeEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
-    public Orders(String orderNumber, BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
-        this.orderNumber = orderNumber;
+    public Orders(BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
         this.orderItems = orderItems;
     }
 
-    public Orders(String orderNumber, Status status, User user) {
-        this.orderNumber = orderNumber;
+    public Orders(Status status, User user, List<OrderItem> orderItems) {
         this.status = status;
         this.user = user;
+        this.orderItems = orderItems;
     }
 
     // 연관관계 오더 아이템 추가
@@ -69,6 +69,11 @@ public class Orders extends BaseTimeEntity {
         this.totalPrice = orderItems.stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private String createOrderNumber(){
+        return orderNumber = "ORD-" + UUID.randomUUID();
+
     }
 
 }

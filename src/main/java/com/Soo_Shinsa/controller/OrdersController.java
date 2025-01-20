@@ -52,4 +52,13 @@ public class OrdersController {
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 
+    @PostMapping("/orders")
+    public ResponseEntity<OrdersResponseDto> createOrder(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid
+            @RequestBody OrdersRequestDto requestDto) {
+        OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId(),requestDto.getOrderItems());
+        return ResponseEntity.ok(responseDto);
+    }
+
 }

@@ -28,6 +28,7 @@ public class OrdersServiceImpl implements OrdersService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
 
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
@@ -56,9 +57,8 @@ public class OrdersServiceImpl implements OrdersService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
-        String orderNumber = "ORD-" + UUID.randomUUID();
         // Orders 생성
-        Orders order = new Orders(orderNumber, product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
 
 
         //주문아이템을생성
@@ -83,8 +83,7 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         // Orders 생성
-        String orderNumber = "ORD-" + UUID.randomUUID();
-        Orders order = new Orders(orderNumber, BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(Status.ACTIVE, user, new ArrayList<>());
 
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
         for (CartItem cartItem : cartItems) {
@@ -104,6 +103,33 @@ public class OrdersServiceImpl implements OrdersService {
 
         // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
+    }
+
+    @Transactional
+    public OrdersResponseDto createOrder(Long userId,List<OrderItemRequestDto> orderItems) {
+        // 사용자 정보 가져오기
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+
+        Orders order = new Orders(BigDecimal.ZERO, Status.ACTIVE, user, new ArrayList<>());
+
+        // OrderItems 추가
+        orderItems.forEach(orderItemDto -> {
+            Product product = productRepository.findById(orderItemDto.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다."));
+            OrderItem orderItem = new OrderItem(
+                    orderItemDto.getQuantity(),
+                    order,
+                    product
+            );
+            order.addOrderItem(orderItem);
+        });
+
+        // 주문 저장
+        Orders savedOrder = ordersRepository.save(order);
+
+        // ResponseDto로 변환
+        return OrdersResponseDto.toDto(savedOrder);
     }
 
 }
