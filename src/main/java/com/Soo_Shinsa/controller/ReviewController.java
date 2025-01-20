@@ -8,6 +8,7 @@ import com.Soo_Shinsa.service.ReviewService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +31,10 @@ public class ReviewController {
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReviewResponseDto> getReview(Long reviewId) {
+    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Long reviewId,
+                                                       @AuthenticationPrincipal UserDetailsImp userDetails) {
+
+        UserUtils.getUser(userDetails);
         ReviewResponseDto review = reviewService.getReview(reviewId);
         return ResponseEntity.ok(review);
     }
