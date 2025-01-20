@@ -20,6 +20,12 @@ public class ReviewServiceImpl implements ReviewService {
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 리뷰 생성
+     * @param orderItemId
+     * @param requestDto
+     * @return ReviewResponseDto.toDto(saveReview)
+     */
     @Transactional
     @Override
     public ReviewResponseDto createReview (Long orderItemId, ReviewRequestDto requestDto) {
@@ -42,6 +48,11 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResponseDto.toDto(saveReview);
     }
 
+    /**
+     * 리뷰 조회
+     * @param reviewId
+     * @return ReviewResponseDto.toDto(review)
+     */
     @Transactional(readOnly = true)
     @Override
     public ReviewResponseDto getReview(Long reviewId) {
@@ -51,6 +62,12 @@ public class ReviewServiceImpl implements ReviewService {
         return ReviewResponseDto.toDto(review);
     }
 
+    /**
+     * 리뷰 수정
+     * @param reviewId
+     * @param updateDto
+     * @return updateDto
+     */
     @Transactional
     @Override
     public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto) {
@@ -62,6 +79,10 @@ public class ReviewServiceImpl implements ReviewService {
         return updateDto;
     }
 
+    /**
+     * 리뷰 삭제
+     * @param reviewId
+     */
     @Transactional
     @Override
     public void delete(Long reviewId) {
