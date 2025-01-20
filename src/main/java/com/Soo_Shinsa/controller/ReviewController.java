@@ -39,6 +39,14 @@ public class ReviewController {
         return ResponseEntity.ok(review);
     }
 
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<Page<ReviewResponseDto>> getReviewProduct(@PathVariable Long productId,
+                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+        Page<ReviewResponseDto> reviews = reviewService.getAllReviewProduct(productId, page, size);
+        return ResponseEntity.ok(reviews);
+    }
+
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateDto> updateReview(@PathVariable Long reviewId,
                                                         @Valid @RequestBody ReviewUpdateDto updateDto,
