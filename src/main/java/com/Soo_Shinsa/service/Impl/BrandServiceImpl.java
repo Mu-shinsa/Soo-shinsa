@@ -71,7 +71,7 @@ public class BrandServiceImpl implements BrandService {
 
         User user = checkUser(userId);
 
-        List<Brand> brands = brandRepository.findAllByUserId(user.getUserId());
+        List<Brand> brands = brandRepository.findAllByUserUserId(user.getUserId());
 
         return brands.stream().map(BrandResponseDto::toDto).toList();
     }
@@ -103,6 +103,7 @@ public class BrandServiceImpl implements BrandService {
         }
         return user;
     }
+
     @Transactional(readOnly = true)
     protected Collection<? extends GrantedAuthority> checkRole(Collection<? extends GrantedAuthority> authorities){
 

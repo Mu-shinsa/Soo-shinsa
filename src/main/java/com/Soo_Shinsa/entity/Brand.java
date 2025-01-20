@@ -40,14 +40,14 @@ public class Brand  extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
-    public Brand(String registrationNum, String name, String context, String status, User userId) {
+    public Brand(String registrationNum, String name, String context, String status, User user) {
         this.registrationNum = registrationNum;
         this.name = name;
         this.context = context;
         this.status = status;
-        this.userId = userId;
+        this.user = user;
     }
 
     public void refuseBrand(String status, String context) {

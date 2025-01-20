@@ -37,13 +37,13 @@ public class ProductOption extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_Id", nullable = false)
-    private Product productId;
+    private Product product;
 
-    public ProductOption(String size, String color, String status, Product productId) {
+    public ProductOption(String size, String color, String status, Product product) {
         this.size = size;
         this.color = color;
         this.status = status;
-        this.productId = productId;
+        this.product = product;
     }
 
     public void update(String size, String color, String status) {
