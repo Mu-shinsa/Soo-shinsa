@@ -1,7 +1,6 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Status;
-import com.Soo_Shinsa.dto.CartItemResponseDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
@@ -21,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -140,5 +138,16 @@ public class OrdersServiceImpl implements OrdersService {
         // ResponseDto로 변환
         return OrdersResponseDto.toDto(savedOrder);
     }
+    @Transactional
+    @Override
+    public OrdersResponseDto updateOrder(Long userId, Long orderId, Status status) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        Orders order = new Orders(status , user, new ArrayList<>());
+        // 주문 저장
+        Orders savedOrder = ordersRepository.save(order);
+        return OrdersResponseDto.toDto(savedOrder);
+    }
+
 
 }

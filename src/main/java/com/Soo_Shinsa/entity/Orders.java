@@ -44,11 +44,6 @@ public class Orders extends BaseTimeEntity {
         this.orderItems = orderItems;
     }
 
-    public Orders(BigDecimal totalPrice, User user, List<OrderItem> orderItems) {
-        this.totalPrice = totalPrice;
-        this.user = user;
-        this.orderItems = orderItems;
-    }
 
     public Orders(Status status, User user, List<OrderItem> orderItems) {
         this.status = status;

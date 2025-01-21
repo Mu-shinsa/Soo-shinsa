@@ -3,6 +3,7 @@ package com.Soo_Shinsa.controller;
 
 import com.Soo_Shinsa.dto.OrdersRequestDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.dto.OrdersUpdateRequestDto;
 import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
 import com.Soo_Shinsa.service.OrdersService;
 import com.Soo_Shinsa.utils.UserUtils;
@@ -75,7 +76,17 @@ public class OrdersController {
             @RequestBody OrdersRequestDto requestDto) {
         UserUtils.getUser(userDetails);
         OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId());
-        return ResponseEntity.ok(responseDto);
+        return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
+    }
+    @PatchMapping("/users/{userId}")
+    public ResponseEntity<OrdersResponseDto> updateOrder(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long userId,
+            @Valid
+            @RequestBody OrdersUpdateRequestDto requestDto){
+        UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.updateOrder(userId, requestDto.getOrderId(), requestDto.getStatus());
+        return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 
 }

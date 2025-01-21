@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.repository;
 
-import com.Soo_Shinsa.entity.CartItem;
+
 import com.Soo_Shinsa.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
