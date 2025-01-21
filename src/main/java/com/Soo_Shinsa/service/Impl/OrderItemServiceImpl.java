@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,13 +34,13 @@ public class OrderItemServiceImpl implements OrderItemService {
         // 상품 조회
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다.: " + requestDto.getProductId()));
-
         // OrderItem 생성 및 저장
         OrderItem orderItem = new OrderItem(
                 requestDto.getQuantity(),
                 order,
                 product
         );
+
         // OrderItem을 Order에 추가
         order.addOrderItem(orderItem);
 
