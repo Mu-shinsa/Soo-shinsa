@@ -44,7 +44,6 @@ public class CartItemServiceImpl implements CartItemService {
         return CartItemResponseDto.toDto(cartItem);
     }
 
-
 //    //카트아이템 찾아옴
     @Transactional(readOnly = true)
     @Override
@@ -98,8 +97,8 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemRepository.delete(findCart);
         //dto로 변환
         return CartItemResponseDto.toDto(findCart);
-
     }
+
     //카트 아이템을 찾아옴
     @Transactional(readOnly = true)
     @Override
