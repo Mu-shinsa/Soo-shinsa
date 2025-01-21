@@ -31,10 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Transactional
     @Override
-    public ReviewResponseDto createReview (Long orderItemId, ReviewRequestDto requestDto) {
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
+    public ReviewResponseDto createReview (Long orderItemId, ReviewRequestDto requestDto, User user) {
         OrderItem orderItem = orderItemRepository.findById(orderItemId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 항목입니다."));
 
@@ -73,9 +70,11 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Transactional
     @Override
-    public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto) {
+    public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto, User user) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+
+        validateUser(user, review);
 
         review.update(updateDto.getRate(), updateDto.getContent());
         Review saveReview = reviewRepository.save(review);
@@ -106,10 +105,18 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Transactional
     @Override
-    public void delete(Long reviewId) {
+    public void delete(Long reviewId, User user) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 
+        validateUser(user, review);
+
         reviewRepository.delete(review);
+    }
+
+    private static void validateUser(User user, Review review) {
+        if (!review.getUser().getUserId().equals(user.getUserId())) {
+            throw new SecurityException("리뷰를 삭제할 권한이 없습니다.");
+        }
     }
 }

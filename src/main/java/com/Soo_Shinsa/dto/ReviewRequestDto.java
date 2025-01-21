@@ -15,15 +15,12 @@ public class ReviewRequestDto {
     @NotEmpty(message = "리뷰 내용을 입력해주세요.")
     private String content;     // 리뷰 내용
 
-    @NotNull(message = "사용자 ID를 입력해주세요.")
-    private Long userId;        // 사용자 ID
     @NotNull(message = "상품 ID를 입력해주세요.")
     private Long productId;     // 상품 ID
 
-    public ReviewRequestDto(Integer rate, String content, Long userId, Long productId) {
+    public ReviewRequestDto(Integer rate, String content, Long productId) {
         this.rate = rate;
         this.content = content;
-        this.userId = userId;
         this.productId = productId;
     }
 }
