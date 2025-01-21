@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "users")
 public class User {
 
@@ -44,6 +42,17 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "user_grade_id")
     private UserGrade userGrade;
+
+    @Builder
+    public User(String email, String password, String name, String phoneNum, UserStatus status, Role role, UserGrade userGrade) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.phoneNum = phoneNum;
+        this.status = status;
+        this.role = role;
+        this.userGrade = userGrade;
+    }
 
     public void updateUserGrade(UserGrade userGrade) {
         this.userGrade = userGrade;
