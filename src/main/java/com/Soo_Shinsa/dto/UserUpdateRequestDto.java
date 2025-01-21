@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class UserUpdateRequestDto {
     private String name;
     private String phoneNum;
-    @NotBlank
+    @NotBlank(message = "기존 비밀번호를 입력해주세요.")
     private String oldPassword;
     private String newPassword;
 }
