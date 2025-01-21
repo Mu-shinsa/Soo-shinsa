@@ -3,14 +3,10 @@ package com.Soo_Shinsa.controller;
 
 import com.Soo_Shinsa.dto.CartItemRequestDto;
 import com.Soo_Shinsa.dto.CartItemResponseDto;
-import com.Soo_Shinsa.dto.OrdersResponseDto;
-import com.Soo_Shinsa.dto.UserDetailResponseDto;
 import com.Soo_Shinsa.service.CartItemService;
-import com.Soo_Shinsa.service.UserService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

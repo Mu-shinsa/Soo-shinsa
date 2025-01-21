@@ -3,7 +3,6 @@ package com.Soo_Shinsa.entity;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

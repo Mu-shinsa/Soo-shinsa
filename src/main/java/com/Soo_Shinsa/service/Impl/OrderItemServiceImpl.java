@@ -1,10 +1,8 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.entity.*;
-import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +69,8 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional(readOnly = true)
     @Override
     public List<OrderItemResponseDto> findByAll(Long userId) {
-
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         //회원의 모든 아이템 오더를 리스트르 받아옴
         List<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(userId);
