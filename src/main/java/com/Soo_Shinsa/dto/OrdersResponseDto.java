@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.dto;
 
-import com.Soo_Shinsa.constant.Status;
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.entity.Orders;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +17,13 @@ public class OrdersResponseDto {
 
     private BigDecimal totalPrice;
 
-    private Status status;
+    private OrdersStatus status;
 
     private Long userId;
 
     private List<OrderItemResponseDto> orderItems;
 
-    public OrdersResponseDto(Long id, String orderNumber, BigDecimal totalPrice, Status status, Long userId, List<OrderItemResponseDto> orderItems) {
+    public OrdersResponseDto(Long id, String orderNumber, BigDecimal totalPrice, OrdersStatus status, Long userId, List<OrderItemResponseDto> orderItems) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.totalPrice = totalPrice;

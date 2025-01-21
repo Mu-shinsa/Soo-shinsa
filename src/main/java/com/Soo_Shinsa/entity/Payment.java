@@ -7,6 +7,7 @@ import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 
@@ -21,6 +22,7 @@ public class Payment extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Value("${toss.secret-key}")
     private String paymentKey; // 토스페이먼츠에서 제공하는 고유 결제 키
 
     @Column(nullable = false)
@@ -42,9 +44,9 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "users_id", nullable = false)
     private User user; // User 엔티티와의 다대일 연관 관계
 
-    public Payment(String paymentKey, TossPayStatus status, TossPayMethod method, Orders order, User user) {
+    public Payment(String paymentKey, BigDecimal amount, TossPayStatus status, TossPayMethod method, Orders order, User user) {
         this.paymentKey = paymentKey;
-        this.amount = order.getTotalPrice();;
+        this.amount = amount;
         this.status = status;
         this.method = method;
         this.order = order;

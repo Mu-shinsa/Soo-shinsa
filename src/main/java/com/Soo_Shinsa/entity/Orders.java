@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.entity;
 
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import com.Soo_Shinsa.model.User;
@@ -28,7 +29,7 @@ public class Orders extends BaseTimeEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrdersStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
@@ -37,7 +38,7 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Orders(BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
+    public Orders(BigDecimal totalPrice, OrdersStatus status, User user, List<OrderItem> orderItems) {
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
@@ -45,7 +46,7 @@ public class Orders extends BaseTimeEntity {
     }
 
 
-    public Orders(Status status, User user, List<OrderItem> orderItems) {
+    public Orders(OrdersStatus status, User user, List<OrderItem> orderItems) {
         this.status = status;
         this.user = user;
         this.orderItems = orderItems;

@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.constant.Status;
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
@@ -76,7 +76,7 @@ public class OrdersServiceImpl implements OrdersService {
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
         // Orders 생성
-        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BeforePayment, user, new ArrayList<>());
 
 
         //주문아이템을생성
@@ -102,7 +102,7 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         // Orders 생성
-        Orders order = new Orders(Status.ACTIVE, user, new ArrayList<>());
+        Orders order = new Orders(OrdersStatus.BeforePayment, user, new ArrayList<>());
 
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
         for (CartItem cartItem : cartItems) {
@@ -130,7 +130,7 @@ public class OrdersServiceImpl implements OrdersService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
-        Orders order = new Orders(BigDecimal.ZERO, Status.ACTIVE,user, new ArrayList<>());
+        Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BeforePayment,user, new ArrayList<>());
         // 주문 저장
         Orders savedOrder = ordersRepository.save(order);
 
@@ -140,7 +140,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
     @Transactional
     @Override
-    public OrdersResponseDto updateOrder(Long userId, Long orderId, Status status) {
+    public OrdersResponseDto updateOrder(Long userId, Long orderId, OrdersStatus status) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Orders order = new Orders(status , user, new ArrayList<>());

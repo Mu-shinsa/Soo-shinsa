@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.constant.Status;
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,5 +14,5 @@ public interface OrdersService {
 
     OrdersResponseDto createOrder (Long userId);
 
-    OrdersResponseDto updateOrder (Long userId, Long orderId, Status status);
+    OrdersResponseDto updateOrder (Long userId, Long orderId, OrdersStatus status);
 }
