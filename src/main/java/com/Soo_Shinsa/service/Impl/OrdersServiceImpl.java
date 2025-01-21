@@ -1,8 +1,7 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Status;
-import com.Soo_Shinsa.dto.OrderItemRequestDto;
-import com.Soo_Shinsa.dto.OrdersRequestDto;
+import com.Soo_Shinsa.dto.CartItemResponseDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
@@ -11,6 +10,8 @@ import com.Soo_Shinsa.entity.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrdersService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,24 @@ public class OrdersServiceImpl implements OrdersService {
         // OrdersResponseDto의 toDto 메서드 사용
         return OrdersResponseDto.toDto(orderWithItems);
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<OrdersResponseDto> getAllByUserId(Long userId, Pageable pageable) {
+        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+
+        //오더를 찾아옴
+        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(userId, pageable);
+
+        //주문이 없을시 예외 던짐
+        if (allByUserUserId == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders를 찾을 수 없습니다");
+        }
+        // OrdersResponseDto의 toDto 메서드 사용
+        return allByUserUserId.map(OrdersResponseDto::toDto);
+    }
+
+
 //
 //    단일 상품 구매
 //    상품을 찾아와서 주문번호를 생성 후 주문을 만들고 거기에 주문아이템에 물건을 담음

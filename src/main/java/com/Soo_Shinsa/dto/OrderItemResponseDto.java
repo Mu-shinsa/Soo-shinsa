@@ -1,8 +1,6 @@
 package com.Soo_Shinsa.dto;
 
-import com.Soo_Shinsa.entity.CartItem;
 import com.Soo_Shinsa.entity.OrderItem;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

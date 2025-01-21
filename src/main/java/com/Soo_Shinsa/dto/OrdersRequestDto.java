@@ -1,18 +1,17 @@
 package com.Soo_Shinsa.dto;
 
-import com.Soo_Shinsa.constant.Status;
-import lombok.AllArgsConstructor;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.util.List;
+
 
 @Getter
 @NoArgsConstructor
 public class OrdersRequestDto {
 
-
+    @NotNull(message = "오더Id는 필수값 입니다.")
     private Long userId;
 
     public OrdersRequestDto(Long userId) {

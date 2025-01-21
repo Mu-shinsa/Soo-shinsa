@@ -1,15 +1,17 @@
 package com.Soo_Shinsa.controller;
 
 
-import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrdersRequestDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
-import com.Soo_Shinsa.service.CartItemService;
 import com.Soo_Shinsa.service.OrdersService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,6 +35,17 @@ public class OrdersController {
         UserUtils.getUser(userDetails);
         OrdersResponseDto responseDto = ordersService.getOrderById(orderId,userId);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    //특정유저의 모든 오더 읽기
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<Page<OrdersResponseDto>> getOrderByAll(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long userId,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        UserUtils.getUser(userDetails);
+        Page<OrdersResponseDto> allByUserId = ordersService.getAllByUserId(userId, pageable);
+        return new ResponseEntity<>(allByUserId, HttpStatus.OK);
     }
 
 //    단품 구매 생성

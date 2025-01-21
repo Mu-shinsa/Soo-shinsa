@@ -1,10 +1,8 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.entity.*;
-import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import org.springframework.transaction.annotation.Transactional;
