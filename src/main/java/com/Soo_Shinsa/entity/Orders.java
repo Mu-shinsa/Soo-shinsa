@@ -9,12 +9,11 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "orders")
 public class Orders extends BaseTimeEntity {
     @Id
@@ -22,10 +21,10 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String orderNumber;
+    private String orderNumber=createOrderNumber();
 
     @Column(nullable = false)
-    private BigDecimal totalPrice= BigDecimal.ZERO;;
+    private BigDecimal totalPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -38,10 +37,20 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-
-    public Orders(String orderNumber, BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
-        this.orderNumber = orderNumber;
+    public Orders(BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
         this.totalPrice = totalPrice;
+        this.status = status;
+        this.user = user;
+        this.orderItems = orderItems;
+    }
+
+    public Orders(BigDecimal totalPrice, User user, List<OrderItem> orderItems) {
+        this.totalPrice = totalPrice;
+        this.user = user;
+        this.orderItems = orderItems;
+    }
+
+    public Orders(Status status, User user, List<OrderItem> orderItems) {
         this.status = status;
         this.user = user;
         this.orderItems = orderItems;
@@ -65,6 +74,11 @@ public class Orders extends BaseTimeEntity {
         this.totalPrice = orderItems.stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private String createOrderNumber(){
+        return orderNumber = "ORD-" + UUID.randomUUID();
+
     }
 
 }

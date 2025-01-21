@@ -10,25 +10,36 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class OrdersResponseDto {
     private Long id;
-    private Long userId;
+
     private String orderNumber;
+
     private BigDecimal totalPrice;
+
     private Status status;
+
+    private Long userId;
+
     private List<OrderItemResponseDto> orderItems;
 
-
+    public OrdersResponseDto(Long id, String orderNumber, BigDecimal totalPrice, Status status, Long userId, List<OrderItemResponseDto> orderItems) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.userId = userId;
+        this.orderItems = orderItems;
+    }
 
     public static OrdersResponseDto toDto(Orders orders) {
         return new OrdersResponseDto(
                 orders.getId(),
-                orders.getUser().getUserId(),
                 orders.getOrderNumber(),
                 orders.getTotalPrice(),
                 orders.getStatus(),
+                orders.getUser().getUserId(),
                 orders.getOrderItems().stream()
                         .map(OrderItemResponseDto::toDto) // OrderItemResponseDto의 toDto 사용
                         .collect(Collectors.toList())
