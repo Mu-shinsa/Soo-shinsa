@@ -9,6 +9,9 @@ import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,9 +78,27 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 
         review.update(updateDto.getRate(), updateDto.getContent());
+        Review saveReview = reviewRepository.save(review);
 
-        return updateDto;
+        return ReviewUpdateDto.toDto(saveReview);
     }
+
+    /**
+     * 상품 리뷰 조회
+     * @param productId
+     * @param productId 상품 ID
+     * @param pageable  페이징 및 정렬 정보
+     * @return reviews.map(ReviewResponseDto::toDto);
+     */
+    @Transactional(readOnly = true)
+    public Page<ReviewResponseDto> getAllReviewProduct(Long productId, Pageable pageable) {
+        // 상품 ID를 기반으로 리뷰 조회 (페이징 적용)
+        Page<Review> reviews = reviewRepository.findAllByProductId(productId, pageable);
+
+        // Review -> ReviewResponseDto 변환
+        return reviews.map(ReviewResponseDto::toDto);
+    }
+
 
     /**
      * 리뷰 삭제
