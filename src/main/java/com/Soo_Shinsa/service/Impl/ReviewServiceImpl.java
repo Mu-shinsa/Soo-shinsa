@@ -74,9 +74,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
 
-        if (!review.getUser().getUserId().equals(user.getUserId())) {
-            throw new IllegalArgumentException("본인의 리뷰만 수정할 수 있습니다.");
-        }
+        validateUser(user, review);
 
         review.update(updateDto.getRate(), updateDto.getContent());
         Review saveReview = reviewRepository.save(review);
