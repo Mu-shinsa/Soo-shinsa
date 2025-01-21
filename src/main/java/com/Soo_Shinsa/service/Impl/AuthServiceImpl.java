@@ -41,10 +41,9 @@ public class AuthServiceImpl implements AuthService {
     public UserResponseDto create(SignInRequestDto dto) {
         //검증
         //중복체크
-        userRepository.findByEmail(dto.getEmail())
-                .ifPresent(user -> {
-                    throw new IllegalArgumentException("가입이 불가능한 이메일입니다.");
-                });
+        if(userRepository.existsByEmail(dto.getEmail())){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
 
         //user 생성
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
