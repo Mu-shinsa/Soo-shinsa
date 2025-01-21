@@ -53,7 +53,14 @@ public class Payment extends BaseTimeEntity {
         this.user = user;
     }
 
+
     public boolean isAmountValid() {
         return this.amount != null && this.order != null && this.amount.compareTo(order.getTotalPrice()) == 0;
+    }
+
+    public void updateStatus(TossPayStatus status) {
+        if (this.status == TossPayStatus.READY) {
+            this.status = TossPayStatus.DONE;
+        }
     }
 }

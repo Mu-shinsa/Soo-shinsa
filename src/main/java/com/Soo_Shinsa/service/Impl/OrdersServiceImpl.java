@@ -33,11 +33,10 @@ public class OrdersServiceImpl implements OrdersService {
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrdersResponseDto getOrderById(Long orderId,Long userId) {
-        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+    public OrdersResponseDto getOrderById(Long orderId,User user) {
 
         //오더를 찾아옴
-        Orders orderWithItems = ordersRepository.findByUserUserId(userId);
+        Orders orderWithItems = ordersRepository.findByUserUserId(user.getUserId());
 
         //주문이 없을시 예외 던짐
         if (orderWithItems == null) {
@@ -49,11 +48,10 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<OrdersResponseDto> getAllByUserId(Long userId, Pageable pageable) {
-        userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+    public Page<OrdersResponseDto> getAllByUserId(User user, Pageable pageable) {
 
         //오더를 찾아옴
-        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(userId, pageable);
+        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(user.getUserId(), pageable);
 
         //주문이 없을시 예외 던짐
         if (allByUserUserId == null) {
@@ -69,9 +67,8 @@ public class OrdersServiceImpl implements OrdersService {
 //    상품을 찾아와서 주문번호를 생성 후 주문을 만들고 거기에 주문아이템에 물건을 담음
     @Transactional
     @Override
-    public OrdersResponseDto createSingleProductOrder(Long userId, Long productId, Integer quantity) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        //상품을 찾아와서 옴
+    public OrdersResponseDto createSingleProductOrder(User user,Long productId, Integer quantity) {
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
@@ -92,11 +89,10 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Transactional
-    public OrdersResponseDto createOrderFromCart(Long userId) {
+    public OrdersResponseDto createOrderFromCart(User user) {
         // 사용자 확인
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        // 사용자 카트 항목 조회
-        List<CartItem> cartItems = cartItemRepository.findByUserUserId(userId);
+
+        List<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId());
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }
@@ -125,10 +121,7 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Transactional
-    public OrdersResponseDto createOrder(Long userId) {
-        // 사용자 정보 가져오기
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+    public OrdersResponseDto createOrder(User user) {
 
         Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BeforePayment,user, new ArrayList<>());
         // 주문 저장
@@ -140,9 +133,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
     @Transactional
     @Override
-    public OrdersResponseDto updateOrder(Long userId, Long orderId, OrdersStatus status) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+    public OrdersResponseDto updateOrder(User user, Long orderId, OrdersStatus status) {
+
         Orders order = new Orders(status , user, new ArrayList<>());
         // 주문 저장
         Orders savedOrder = ordersRepository.save(order);

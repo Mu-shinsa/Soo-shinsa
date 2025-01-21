@@ -20,17 +20,14 @@ import org.springframework.stereotype.Service;
 public class TossPaymentsServiceImpl implements TossPaymentsService {
     private final PaymentRepository paymentRepository;
     private final OrdersRepository ordersRepository;
-    private final UserRepository userRepository;
 
 
     @Transactional
-    public PaymentResponseDto createPayment(PaymentRequestDto requestDto) {
+    public PaymentResponseDto createPayment(PaymentRequestDto requestDto,User user) {
         // 주문 및 사용자 조회
         Orders order = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
 
-        User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을수 없습니다."));
 
         // Payment 엔티티 생성
         Payment payment = new Payment(
@@ -46,10 +43,5 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         // 응답 DTO 생성 및 반환
         return PaymentResponseDto.toDto(savedPayment);
-    }
-    @Transactional
-    public void handlePaymentCallback(String callbackData) {
-        // TODO: 콜백 데이터 처리 로직 구현
-        System.out.println("Callback Data: " + callbackData);
     }
 }

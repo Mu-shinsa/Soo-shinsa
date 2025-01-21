@@ -3,8 +3,10 @@ package com.Soo_Shinsa.controller;
 import com.Soo_Shinsa.dto.PaymentRequestDto;
 import com.Soo_Shinsa.dto.PaymentResponseDto;
 
+import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.TossPaymentsService;
 
+import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,8 @@ public class TossPaymentsController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
             @RequestBody PaymentRequestDto requestDto) {
-        PaymentResponseDto responseDto = tossPaymentsService.createPayment(requestDto);
+        User user = UserUtils.getUser(userDetails);
+        PaymentResponseDto responseDto = tossPaymentsService.createPayment(requestDto,user);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 }

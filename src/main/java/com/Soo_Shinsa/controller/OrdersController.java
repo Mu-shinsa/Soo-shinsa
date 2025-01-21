@@ -5,6 +5,7 @@ import com.Soo_Shinsa.dto.OrdersRequestDto;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.dto.OrdersUpdateRequestDto;
 import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
+import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.OrdersService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
@@ -28,64 +29,57 @@ public class OrdersController {
     private final OrdersService ordersService;
 
     //특정유저의 특정 오더 읽기
-    @GetMapping("/{orderId}/users/{userId}")
+    @GetMapping("/{orderId}/users")
     public ResponseEntity<OrdersResponseDto> getOrderById(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long orderId,
-            @PathVariable Long userId) {
-        UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.getOrderById(orderId,userId);
+            @PathVariable Long orderId) {
+        User user = UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.getOrderById(orderId,user);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     //특정유저의 모든 오더 읽기
-    @GetMapping("/users/{userId}")
+    @GetMapping("/users")
     public ResponseEntity<Page<OrdersResponseDto>> getOrderByAll(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        UserUtils.getUser(userDetails);
-        Page<OrdersResponseDto> allByUserId = ordersService.getAllByUserId(userId, pageable);
+        User user = UserUtils.getUser(userDetails);
+        Page<OrdersResponseDto> allByUserId = ordersService.getAllByUserId(user, pageable);
         return new ResponseEntity<>(allByUserId, HttpStatus.OK);
     }
 
 //    단품 구매 생성
-    @PostMapping("/users/{userId}/single-order")
+    @PostMapping("/users/single-order")
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId,
             @Valid
             @RequestBody SingleProductOrderRequestDto requestDto) {
-        UserUtils.getUser(userDetails);
-        OrdersResponseDto response = ordersService.createSingleProductOrder(userId, requestDto.getProductId(), requestDto.getQuantity());
+        User user = UserUtils.getUser(userDetails);
+        OrdersResponseDto response = ordersService.createSingleProductOrder(user,requestDto.getProductId(), requestDto.getQuantity());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @PostMapping("/users/{userId}/from-cart")
+    @PostMapping("/users/from-cart")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId) {
-        UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.createOrderFromCart(userId);
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.createOrderFromCart(user);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 
     @PostMapping()
     public ResponseEntity<OrdersResponseDto> createOrder(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid
-            @RequestBody OrdersRequestDto requestDto) {
-        UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.createOrder(requestDto.getUserId());
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.createOrder(user);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
-    @PatchMapping("/users/{userId}")
+    @PatchMapping("/users")
     public ResponseEntity<OrdersResponseDto> updateOrder(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId,
             @Valid
             @RequestBody OrdersUpdateRequestDto requestDto){
-        UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.updateOrder(userId, requestDto.getOrderId(), requestDto.getStatus());
+        User user = UserUtils.getUser(userDetails);
+        OrdersResponseDto responseDto = ordersService.updateOrder(user, requestDto.getOrderId(), requestDto.getStatus());
         return new ResponseEntity<>(responseDto,HttpStatus.OK);
     }
 

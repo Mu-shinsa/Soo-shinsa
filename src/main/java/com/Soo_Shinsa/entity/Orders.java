@@ -74,7 +74,11 @@ public class Orders extends BaseTimeEntity {
 
     private String createOrderNumber(){
         return orderNumber = "ORD-" + UUID.randomUUID();
-
+    }
+    public void updateOrderStatus(OrdersStatus status) {
+        if (this.status == OrdersStatus.BeforePayment) {
+            this.status = OrdersStatus.PaymentCompleted;
+        }
     }
 
 }
