@@ -2,6 +2,7 @@ package com.Soo_Shinsa.entity;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
+import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,14 +34,19 @@ public class Report {
     @Column(nullable = false)
     private String rejectReason;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
     @Builder
-    public Report(Long targetId, TargetType targetType, ReportStatus status, String content, String rejectReason) {
+    public Report(Long targetId, TargetType targetType, ReportStatus status, String content, String rejectReason, User user) {
         this.targetId = targetId;
         this.targetType = targetType;
         this.status = status;
         this.content = content;
         this.rejectReason = rejectReason;
+        this.user = user;
     }
+
 
     public void process(ReportStatus status) {
         if (status == null) {
@@ -60,6 +66,7 @@ public class Report {
                 throw new IllegalArgumentException("status는 OPEN, IN_PROGRESS, APPROVED, REJECTED, RESOLVED 중 하나여야 합니다.");
         }
     }
+
 
     public void addRejectReason(String rejectReason) {
         if (rejectReason == null) {
