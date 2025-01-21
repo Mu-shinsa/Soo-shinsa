@@ -4,6 +4,7 @@ import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.dto.ReviewRequestDto;
 import com.Soo_Shinsa.dto.ReviewResponseDto;
 import com.Soo_Shinsa.dto.ReviewUpdateDto;
+import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.ReviewService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
@@ -28,18 +29,13 @@ public class ReviewController {
     public ResponseEntity<ReviewResponseDto> createReview(@PathVariable Long orderItemId,
                                                           @Valid @RequestBody ReviewRequestDto requestDto,
                                                           @AuthenticationPrincipal UserDetailsImp userDetails) {
-        UserUtils.getUser(userDetails);
-        ReviewResponseDto review = reviewService.createReview(orderItemId, requestDto);
+        User user = UserUtils.getUser(userDetails);
+        ReviewResponseDto review = reviewService.createReview(orderItemId, requestDto, user);
         return ResponseEntity.ok(review);
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Long reviewId,
-                                                       @AuthenticationPrincipal UserDetailsImp userDetails) {
-
-        UserUtils.getUser(userDetails);
-
-       
+    public ResponseEntity<ReviewResponseDto> getReview(@PathVariable Long reviewId) {
 
         ReviewResponseDto review = reviewService.getReview(reviewId);
         return ResponseEntity.ok(review);
@@ -49,8 +45,8 @@ public class ReviewController {
     public ResponseEntity<ReviewUpdateDto> updateReview(@PathVariable Long reviewId,
                                                         @Valid @RequestBody ReviewUpdateDto updateDto,
                                                         @AuthenticationPrincipal UserDetailsImp userDetails) {
-        UserUtils.getUser(userDetails);
-        ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto);
+        User user = UserUtils.getUser(userDetails);
+        ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto, user);
         return ResponseEntity.ok(review);
     }
 
@@ -64,8 +60,8 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long reviewId,
                                              @AuthenticationPrincipal UserDetailsImp userDetails) {
-        UserUtils.getUser(userDetails);
-        reviewService.delete(reviewId);
+        User user = UserUtils.getUser(userDetails);
+        reviewService.delete(reviewId, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
