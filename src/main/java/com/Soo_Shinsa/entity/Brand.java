@@ -1,11 +1,11 @@
 package com.Soo_Shinsa.entity;
 
+import com.Soo_Shinsa.constant.BrandStatus;
 import com.Soo_Shinsa.model.BaseTimeEntity;
 import com.Soo_Shinsa.model.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -31,18 +31,18 @@ public class Brand  extends BaseTimeEntity {
     @Length(min = 1, max = 255)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String context;
 
     @Column(nullable = false)
     @Length(min = 1, max = 15)
-    private String status;
+    private BrandStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Brand(String registrationNum, String name, String context, String status, User user) {
+    public Brand(String registrationNum, String name, String context, BrandStatus status, User user) {
         this.registrationNum = registrationNum;
         this.name = name;
         this.context = context;
@@ -50,7 +50,7 @@ public class Brand  extends BaseTimeEntity {
         this.user = user;
     }
 
-    public void refuseBrand(String status, String context) {
+    public void refuseBrand(BrandStatus status, String context) {
         this.status = status;
         this.context = context;
     }
