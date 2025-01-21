@@ -39,7 +39,7 @@ public class OrdersServiceImpl implements OrdersService {
         userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         //오더를 찾아옴
-        Orders orderWithItems = ordersRepository.findOrderWithItemsByUserIdAndOrderId(orderId,userId);
+        Orders orderWithItems = ordersRepository.findByUserUserId(userId);
 
         //주문이 없을시 예외 던짐
         if (orderWithItems == null) {
