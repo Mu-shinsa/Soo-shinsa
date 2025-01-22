@@ -27,7 +27,7 @@ public class ProductOptionController {
         return ResponseEntity.ok(productOptionResponseDto);
     }
 
-    @PatchMapping("/{productOptionId}")
+    @PatchMapping("/{optionId}")
     public ResponseEntity<ProductOptionResponseDto> updateOption(@AuthenticationPrincipal UserDetails userDetails,
                                                             @RequestBody ProductOptionRequestDto productOptionRequestDto,
                                                             @PathVariable Long productOptionId) {
@@ -35,7 +35,7 @@ public class ProductOptionController {
         return ResponseEntity.ok(productOptionResponseDto);
     }
 
-    @GetMapping("/{productOptionId}")
+    @GetMapping("/{optionId}")
     public ResponseEntity<ProductOptionResponseDto> findOption(@PathVariable Long productOptionId) {
         ProductOptionResponseDto productOptionResponseDto = productOptionService.findOption(productOptionId);
         return ResponseEntity.ok(productOptionResponseDto);
