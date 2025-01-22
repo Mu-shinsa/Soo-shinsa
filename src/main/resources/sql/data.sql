@@ -1,0 +1,158 @@
+
+insert into grade (point_rate, requirement, created_at, updated_at, name)
+values (0.3,0,now(),now(),'ROOKIE'),
+       (0.5,100,now(),now(),'BRONZE'),
+       (0.7,200,now(),now(),'SILVER'),
+       (1,300,now(),now(),'GOLD');
+
+insert into users (email, name, password, phone_num, role, status) values ('eee','eee','eee','eee','VENDOR','ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('lfridlington0@webmd.com', 'Liv Fridlington', 'nX1(pr{N?', '2593133637', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('wglayzer1@barnesandnoble.com', 'Welbie Glayzer', 'fE2?q4~`mM=', '2542570100', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('maudas2@opensource.org', 'Mata Audas', 'cJ0\|?0%A}),a', '2926395206', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('acoomber3@e-recht24.de', 'Ammamaria Coomber', 'tM7,TqL_9(6%H},', '2248255918', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('gwhifen4@latimes.com', 'Grace Whifen', 'lI1$dC$61PSLw%t', '3481764576', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('nmccomiskey5@weebly.com', 'Novelia McComiskey', 'dT9`e.z)', '7488313419', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('gpaddison6@tripadvisor.com', 'Germaine Paddison', 'mY4\d`kt`/1}b=zl', '4218439549', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('jskpsey7@epa.gov', 'Jackqueline Skpsey', 'dJ1~Ia<u?b#', '4694637620', 'CUSTOMER', 'ACTIVE');
+insert into Users (email, name, password, phone_num, role, status) values ('rkrelle8@diigo.com', 'Rafe Krelle', 'hZ7~ilvQt$Yc5FX', '3742992616', 'CUSTOMER', 'ACTIVE');
+
+
+insert into brand (created_at,user_id, status, registration_num, context, name) values (now(),1, 'ACTIVE', 123, 123, 'Mrs');
+insert into brand (created_at,user_id, status, registration_num, context, name) values (now(),1, 'ACTIVE', 123, 123, 'Rev');
+insert into brand (created_at,user_id, status, registration_num, context, name) values (now(),1, 'ACTIVE', 123, 123, 'Ms');
+
+insert into product (created_at,price, brand_id, status, name) values (now(),'41300', 1, 'ACTIVE', 'Creme De Banane - Marie');
+insert into product (created_at,price, brand_id, status, name) values (now(),'34600', 1, 'ACTIVE', 'The Pop Shoppe - Grape');
+insert into product (created_at,price, brand_id, status, name) values (now(),'73800', 3, 'ACTIVE', 'Bacardi Limon');
+insert into product (created_at,price, brand_id, status, name) values (now(),'49200', 2, 'ACTIVE', 'Fenngreek Seed');
+insert into product (created_at,price, brand_id, status, name) values (now(),'58600', 3, 'ACTIVE', 'Tart - Pecan Butter Squares');
+insert into product (created_at,price, brand_id, status, name) values (now(),'07600', 2, 'ACTIVE', 'Chicken Giblets');
+insert into product (created_at,price, brand_id, status, name) values (now(),'30800', 2, 'ACTIVE', 'Ocean Spray - Ruby Red');
+insert into product (created_at,price, brand_id, status, name) values (now(),'12700', 2, 'ACTIVE', 'Stock - Veal, White');
+insert into product (created_at,price, brand_id, status, name) values (now(),'36600', 2, 'ACTIVE', 'Energy Drink');
+insert into product (created_at,price, brand_id, status, name) values (now(),'20600', 2, 'ACTIVE', 'Lettuce - Sea / Sea Asparagus');
+
+insert into product_option (created_at,product_id, size, status, color) values (now(),2, '2XL', 'ACTIVE', 'Violet');
+insert into product_option (created_at,product_id, size, status, color) values (now(),9, '2XL', 'ACTIVE', 'Red');
+insert into product_option (created_at,product_id, size, status, color) values (now(),8, '2XL', 'ACTIVE', 'Indigo');
+insert into product_option (created_at,product_id, size, status, color) values (now(),5, 'XS', 'ACTIVE', 'Crimson');
+insert into product_option (created_at,product_id, size, status, color) values (now(),3, 'M', 'ACTIVE', 'Turquoise');
+insert into product_option (created_at,product_id, size, status, color) values (now(),2, 'S', 'ACTIVE', 'Aquamarine');
+insert into product_option (created_at,product_id, size, status, color) values (now(),1, 'S', 'ACTIVE', 'Blue');
+insert into product_option (created_at,product_id, size, status, color) values (now(),8, 'XS', 'ACTIVE', 'Pink');
+insert into product_option (created_at,product_id, size, status, color) values (now(),1, 'S', 'ACTIVE', 'Mauv');
+insert into product_option (created_at,product_id, size, status, color) values (now(),5, '2XL', 'ACTIVE', 'Red');
+
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'317.40', 3,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'926.33', 4,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'205.83', 2,'1111', 'CANCELED');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'519.68', 7,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'844.23', 5,'1111', 'CANCELED');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'324.92', 9,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'752.89', 8,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'468.03', 2,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'799.37', 6,'1111', 'ACTIVE');
+insert into orders (created_at,total_price, users_id,order_number, status) values (now(),'307.45', 6,'1111', 'ACTIVE');
+
+
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 7, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 4, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 8, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 7, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 10, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 3, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 3, 7);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 5, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 3, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 5, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 9, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 9, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 7, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 4, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 3, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 4, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 1, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 1, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 3, 7);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 7, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 5, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 5, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 6, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 4, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 3, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 7, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 10, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),7, 1, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 1, 7);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 5, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 4, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 2, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 6, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 2, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 2, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 10, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 8, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 9, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 8, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 8, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),7, 6, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 7, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 1, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 1, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 6, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 5, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 5, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 10, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 5, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 6, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 10, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 9, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 9, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 10, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 2, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 7, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 8, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 3, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 5, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 10, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 9, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 2, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 2, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 6, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 2, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 5, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 7, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 10, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 2, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 10, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 7, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 2, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 6, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 7, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 4, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 2, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),3, 9, 3);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 8, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),4, 7, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 8, 5);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 9, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),1, 2, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 9, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 4, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 1, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 9, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 2, 10);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 4, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 1, 8);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 6, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),2, 6, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),7, 5, 6);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),9, 6, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),7, 4, 1);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),8, 10, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),10, 2, 4);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 9, 2);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 8, 7);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),5, 5, 9);
+insert into order_items (created_at,quantity, orders_id, product_id) values (now(),6, 10, 7);
+
