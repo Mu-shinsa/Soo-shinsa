@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Base64;
+import java.util.Map;
 
 
 @Service
@@ -56,8 +57,32 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         Payment savedPayment = paymentRepository.save(payment);
 
+        String baseUrl = "https://api.tosspayments.com/v1";
+        String secretKey = "test_sk_6bJXmgo28eBv06JyKg7e3LAnGKWx";
+
+        String authHeader = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
+
+        WebClient webClient = WebClient.builder()
+                .baseUrl(baseUrl)
+                .defaultHeader("Authorization", authHeader)
+                .defaultHeader("Content-Type", "application/json")
+                .build();
+
+        String paymentKey = webClient.post()
+                .uri("/payments")
+                .bodyValue(Map.of(
+                        "orderId", requestDto.getOrderId(),
+                        "amount", order.getTotalPrice(),
+                        "order", requestDto.getOrder() // 주문 이름을 동적으로 설정할 수도 있음
+                ))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        System.out.println("Payment Key: " + paymentKey);
+
         // 응답 DTO 생성 및 반환
         return PaymentResponseDto.toDto(savedPayment);
+
     }
 
     @Transactional

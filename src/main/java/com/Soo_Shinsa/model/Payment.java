@@ -21,7 +21,6 @@ public class Payment extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    @Value("${toss.secret-key}")
     private String paymentKey; // 토스페이먼츠에서 제공하는 고유 결제 키
 
     @Column(nullable = false)
