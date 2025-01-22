@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.dto.OrderItemRequestDto;
-import com.Soo_Shinsa.dto.OrderItemResponseDto;
-import com.Soo_Shinsa.entity.OrderItem;
+import com.Soo_Shinsa.dto.order.OrderItemRequestDto;
+import com.Soo_Shinsa.dto.order.OrderItemResponseDto;
+import com.Soo_Shinsa.model.OrderItem;
 
 import java.util.List;
 

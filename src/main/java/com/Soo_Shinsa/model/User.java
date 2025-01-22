@@ -2,7 +2,7 @@ package com.Soo_Shinsa.model;
 
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
-import com.Soo_Shinsa.dto.UserUpdateRequestDto;
+import com.Soo_Shinsa.dto.user.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

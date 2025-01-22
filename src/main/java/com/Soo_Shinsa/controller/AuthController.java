@@ -1,7 +1,9 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.dto.*;
+import com.Soo_Shinsa.dto.user.LoginRequestDto;
+import com.Soo_Shinsa.dto.user.SignInRequestDto;
+import com.Soo_Shinsa.dto.user.UserResponseDto;
 import com.Soo_Shinsa.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;

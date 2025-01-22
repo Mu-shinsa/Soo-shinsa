@@ -1,9 +1,9 @@
 package com.Soo_Shinsa.controller;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
-import com.Soo_Shinsa.dto.LeaveRequestDto;
-import com.Soo_Shinsa.dto.UserDetailResponseDto;
-import com.Soo_Shinsa.dto.UserUpdateRequestDto;
+import com.Soo_Shinsa.dto.user.LeaveRequestDto;
+import com.Soo_Shinsa.dto.user.UserDetailResponseDto;
+import com.Soo_Shinsa.dto.user.UserUpdateRequestDto;
 import com.Soo_Shinsa.service.UserService;
 import com.Soo_Shinsa.utils.UserUtils;
 import lombok.RequiredArgsConstructor;

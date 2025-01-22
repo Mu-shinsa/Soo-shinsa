@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.repository;
 
-import com.Soo_Shinsa.entity.Review;
+import com.Soo_Shinsa.model.Review;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
