@@ -1,7 +1,6 @@
 package com.Soo_Shinsa.model;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
-import com.Soo_Shinsa.constant.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,7 +19,7 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String orderNumber=createOrderNumber();
+    private String orderId = createOrderNumber();
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
@@ -71,12 +70,10 @@ public class Orders extends BaseTimeEntity {
     }
 
     private String createOrderNumber(){
-        return orderNumber = "ORD-" + UUID.randomUUID();
-    }
-    public void updateOrderStatus(OrdersStatus status) {
-        if (this.status == OrdersStatus.BeforePayment) {
-            this.status = OrdersStatus.PaymentCompleted;
-        }
+        return orderId = "ORD-" + UUID.randomUUID();
     }
 
+    public void updateStatus(OrdersStatus status) {
+        this.status = status;
+    }
 }

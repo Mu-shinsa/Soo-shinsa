@@ -1,11 +1,12 @@
-package com.Soo_Shinsa.dto.order;
+package com.Soo_Shinsa.dto.payment;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
-import com.Soo_Shinsa.constant.TossPayStatus;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Getter
 @NoArgsConstructor
@@ -15,14 +16,17 @@ public class PaymentRequestDto {
     @NotNull(message = "결제방법을 입력해주세요.")
     private TossPayMethod method; // 결제 수단 (CARD)
     @NotNull(message = "오더Id는 필수값 입니다.")
-    private Long orderId; // 주문 ID
-    @NotNull(message = "유저Id는 필수값 입니다.")
-    private Long userId; // 사용자 ID
+    private String orderId; // 주문 ID
+    @NotNull(message = "오더는 필수값 입니다.")
+    private Long order; // 주문 ID
 
-    public PaymentRequestDto(String paymentKey, TossPayMethod method, Long orderId, Long userId) {
+
+
+
+    public PaymentRequestDto(String paymentKey, TossPayMethod method, String orderId,Long order) {
         this.paymentKey = paymentKey;
         this.method = method;
         this.orderId = orderId;
-        this.userId = userId;
+        this.order=order;
     }
 }

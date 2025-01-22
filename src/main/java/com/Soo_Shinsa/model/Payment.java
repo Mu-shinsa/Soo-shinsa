@@ -1,10 +1,8 @@
-package com.Soo_Shinsa.entity;
+package com.Soo_Shinsa.model;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
-import com.Soo_Shinsa.model.BaseTimeEntity;
-import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.User;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +25,9 @@ public class Payment extends BaseTimeEntity {
     private String paymentKey; // 토스페이먼츠에서 제공하는 고유 결제 키
 
     @Column(nullable = false)
+    private String orderId;
+
+    @Column(nullable = false)
     private BigDecimal amount; // 결제 금액
 
     @Column(nullable = false)
@@ -45,8 +46,9 @@ public class Payment extends BaseTimeEntity {
     @JoinColumn(name = "users_id", nullable = false)
     private User user; // User 엔티티와의 다대일 연관 관계
 
-    public Payment(String paymentKey, BigDecimal amount, TossPayStatus status, TossPayMethod method, Orders order, User user) {
+    public Payment(String paymentKey, String orderId, BigDecimal amount, TossPayStatus status, TossPayMethod method, Orders order, User user) {
         this.paymentKey = paymentKey;
+        this.orderId = orderId;
         this.amount = amount;
         this.status = status;
         this.method = method;
@@ -60,8 +62,6 @@ public class Payment extends BaseTimeEntity {
     }
 
     public void updateStatus(TossPayStatus status) {
-        if (this.status == TossPayStatus.READY) {
-            this.status = TossPayStatus.DONE;
-        }
+        this.status = status;
     }
 }

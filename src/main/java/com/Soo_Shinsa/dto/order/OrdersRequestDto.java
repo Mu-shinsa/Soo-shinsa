@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrdersRequestDto {
 
-    @NotNull(message = "오더Id는 필수값 입니다.")
+    @NotNull(message = "유저Id는 필수값 입니다.")
     private Long userId;
 
     public OrdersRequestDto(Long userId) {

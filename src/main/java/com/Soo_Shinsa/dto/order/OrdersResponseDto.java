@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class OrdersResponseDto {
     private Long id;
 
-    private String orderNumber;
+    private String orderId;
 
     private BigDecimal totalPrice;
 
@@ -24,9 +24,9 @@ public class OrdersResponseDto {
 
     private List<OrderItemResponseDto> orderItems;
 
-    public OrdersResponseDto(Long id, String orderNumber, BigDecimal totalPrice, OrdersStatus status, Long userId, List<OrderItemResponseDto> orderItems) {
+    public OrdersResponseDto(Long id, String orderId, BigDecimal totalPrice, OrdersStatus status, Long userId, List<OrderItemResponseDto> orderItems) {
         this.id = id;
-        this.orderNumber = orderNumber;
+        this.orderId = orderId;
         this.totalPrice = totalPrice;
         this.status = status;
         this.userId = userId;
@@ -36,7 +36,7 @@ public class OrdersResponseDto {
     public static OrdersResponseDto toDto(Orders orders) {
         return new OrdersResponseDto(
                 orders.getId(),
-                orders.getOrderNumber(),
+                orders.getOrderId(),
                 orders.getTotalPrice(),
                 orders.getStatus(),
                 orders.getUser().getUserId(),

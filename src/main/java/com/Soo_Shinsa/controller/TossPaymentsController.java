@@ -1,8 +1,9 @@
 package com.Soo_Shinsa.controller;
 
 
-import com.Soo_Shinsa.dto.order.PaymentRequestDto;
-import com.Soo_Shinsa.dto.order.PaymentResponseDto;
+import com.Soo_Shinsa.dto.payment.PaymentApproveRequestDto;
+import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
+import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.TossPaymentsService;
 
@@ -33,5 +34,15 @@ public class TossPaymentsController {
         User user = UserUtils.getUser(userDetails);
         PaymentResponseDto responseDto = tossPaymentsService.createPayment(requestDto,user);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<PaymentResponseDto> approvePayment (
+            @Valid @RequestBody PaymentApproveRequestDto requestDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        User user = UserUtils.getUser(userDetails);
+        PaymentResponseDto responseDto = tossPaymentsService.approvePayment(requestDto, user) ;
+        return ResponseEntity.ok(responseDto);
     }
 }

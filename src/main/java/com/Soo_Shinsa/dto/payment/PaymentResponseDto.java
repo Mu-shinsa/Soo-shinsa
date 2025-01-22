@@ -1,8 +1,8 @@
-package com.Soo_Shinsa.dto.order;
+package com.Soo_Shinsa.dto.payment;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
-import com.Soo_Shinsa.entity.Payment;
+import com.Soo_Shinsa.model.Payment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,15 +17,17 @@ public class PaymentResponseDto {
     private BigDecimal amount; // 결제 및 주문 금액을 단일 필드로 통합
     private TossPayStatus status;
     private String userEmail;
+    private String orderId;
 
 
-    public PaymentResponseDto(Long id, String paymentKey, TossPayMethod method, BigDecimal amount, TossPayStatus status, String userEmail) {
+    public PaymentResponseDto(Long id, String paymentKey, TossPayMethod method, BigDecimal amount, TossPayStatus status, String userEmail,String orderId) {
         this.id = id;
         this.paymentKey = paymentKey;
         this.method = method;
         this.amount = amount;
         this.status = status;
         this.userEmail = userEmail;
+        this.orderId=orderId;
     }
 
     public static PaymentResponseDto toDto(Payment payment) {
@@ -35,7 +37,8 @@ public class PaymentResponseDto {
                 payment.getMethod(),
                 payment.getAmount(),
                 payment.getStatus(),
-                payment.getUser().getEmail()
+                payment.getUser().getEmail(),
+                payment.getOrderId()
         );
     }
 }
