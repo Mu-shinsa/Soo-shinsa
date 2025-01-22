@@ -19,7 +19,7 @@ public class UserDetailResponseDto {
         this.role = user.getRole().name();
         if(user.getUserGrade() != null){
             Grade grade = user.getUserGrade().getGrade();
-            this.userGrade = grade.getName();
+            this.userGrade = grade.getName().getName();
             this.pointRate = grade.getPointRate().toString();
             this.requirement = grade.getRequirement().toString();
 
