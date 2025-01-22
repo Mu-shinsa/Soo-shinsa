@@ -3,6 +3,7 @@ package com.Soo_Shinsa.entity;
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
 import com.Soo_Shinsa.model.BaseTimeEntity;
+import com.Soo_Shinsa.model.Orders;
 import com.Soo_Shinsa.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;

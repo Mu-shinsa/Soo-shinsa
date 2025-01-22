@@ -1,10 +1,11 @@
 package com.Soo_Shinsa.controller;
 
 
-import com.Soo_Shinsa.dto.OrdersRequestDto;
+
 import com.Soo_Shinsa.dto.OrdersResponseDto;
 import com.Soo_Shinsa.dto.OrdersUpdateRequestDto;
-import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
+
+import com.Soo_Shinsa.dto.product.SingleProductOrderRequestDto;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.OrdersService;
 import com.Soo_Shinsa.utils.UserUtils;

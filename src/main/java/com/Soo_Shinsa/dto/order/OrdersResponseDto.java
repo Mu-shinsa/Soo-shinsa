@@ -1,7 +1,8 @@
 package com.Soo_Shinsa.dto;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
-import com.Soo_Shinsa.entity.Orders;
+import com.Soo_Shinsa.dto.order.OrderItemResponseDto;
+import com.Soo_Shinsa.model.Orders;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

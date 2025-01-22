@@ -3,7 +3,6 @@ package com.Soo_Shinsa.dto.order;
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
 import com.Soo_Shinsa.entity.Payment;
-import com.Soo_Shinsa.entity.ProductOption;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

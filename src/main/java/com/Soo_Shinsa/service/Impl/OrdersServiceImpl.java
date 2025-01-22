@@ -2,11 +2,8 @@ package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.dto.OrdersResponseDto;
-import com.Soo_Shinsa.entity.CartItem;
-import com.Soo_Shinsa.entity.OrderItem;
-import com.Soo_Shinsa.entity.Orders;
-import com.Soo_Shinsa.entity.Product;
-import com.Soo_Shinsa.model.User;
+
+import com.Soo_Shinsa.model.*;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrdersService;
 import org.springframework.data.domain.Page;

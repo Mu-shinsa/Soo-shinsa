@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.dto.PaymentRequestDto;
-import com.Soo_Shinsa.dto.PaymentResponseDto;
 
+import com.Soo_Shinsa.dto.order.PaymentRequestDto;
+import com.Soo_Shinsa.dto.order.PaymentResponseDto;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.TossPaymentsService;
 

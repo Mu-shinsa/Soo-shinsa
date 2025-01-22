@@ -2,10 +2,11 @@ package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
-import com.Soo_Shinsa.dto.PaymentRequestDto;
-import com.Soo_Shinsa.dto.PaymentResponseDto;
-import com.Soo_Shinsa.entity.Orders;
+
+import com.Soo_Shinsa.dto.order.PaymentRequestDto;
+import com.Soo_Shinsa.dto.order.PaymentResponseDto;
 import com.Soo_Shinsa.entity.Payment;
+import com.Soo_Shinsa.model.Orders;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.OrdersRepository;
 import com.Soo_Shinsa.repository.PaymentRepository;
@@ -23,7 +24,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
     @Transactional
-    public PaymentResponseDto createPayment(PaymentRequestDto requestDto,User user) {
+    public PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user) {
         // 주문 및 사용자 조회
         Orders order = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
