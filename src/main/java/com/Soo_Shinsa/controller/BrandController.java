@@ -4,7 +4,6 @@ import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
 import com.Soo_Shinsa.dto.brand.BrandRequestDto;
 import com.Soo_Shinsa.dto.brand.BrandResponseDto;
 import com.Soo_Shinsa.service.BrandService;
-import com.Soo_Shinsa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequestMapping("/brands")
 public class BrandController {
 
-    private final UserService userService;
     private final BrandService brandService;
 
     @PostMapping("/{userId}")

@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
 
@@ -8,16 +7,16 @@ import com.Soo_Shinsa.dto.payment.PaymentApproveRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.model.Payment;
 import com.Soo_Shinsa.repository.OrdersRepository;
 import com.Soo_Shinsa.repository.PaymentRepository;
 import com.Soo_Shinsa.service.TossPaymentsService;
-import com.Soo_Shinsa.utils.AuthUtils;
-import com.Soo_Shinsa.utils.JsonUtils;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -95,8 +94,11 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
             // WebClient로 POST 요청
             PaymentResponseDto response = webClient.post()
-                    .uri("/payments/confirm")
-                    .headers(headers -> headers.add("Authorization", authHeader)) // Authorization 헤더 추가
+                    .uri("https://api.tosspayments.com/v1/payments/confirm")
+                    .headers(headers -> {
+                        headers.add("Authorization", authHeader);
+                        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+                    }) // Authorization 헤더 추가
                     .bodyValue(requestDto) // 요청 본문
                     .retrieve()
                     .bodyToMono(PaymentResponseDto.class) // 응답을 Mono로 변환
@@ -106,6 +108,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         } catch (WebClientResponseException e) {
             // 4xx 또는 5xx 에러 처리
+            e.printStackTrace();
             System.err.println("Error Response: " + e.getResponseBodyAsString());
             throw new RuntimeException("결제 승인 중 오류 발생: " + e.getMessage(), e);
         } catch (Exception e) {

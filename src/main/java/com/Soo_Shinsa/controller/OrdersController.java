@@ -2,7 +2,7 @@ package com.Soo_Shinsa.controller;
 
 
 
-import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 import com.Soo_Shinsa.dto.order.OrdersUpdateRequestDto;
 
 import com.Soo_Shinsa.dto.product.SingleProductOrderRequestDto;

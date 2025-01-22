@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 @Component
 public class TossPaymentsConfig {
 
-    @Value("${toss.client-key}")
-    private String clientKey;
 
     @Value("${toss.secret-key}")
     private String secretKey;

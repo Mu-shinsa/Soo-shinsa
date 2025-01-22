@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
-import com.Soo_Shinsa.dto.OrdersResponseDto;
 
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 import com.Soo_Shinsa.model.*;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrdersService;
@@ -29,7 +29,7 @@ public class OrdersServiceImpl implements OrdersService {
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrdersResponseDto getOrderById(Long orderId,User user) {
+    public OrdersResponseDto getOrderById(Long orderId, User user) {
 
         //오더를 찾아옴
         Orders orderWithItems = ordersRepository.findByUserUserId(user.getUserId());

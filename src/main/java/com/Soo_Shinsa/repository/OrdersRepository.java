@@ -4,7 +4,6 @@ package com.Soo_Shinsa.repository;
 
 
 import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.service;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
-import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 import com.Soo_Shinsa.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
