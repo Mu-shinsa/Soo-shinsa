@@ -50,18 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
         //customer 경우 customer grade 생성
         if (user.getRole().equals(Role.CUSTOMER)) {
-            //grade 검증
-            Grade grade = gradeRepository.findByName(com.Soo_Shinsa.constant.Grade.ROOKIE.getName())
-                    .orElseThrow(() -> new IllegalArgumentException("서버 오류"));
-
-            //userGrade 생성
-            UserGrade userGrade = new UserGrade(grade);
-
-            //저장
-            userGradeRepository.save(userGrade);
-
-            user.updateUserGrade(userGrade);
-
+            user.updateUserGrade(createNewUserGrade());
         }
 
         //저장
@@ -105,4 +94,17 @@ public class AuthServiceImpl implements AuthService {
     }
 
 
+
+    private UserGrade createNewUserGrade() {
+        //grade 검증
+        Grade grade = gradeRepository.findByName(com.Soo_Shinsa.constant.Grade.ROOKIE.getName())
+                .orElseThrow(() -> new IllegalArgumentException("서버 오류"));
+
+        //userGrade 생성
+        UserGrade userGrade = new UserGrade(grade);
+
+        //저장
+        userGradeRepository.save(userGrade);
+        return userGrade;
+    }
 }
