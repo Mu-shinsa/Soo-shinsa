@@ -28,22 +28,17 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionResponseDto createOption(User user, ProductOptionRequestDto dto, Long productId) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
-        Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Role findRole = user.getRole();
 
-        Role findRole = userById.getRole();
-
-        if(findRole == Role.CUSTOMER) {
-            throw new IllegalArgumentException("일반 사용자는 옵션 등록을 할 수 없습니다.");
+        if(Role.CUSTOMER.equals(findRole)) {
+            throw new IllegalArgumentException("일반 사용자는 상품 등록을 할 수 없습니다.");
         }
+
         ProductOption option = new ProductOption(dto.getSize(), dto.getColor(), dto.getStatus(), findProduct);
 
-        ProductOption savedOption = productOptionRepository.save(option);
-
-        return ProductOptionResponseDto.toDto(savedOption);
+        return ProductOptionResponseDto.toDto(option);
     }
 
     @Transactional
@@ -53,8 +48,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         findOption.update(dto.getSize(), dto.getColor(), dto.getStatus());
 
@@ -63,22 +57,18 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return ProductOptionResponseDto.toDto(savedOption);
     }
 
-    @Transactional
     @Override
     public ProductOptionResponseDto findOption(Long productOptionId) {
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         return ProductOptionResponseDto.toDto(findOption);
     }
 
-    @Transactional
     @Override
     public List<ProductOptionResponseDto> findOptionListByProductId(Long productId) {
 
-        Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
         List<ProductOption> options = productOptionRepository.findAllByProductId(findProduct);
 
