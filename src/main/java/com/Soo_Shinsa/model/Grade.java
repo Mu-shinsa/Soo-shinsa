@@ -14,8 +14,9 @@ public class Grade extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gradeId;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String name;
+    private com.Soo_Shinsa.constant.Grade name;
 
     @Column(nullable = false)
     private BigDecimal pointRate;
