@@ -1,12 +1,11 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Status;
-import com.Soo_Shinsa.dto.CartItemResponseDto;
-import com.Soo_Shinsa.dto.OrdersResponseDto;
-import com.Soo_Shinsa.entity.CartItem;
-import com.Soo_Shinsa.entity.OrderItem;
-import com.Soo_Shinsa.entity.Orders;
-import com.Soo_Shinsa.entity.Product;
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
+import com.Soo_Shinsa.model.CartItem;
+import com.Soo_Shinsa.model.OrderItem;
+import com.Soo_Shinsa.model.Orders;
+import com.Soo_Shinsa.model.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrdersService;
@@ -21,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

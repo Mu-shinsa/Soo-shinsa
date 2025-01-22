@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.dto.BrandRequestDto;
-import com.Soo_Shinsa.dto.BrandResponseDto;
+import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
+import com.Soo_Shinsa.dto.brand.BrandRequestDto;
+import com.Soo_Shinsa.dto.brand.BrandResponseDto;
 import com.Soo_Shinsa.service.BrandService;
 import com.Soo_Shinsa.service.UserService;
 import lombok.RequiredArgsConstructor;

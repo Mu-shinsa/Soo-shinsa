@@ -1,9 +1,9 @@
 package com.Soo_Shinsa.controller;
 
 
-import com.Soo_Shinsa.dto.OrdersRequestDto;
-import com.Soo_Shinsa.dto.OrdersResponseDto;
-import com.Soo_Shinsa.dto.SingleProductOrderRequestDto;
+import com.Soo_Shinsa.dto.order.OrdersRequestDto;
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
+import com.Soo_Shinsa.dto.product.SingleProductOrderRequestDto;
 import com.Soo_Shinsa.service.OrdersService;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
@@ -17,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
