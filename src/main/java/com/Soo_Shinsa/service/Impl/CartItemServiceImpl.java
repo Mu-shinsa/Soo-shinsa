@@ -1,8 +1,9 @@
 package com.Soo_Shinsa.service.Impl;
 
 
-import com.Soo_Shinsa.dto.CartItemResponseDto;
-import com.Soo_Shinsa.entity.*;
+import com.Soo_Shinsa.dto.cartitem.CartItemResponseDto;
+import com.Soo_Shinsa.model.CartItem;
+import com.Soo_Shinsa.model.ProductOption;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.CartItemRepository;
 import com.Soo_Shinsa.repository.ProductOptionRepository;

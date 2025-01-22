@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.utils;
 
-import com.Soo_Shinsa.dto.UserResponseDto;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.UserRepository;
 import io.jsonwebtoken.*;

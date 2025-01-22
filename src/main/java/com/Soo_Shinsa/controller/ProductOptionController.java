@@ -1,9 +1,7 @@
 package com.Soo_Shinsa.controller;
 
-import com.Soo_Shinsa.dto.ProductOptionRequestDto;
-import com.Soo_Shinsa.dto.ProductOptionResponseDto;
-import com.Soo_Shinsa.dto.ProductRequestDto;
-import com.Soo_Shinsa.dto.ProductResponseDto;
+import com.Soo_Shinsa.dto.product.ProductOptionRequestDto;
+import com.Soo_Shinsa.dto.product.ProductOptionResponseDto;
 import com.Soo_Shinsa.service.ProductOptionService;
 import com.Soo_Shinsa.utils.UserUtils;
 import lombok.RequiredArgsConstructor;

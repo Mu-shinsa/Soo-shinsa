@@ -1,17 +1,15 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Role;
-import com.Soo_Shinsa.dto.BrandResponseDto;
-import com.Soo_Shinsa.dto.ProductRequestDto;
-import com.Soo_Shinsa.dto.ProductResponseDto;
-import com.Soo_Shinsa.entity.Brand;
-import com.Soo_Shinsa.entity.Product;
+import com.Soo_Shinsa.dto.product.ProductRequestDto;
+import com.Soo_Shinsa.dto.product.ProductResponseDto;
+import com.Soo_Shinsa.model.Brand;
+import com.Soo_Shinsa.model.Product;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.BrandRepository;
 import com.Soo_Shinsa.repository.ProductRepository;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.ProductService;
-import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
