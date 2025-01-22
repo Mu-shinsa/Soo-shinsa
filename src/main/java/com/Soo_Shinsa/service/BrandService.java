@@ -17,11 +17,9 @@ public interface BrandService {
 
     BrandUpdateResponseDto update(User user, BrandRequestDto brandRequestDto, Long id);
 
-    Brand findByIdOrElseThrow(Long id);
+    BrandResponseDto findBrandById(User user,Long brandId);
 
-    BrandResponseDto findBrandById(Long brandId, Long userId);
+    List<BrandResponseDto> getAllByUserId(User user);
 
-    List<BrandResponseDto> getAllByUserId(Long userId);
-
-    List<BrandResponseDto> getAll();
+    List<BrandResponseDto> getAll(User user);
 }

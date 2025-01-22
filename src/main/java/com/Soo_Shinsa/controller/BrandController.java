@@ -46,26 +46,28 @@ public class BrandController {
         return new ResponseEntity<>(brandRefuseResponseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{brandId}/owners/{userId}")
+    @GetMapping("/{brandId}")
     public ResponseEntity<BrandResponseDto> getBrand(
-            @PathVariable Long brandId,
-            @PathVariable Long userId
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long brandId
     ) {
-        BrandResponseDto findBrand = brandService.findBrandById(brandId, userId);
+        BrandResponseDto findBrand = brandService.findBrandById(UserUtils.getUser(userDetails),brandId);
         return new ResponseEntity<>(findBrand, HttpStatus.OK);
     }
 
-    @GetMapping("/owners/{userId}")
+    @GetMapping("/owners")
     public ResponseEntity<List<BrandResponseDto>> getAllBrandByUserId(
-            @PathVariable Long userId
+            @AuthenticationPrincipal UserDetails userDetails
     ) {
-        List<BrandResponseDto> getAllBrand = brandService.getAllByUserId(userId);
+        List<BrandResponseDto> getAllBrand = brandService.getAllByUserId(UserUtils.getUser(userDetails));
         return new ResponseEntity<>(getAllBrand, HttpStatus.OK);
     }
 
     @GetMapping("/admin")
-    public ResponseEntity<List<BrandResponseDto>> getAllBrands() {
-        List<BrandResponseDto> getAllBrand = brandService.getAll();
+    public ResponseEntity<List<BrandResponseDto>> getAllBrands(
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        List<BrandResponseDto> getAllBrand = brandService.getAll(UserUtils.getUser(userDetails));
         return new ResponseEntity<>(getAllBrand, HttpStatus.OK);
     }
 }
