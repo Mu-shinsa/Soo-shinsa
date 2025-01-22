@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         User user = dto.toEntity(passwordEncoder.encode(dto.getPassword()));
 
         //customer 경우 customer grade 생성
-        if (user.getRole().compareTo(Role.CUSTOMER) == 0) {
+        if (user.getRole().equals(Role.CUSTOMER)) {
             //grade 검증
             Grade grade = gradeRepository.findByName("rookie")
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (user.getStatus().compareTo(UserStatus.DELETED) == 0) {
+        if (user.getStatus().equals(UserStatus.DELETED)) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
