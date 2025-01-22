@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.dto.BrandResponseDto;
-import com.Soo_Shinsa.entity.Brand;
+import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
+import com.Soo_Shinsa.dto.brand.BrandResponseDto;
+import com.Soo_Shinsa.model.Brand;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

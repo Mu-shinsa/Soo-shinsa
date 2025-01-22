@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.dto.ReportProcessDto;
-import com.Soo_Shinsa.dto.ReportRequestDto;
-import com.Soo_Shinsa.dto.ReportResponseDto;
+import com.Soo_Shinsa.dto.report.ReportProcessDto;
+import com.Soo_Shinsa.dto.report.ReportRequestDto;
+import com.Soo_Shinsa.dto.report.ReportResponseDto;
 import com.Soo_Shinsa.model.User;
 
 public interface ReportService {

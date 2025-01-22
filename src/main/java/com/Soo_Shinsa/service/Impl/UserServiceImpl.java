@@ -1,14 +1,13 @@
 package com.Soo_Shinsa.service.Impl;
 
-import com.Soo_Shinsa.dto.UserDetailResponseDto;
-import com.Soo_Shinsa.dto.UserUpdateRequestDto;
+import com.Soo_Shinsa.dto.user.UserDetailResponseDto;
+import com.Soo_Shinsa.dto.user.UserUpdateRequestDto;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

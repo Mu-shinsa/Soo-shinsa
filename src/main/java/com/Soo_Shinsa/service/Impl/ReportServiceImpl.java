@@ -2,10 +2,10 @@ package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.Role;
-import com.Soo_Shinsa.dto.ReportProcessDto;
-import com.Soo_Shinsa.dto.ReportRequestDto;
-import com.Soo_Shinsa.dto.ReportResponseDto;
-import com.Soo_Shinsa.entity.Report;
+import com.Soo_Shinsa.dto.report.ReportProcessDto;
+import com.Soo_Shinsa.dto.report.ReportRequestDto;
+import com.Soo_Shinsa.dto.report.ReportResponseDto;
+import com.Soo_Shinsa.model.Report;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.ReportRepository;
 import com.Soo_Shinsa.service.ReportService;

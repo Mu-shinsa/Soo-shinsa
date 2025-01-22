@@ -1,9 +1,9 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
-import com.Soo_Shinsa.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.dto.BrandResponseDto;
-import com.Soo_Shinsa.entity.Brand;
+import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
+import com.Soo_Shinsa.dto.brand.BrandResponseDto;
+import com.Soo_Shinsa.model.Brand;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.BrandRepository;
 import com.Soo_Shinsa.repository.UserRepository;

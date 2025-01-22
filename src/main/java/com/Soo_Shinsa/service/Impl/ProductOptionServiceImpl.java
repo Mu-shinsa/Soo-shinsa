@@ -1,14 +1,11 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Role;
-import com.Soo_Shinsa.dto.ProductOptionRequestDto;
-import com.Soo_Shinsa.dto.ProductOptionResponseDto;
-import com.Soo_Shinsa.dto.ProductResponseDto;
-import com.Soo_Shinsa.entity.Brand;
-import com.Soo_Shinsa.entity.Product;
-import com.Soo_Shinsa.entity.ProductOption;
+import com.Soo_Shinsa.dto.product.ProductOptionRequestDto;
+import com.Soo_Shinsa.dto.product.ProductOptionResponseDto;
+import com.Soo_Shinsa.model.Product;
+import com.Soo_Shinsa.model.ProductOption;
 import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.repository.BrandRepository;
 import com.Soo_Shinsa.repository.ProductOptionRepository;
 import com.Soo_Shinsa.repository.ProductRepository;
 import com.Soo_Shinsa.repository.UserRepository;
