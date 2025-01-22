@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class UserResponseDto {
-    private String email;
-    private String phoneNum;
-    private String name;
-    private String status;
-    private String role;
+    private final String email;
+    private final String phoneNum;
+    private final String name;
+    private final String status;
+    private final String role;
     private String userGrade;
 
     public UserResponseDto(User user) {
@@ -19,7 +19,7 @@ public class UserResponseDto {
         this.status = user.getStatus().name();
         this.role = user.getRole().name();
         if(user.getUserGrade() != null){
-            this.userGrade = user.getUserGrade().getGrade().getName();
+            this.userGrade = user.getUserGrade().getGrade().getName().getName();
         }
     }
 }
