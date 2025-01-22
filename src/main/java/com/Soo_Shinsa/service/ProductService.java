@@ -1,9 +1,7 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.dto.ProductRequestDto;
-import com.Soo_Shinsa.dto.ProductResponseDto;
-import com.Soo_Shinsa.dto.UserDetailResponseDto;
-import com.Soo_Shinsa.dto.UserUpdateRequestDto;
+import com.Soo_Shinsa.dto.product.ProductRequestDto;
+import com.Soo_Shinsa.dto.product.ProductResponseDto;
 import com.Soo_Shinsa.model.User;
 
 import java.util.List;

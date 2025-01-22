@@ -1,11 +1,9 @@
 package com.Soo_Shinsa.service;
 
 import com.Soo_Shinsa.dto.JwtAuthResponseDto;
-import com.Soo_Shinsa.dto.LoginRequestDto;
-import com.Soo_Shinsa.dto.SignInRequestDto;
-import com.Soo_Shinsa.dto.UserResponseDto;
-import com.Soo_Shinsa.model.User;
-import jakarta.validation.constraints.NotBlank;
+import com.Soo_Shinsa.dto.user.LoginRequestDto;
+import com.Soo_Shinsa.dto.user.SignInRequestDto;
+import com.Soo_Shinsa.dto.user.UserResponseDto;
 
 public interface AuthService {
     UserResponseDto create(SignInRequestDto dto);

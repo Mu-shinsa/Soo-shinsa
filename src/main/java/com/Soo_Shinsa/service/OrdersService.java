@@ -1,10 +1,8 @@
 package com.Soo_Shinsa.service;
 
-import com.Soo_Shinsa.dto.OrdersResponseDto;
+import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 
 public interface OrdersService {
