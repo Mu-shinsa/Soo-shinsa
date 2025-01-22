@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.dto.brand;
 
+import com.Soo_Shinsa.constant.BrandStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +14,5 @@ public class BrandRequestDto {
 
     private String context;
 
-    private String status;
+    private BrandStatus status;
 }

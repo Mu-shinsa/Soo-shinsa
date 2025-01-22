@@ -15,7 +15,7 @@ public interface BrandService {
 
     BrandResponseDto create(User user, BrandRequestDto brandRequestDto);
 
-    BrandUpdateResponseDto update(String status, String context, Long brandId, Long userId, Collection<? extends GrantedAuthority> authorities);
+    BrandUpdateResponseDto update(User user, BrandRequestDto brandRequestDto, Long id);
 
     Brand findByIdOrElseThrow(Long id);
 

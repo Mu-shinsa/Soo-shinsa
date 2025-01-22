@@ -6,6 +6,7 @@ import com.Soo_Shinsa.dto.brand.BrandRequestDto;
 import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
 import com.Soo_Shinsa.dto.brand.BrandResponseDto;
 import com.Soo_Shinsa.model.Brand;
+import com.Soo_Shinsa.model.Review;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.BrandRepository;
 import com.Soo_Shinsa.repository.UserRepository;
@@ -47,15 +48,12 @@ public class BrandServiceImpl implements BrandService {
 
     @Transactional
     @Override
-    public BrandUpdateResponseDto update(String status, String context, Long brandId, Long userId, Collection<? extends GrantedAuthority> authorities) {
-
-        User user = checkUser(userId);
-
-        Collection<? extends GrantedAuthority> authority = checkRole(authorities);
+    public BrandUpdateResponseDto update(User user, BrandRequestDto dto, Long brandId) {
 
         Brand findBrand = findByIdOrElseThrow(brandId);
-
+        findBrand.update(dto.getRegistrationNum(),dto.getName(),dto.getContext(), dto.getStatus());
         Brand saved = brandRepository.save(findBrand);
+
         return BrandUpdateResponseDto.toDto(saved);
     }
 
@@ -95,27 +93,4 @@ public class BrandServiceImpl implements BrandService {
         return brandRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @Transactional(readOnly = true)
-    protected User checkUser(Long userId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImp userDetails = (UserDetailsImp) authentication.getPrincipal();
-        User user = userDetails.getUser();
-        User loginId = userRepository.findById(user.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));;
-
-        if(!loginId.getUserId().equals(userId)){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
-        return user;
-    }
-
-    @Transactional(readOnly = true)
-    protected Collection<? extends GrantedAuthority> checkRole(Collection<? extends GrantedAuthority> authorities){
-
-        UserDetailsImp userDetails = (UserDetailsImp) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(userDetails.getAuthorities().equals("CUSTOMER")){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
-        return authorities;
-    }
 }

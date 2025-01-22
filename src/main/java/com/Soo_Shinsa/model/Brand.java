@@ -57,4 +57,10 @@ public class Brand  extends BaseTimeEntity {
     public void apply(BrandStatus status) {
         this.status = APPLY;
     }
+    public void update(String registrationNum, String name, String context, BrandStatus status) {
+        this.registrationNum = registrationNum;
+        this.name = name;
+        this.context = context;
+        this.status = status;
+    }
 }

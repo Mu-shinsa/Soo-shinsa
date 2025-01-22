@@ -3,6 +3,7 @@ package com.Soo_Shinsa.controller;
 import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
 import com.Soo_Shinsa.dto.brand.BrandRequestDto;
 import com.Soo_Shinsa.dto.brand.BrandResponseDto;
+import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.BrandService;
 import com.Soo_Shinsa.service.UserService;
 import com.Soo_Shinsa.utils.UserUtils;
@@ -32,19 +33,16 @@ public class BrandController {
         return ResponseEntity.ok(brandResponseDto);
     }
 
-    @PatchMapping("/{brandId}/admin/{userId}")
+    @PatchMapping("/{brandId}")
     public ResponseEntity<BrandUpdateResponseDto> updateBrand(
+            @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody BrandRequestDto brandRequestDto,
-            @PathVariable Long brandId,
-            @PathVariable Long userId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @PathVariable Long brandId
     ) {
         BrandUpdateResponseDto brandRefuseResponseDto = brandService.update(
-                brandRequestDto.getStatus(),
-                brandRequestDto.getContext(),
-                brandId,
-                userId,
-                userDetails.getAuthorities());
+                UserUtils.getUser(userDetails),
+                brandRequestDto,
+                brandId);
         return new ResponseEntity<>(brandRefuseResponseDto, HttpStatus.OK);
     }
 
