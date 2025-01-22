@@ -1,6 +1,8 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
+import com.Soo_Shinsa.constant.BrandStatus;
+import com.Soo_Shinsa.dto.brand.BrandRequestDto;
 import com.Soo_Shinsa.dto.brand.BrandUpdateResponseDto;
 import com.Soo_Shinsa.dto.brand.BrandResponseDto;
 import com.Soo_Shinsa.model.Brand;
@@ -30,15 +32,15 @@ public class BrandServiceImpl implements BrandService {
 
     @Transactional
     @Override
-    public BrandResponseDto create(String registrationNum, String name, String context, Long userId, Collection<? extends GrantedAuthority> authorities) {
+    public BrandResponseDto create(User user, BrandRequestDto dto) {
 
-        User user = checkUser(userId);
-
-        Collection<? extends GrantedAuthority> authority = checkRole(authorities);
-
-        Brand brand = new Brand(registrationNum, name, context, "입점신청", user);
-
-        Brand savedBrand = brandRepository.save(brand);
+        Brand savedBrand = new Brand(
+                dto.getRegistrationNum(),
+                dto.getName(),
+                dto.getContext(),
+                BrandStatus.APPLY,
+                user
+        );
 
         return BrandResponseDto.toDto(savedBrand);
     }

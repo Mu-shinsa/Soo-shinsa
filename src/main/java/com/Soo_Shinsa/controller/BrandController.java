@@ -5,6 +5,7 @@ import com.Soo_Shinsa.dto.brand.BrandRequestDto;
 import com.Soo_Shinsa.dto.brand.BrandResponseDto;
 import com.Soo_Shinsa.service.BrandService;
 import com.Soo_Shinsa.service.UserService;
+import com.Soo_Shinsa.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +23,13 @@ public class BrandController {
     private final UserService userService;
     private final BrandService brandService;
 
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<BrandResponseDto> createBrand(
-            @RequestBody BrandRequestDto brandRequestDto,
-            @PathVariable Long userId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody BrandRequestDto brandRequestDto
     ) {
-        BrandResponseDto brandResponseDto = brandService.create(
-                brandRequestDto.getRegistrationNum(),
-                brandRequestDto.getName(),
-                brandRequestDto.getContext(),
-                userId,
-                userDetails.getAuthorities());
-        return new ResponseEntity<>(brandResponseDto, HttpStatus.CREATED);
+        BrandResponseDto brandResponseDto = brandService.create(UserUtils.getUser(userDetails),brandRequestDto);
+        return ResponseEntity.ok(brandResponseDto);
     }
 
     @PatchMapping("/{brandId}/admin/{userId}")
