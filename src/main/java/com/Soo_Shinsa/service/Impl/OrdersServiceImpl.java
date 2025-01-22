@@ -27,7 +27,6 @@ public class OrdersServiceImpl implements OrdersService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final CartItemRepository cartItemRepository;
-    private final UserRepository userRepository;
 
 
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
