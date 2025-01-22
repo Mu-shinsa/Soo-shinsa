@@ -37,11 +37,16 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "brand_Id", nullable = false)
     private Brand brand;
 
-    public Product(String name, BigDecimal price, String status, Brand brand) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catogory_id", nullable = false)
+    private Category category;
+
+    public Product(String name, BigDecimal price, String status, Brand brand, Category category) {
         this.name = name;
         this.price = price;
         this.status = status;
         this.brand = brand;
+        this.category = category;
     }
 
     public void update(String name, BigDecimal price, String status) {
