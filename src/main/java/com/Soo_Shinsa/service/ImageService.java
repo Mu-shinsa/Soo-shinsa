@@ -4,6 +4,6 @@ import com.Soo_Shinsa.model.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
-    Image saveImage (MultipartFile file);
+    Image uploadImage(MultipartFile file, String dirName);
     void deleteImage(Long imageId);
 }
