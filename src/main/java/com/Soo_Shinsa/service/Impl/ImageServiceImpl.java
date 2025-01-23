@@ -51,8 +51,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image updateImage(MultipartFile newFile, String oldImageUrl, String dirName) {
         try {
-            String newImageUrl = s3Uploader.upload(newFile, dirName);
-            s3Uploader.deleteFile(oldImageUrl);
+            String newImageUrl = s3Uploader.updateFile(newFile, oldImageUrl, dirName);
             Image image = new Image(newFile.getOriginalFilename(), newImageUrl);
             return imageRepository.save(image);
         } catch (IOException e) {
