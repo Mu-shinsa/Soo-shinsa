@@ -59,7 +59,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
-        model.addAttribute("tosspayments_key", clientKey);
+
         Orders find = ordersRepository.findByOrderId(orderId);
 
         Payment payment = new Payment(
@@ -67,7 +67,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 orderId,
                 find.getTotalPrice(),
                 TossPayStatus.READY,
-                TossPayMethod.Card,
+                TossPayMethod.CARD,
                 find,
                 user);
 

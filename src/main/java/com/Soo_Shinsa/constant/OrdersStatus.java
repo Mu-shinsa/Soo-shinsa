@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.constant;
 
 public enum OrdersStatus {
-    BeforePayment,
-    PaymentCompleted,
-    InDelivery,
-    DeliveryCompleted
+    BEFOREPAYMENT,
+    PAYMENTCOMPLETED,
+    INDELIVERY,
+    DELIVERYCOMPLETED
 }

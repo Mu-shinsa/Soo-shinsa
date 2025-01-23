@@ -10,6 +10,7 @@ import com.Soo_Shinsa.utils.UserUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,12 +22,18 @@ import org.springframework.web.bind.annotation.*;
 public class TossPaymentsController {
     private final TossPaymentsService tossPaymentsService;
 
+    @Value("${toss.secret-key}")
+    private String secretKey;
+
+    @Value("${toss.client-key}")
+    private String clientKey;
+
 
     @RequestMapping("/success")
     public String approvePayment (
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
             @AuthenticationPrincipal UserDetails userDetails, Model model) throws JsonProcessingException {
-
+        model.addAttribute("tosspayments_key", clientKey);
         User user = UserUtils.getUser(userDetails);
         tossPaymentsService.approvePayment(user,paymentKey,orderId,amount,model);
         return "success";

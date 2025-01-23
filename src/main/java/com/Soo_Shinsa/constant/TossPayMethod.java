@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum TossPayMethod {
-    Card
+    CARD
 
 }
