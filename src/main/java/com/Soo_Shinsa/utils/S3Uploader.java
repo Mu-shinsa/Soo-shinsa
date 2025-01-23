@@ -24,6 +24,13 @@ public class S3Uploader {
     private final AmazonS3 amazonS3;
     private final String bucket;
 
+    /**
+     * S3로 파일 업로드
+     * @param multipartFile
+     * @param dirName
+     * @return uploadImageUrl
+     * @throws IOException
+     */
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         // 파일 이름에서 공백 제거한 새로운 파일 이름 생성
         String originalFileName = multipartFile.getOriginalFilename();
@@ -41,6 +48,12 @@ public class S3Uploader {
         return uploadImageUrl;
     }
 
+    /**
+     * MultipartFile을 File로 변환
+     * @param multipartFile
+     * @return convertFile
+     * @throws IOException
+     */
     private File convert(MultipartFile multipartFile) throws IOException {
         String originalFileName = multipartFile.getOriginalFilename();
         String uuid = UUID.randomUUID().toString();
@@ -61,6 +74,10 @@ public class S3Uploader {
     }
 
 
+    /**
+     * 로컬에 생성된 파일 삭제
+     * @param uploadFile
+     */
     private void removeNewFile(File uploadFile) {
         if (uploadFile.delete()) {
             log.info("로컬 파일이 삭제되었습니다.");
