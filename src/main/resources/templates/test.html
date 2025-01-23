@@ -12,7 +12,7 @@
     // ------  SDK 초기화 ------
     // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
     const clientKey = "test_ck_E92LAa5PVbJYqXywkgYzV7YmpXyJ";
-    const customerKey = "test_sk_6bJXmgo28eBv06JyKg7e3LAnGKWx";
+    const customerKey = "ANONYMOUS";
     const tossPayments = TossPayments(clientKey);
     // 회원 결제
     // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
@@ -28,12 +28,12 @@
             method: "CARD", // 카드 결제
             amount: {
                 currency: "KRW",
-                value: 1000,
+                value: 4500,
             },
             orderId: "x6od_qmmdi0ql2QPWiMMq", // 고유 주문번호
             orderName: "토스 티셔츠 외 2건",
-            successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-            failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+            successUrl: window.location.origin + "/success.html", // 결제 요청이 성공하면 리다이렉트되는 URL
+            failUrl: window.location.origin + "/fail.html", // 결제 요청이 실패하면 리다이렉트되는 URL
             customerEmail: "customer123@gmail.com",
             customerName: "김토스",
             customerMobilePhone: "01012341234",
