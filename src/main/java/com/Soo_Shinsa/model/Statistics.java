@@ -1,18 +1,20 @@
 package com.Soo_Shinsa.model;
 
+import com.Soo_Shinsa.dto.OrderHistoryForStatistic;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 @NoArgsConstructor
 public class Statistics {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "statistics_id")
     private Long statisticsId;
 
     //제품 관련 정보
@@ -21,12 +23,25 @@ public class Statistics {
     private String categoryName;
     private String brandName;
 
+    private Integer quantity;
+
     //주문 관련 정보
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
     private String orderStatus;
 
     //구매자 관련 정보
 
+
+    public Statistics(OrderHistoryForStatistic orderHistory) {
+        this.productName = orderHistory.getProductName();
+        this.price = orderHistory.getPrice();
+        this.categoryName = null;
+        this.brandName = orderHistory.getBrandName();
+
+        this.quantity = orderHistory.getQuantity();
+        this.orderDate = orderHistory.getOrderDate().toLocalDateTime().toLocalDate();
+        this.orderStatus = orderHistory.getOrderStatus();
+    }
 
 
 }
