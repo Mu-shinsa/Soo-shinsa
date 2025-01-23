@@ -5,5 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     Image uploadImage(MultipartFile file, String dirName);
-    void deleteImage(Long imageId);
+    void deleteImage(String imageUrl);
+    Image updateImage(MultipartFile newFile, String oldImageUrl, String dirName);
 }
