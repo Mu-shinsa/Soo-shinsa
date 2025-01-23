@@ -4,6 +4,7 @@ package com.Soo_Shinsa.controller;
 
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 import com.Soo_Shinsa.model.User;
+import com.Soo_Shinsa.repository.UserRepository;
 import com.Soo_Shinsa.service.TossPaymentsService;
 
 import com.Soo_Shinsa.utils.UserUtils;
@@ -19,12 +20,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @RequestMapping("/api")
 @Controller
 @RequiredArgsConstructor
 public class TossPaymentsController {
     private final TossPaymentsService tossPaymentsService;
+    private final UserRepository userRepository;
 
     @Value("${toss.secret-key}")
     private String secretKey;
@@ -53,6 +56,17 @@ public class TossPaymentsController {
         String name = item.getUser().getName();
 
 
+        System.out.println(totalPrice);
+        System.out.println(orderName);
+        System.out.println(name);
+
+//        model.addAttribute("paymentData", Map.of(
+//                "amount", totalPrice,
+//                "orderName", orderName,
+//                "customerName", name,
+//                "successUrl", "/success",
+//                "failUrl", "/fail"
+//        ));
         model.addAttribute("tosspayments_key", clientKey);
 
         model.addAttribute("totalPrice", totalPrice != null ? totalPrice : 1000);
@@ -63,10 +77,10 @@ public class TossPaymentsController {
 
         return "home";
     }
-    @RequestMapping("/home")
+    @RequestMapping("/test")
     public String test(
             Model model){
         model.addAttribute("tosspayments_key", clientKey);
-        return "home";
+        return "test";
     }
 }

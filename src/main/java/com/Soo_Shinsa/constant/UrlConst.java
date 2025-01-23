@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UrlConst {
     //로그인 필터 화이트 리스트
-    public static final String[] WHITE_LIST = {"/", "/users/signin", "/users/login", "/api/**", "/home"};
+    public static final String[] WHITE_LIST = {"/", "/users/signin", "/users/login", "/api/**", "/test","/stylesheets/**"};
 
     //사장 인터셉터 리스트
     public static final String[] ADMIN_INTERCEPTOR_LIST = {"/admin", "/admin/**"};

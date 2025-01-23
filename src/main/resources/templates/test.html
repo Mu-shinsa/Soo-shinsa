@@ -9,12 +9,15 @@
 </head>
 <body>
 <section>
-
-
+    <!--<p>----------------------</p>
+    <div><label><input type="radio" name="method" value="카드" checked/>신용카드</label></div>
+    <div><label><input type="radio" name="method" value="가상계좌"/>가상계좌</label></div>
+    <p>----------------------</p>-->
     <button id="payment-button">결제하기</button>
 </section>
 <script src="https://js.tosspayments.com/v1"></script>
 <script th:inline="javascript">
+    /*<![CDATA[*/
 
     var tossPayments = TossPayments(/*[[${tosspayments_key}]]*/);
     var button = document.getElementById("payment-button");
@@ -22,22 +25,25 @@
     var orderId = new Date().getTime();
 
     button.addEventListener("click", function () {
-
+        //var method = document.querySelector('input[name=method]:checked').value; // "카드" 혹은 "가상계좌"
         var method = "카드";
+
         var paymentData = {
-            amount: parseInt('[[${totalPrice}]]'),
+            amount: 54300,
             orderId: orderId,
-            orderName: '[[${orderName}]]',
-            customerName: '[[${name}]]',
+            orderName: "토스 티셔츠11",
+            customerName: "이토페22",
             successUrl: window.location.origin + "/success",
             failUrl: window.location.origin + "/fail",
         };
 
-
+        //if (method === '가상계좌') {
+        //    paymentData.virtualAccountCallbackUrl = window.location.origin + '/virtual-account/callback'
+        //}
 
         tossPayments.requestPayment(method, paymentData);
     });
-
+    /*]]>*/
 </script>
 </body>
 </html>
