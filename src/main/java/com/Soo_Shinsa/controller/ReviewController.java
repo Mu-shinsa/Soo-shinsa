@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/reviews")
@@ -28,9 +29,10 @@ public class ReviewController {
     @PostMapping("/order-item/{orderItemId}")
     public ResponseEntity<ReviewResponseDto> createReview(@PathVariable Long orderItemId,
                                                           @Valid @RequestBody ReviewRequestDto requestDto,
+                                                          @RequestPart (required = false) MultipartFile imageFile,
                                                           @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
-        ReviewResponseDto review = reviewService.createReview(orderItemId, requestDto, user);
+        ReviewResponseDto review = reviewService.createReview(orderItemId, requestDto, user, imageFile);
         return ResponseEntity.ok(review);
     }
 
@@ -44,9 +46,10 @@ public class ReviewController {
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateDto> updateReview(@PathVariable Long reviewId,
                                                         @Valid @RequestBody ReviewUpdateDto updateDto,
+                                                        @RequestPart(required = false) MultipartFile imageFile,
                                                         @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
-        ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto, user);
+        ReviewUpdateDto review = reviewService.updateReview(reviewId, updateDto, user, imageFile);
         return ResponseEntity.ok(review);
     }
 
