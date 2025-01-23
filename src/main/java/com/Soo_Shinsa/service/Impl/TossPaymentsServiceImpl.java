@@ -64,16 +64,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         Orders find = ordersRepository.findByOrderId(orderId);
 
-        Payment payment = new Payment(
-                paymentKey,
-                orderId,
-                find.getTotalPrice(),
-                TossPayStatus.READY,
-                TossPayMethod.CARD,
-                find,
-                user);
 
-        paymentRepository.save(payment);
         Map<String, String> payloadMap = new HashMap<>();
 
 
@@ -86,6 +77,16 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
+
+
+        Payment findPayment = paymentRepository.findByOrderId(find.getOrderId());
+
+
+        findPayment.update(TossPayStatus.DONE,paymentKey);
+
+        paymentRepository.save(findPayment);
+
+
     }
 
     @Transactional
@@ -93,6 +94,8 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
         Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더입니다."));
+
+
 
         Payment payment = new Payment(
                 order.getOrderId(),

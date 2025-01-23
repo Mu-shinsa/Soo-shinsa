@@ -42,6 +42,8 @@ public class TossPaymentsController {
             @AuthenticationPrincipal UserDetails userDetails, Model model) throws JsonProcessingException {
         User user = UserUtils.getUser(userDetails);
         tossPaymentsService.approvePayment(user,paymentKey,orderId,amount,model);
+
+
         return "success";
     }
 
@@ -60,13 +62,7 @@ public class TossPaymentsController {
         System.out.println(orderName);
         System.out.println(name);
 
-//        model.addAttribute("paymentData", Map.of(
-//                "amount", totalPrice,
-//                "orderName", orderName,
-//                "customerName", name,
-//                "successUrl", "/success",
-//                "failUrl", "/fail"
-//        ));
+
         model.addAttribute("tosspayments_key", clientKey);
 
         model.addAttribute("totalPrice", totalPrice != null ? totalPrice : 1000);
@@ -78,6 +74,8 @@ public class TossPaymentsController {
         return "home";
     }
     @RequestMapping("/test")
+
+
     public String test(
             Model model){
         model.addAttribute("tosspayments_key", clientKey);

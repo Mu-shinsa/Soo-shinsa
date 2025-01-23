@@ -68,7 +68,8 @@ public class Payment extends BaseTimeEntity {
         return this.amount != null && this.order != null && this.amount.compareTo(order.getTotalPrice()) == 0;
     }
 
-    public void updateStatus(TossPayStatus status) {
-        this.status = status;
+    public void update(TossPayStatus status, String paymentKey) {
+            this.status = status;
+            this.paymentKey = paymentKey;
+        }
     }
-}
