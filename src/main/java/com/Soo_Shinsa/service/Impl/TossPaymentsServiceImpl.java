@@ -56,13 +56,13 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
     @Transactional
-    public void approvePayment(User user, String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException {
+    public void approvePayment(String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Orders find = ordersRepository.findByOrderId(orderId);
+
 
 
         Map<String, String> payloadMap = new HashMap<>();
@@ -70,21 +70,13 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
         payloadMap.put("orderId", orderId);
-        payloadMap.put("amount", String.valueOf(find.getTotalPrice()));
+        payloadMap.put("amount", String.valueOf(amount));
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
-
-
-        Payment findPayment = paymentRepository.findByOrderId(find.getOrderId());
-
-
-        findPayment.update(TossPayStatus.DONE,paymentKey);
-
-        paymentRepository.save(findPayment);
 
 
     }

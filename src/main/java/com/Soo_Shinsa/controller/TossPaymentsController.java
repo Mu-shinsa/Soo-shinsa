@@ -39,9 +39,8 @@ public class TossPaymentsController {
     @RequestMapping("/success")
     public String approvePayment (
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
-            @AuthenticationPrincipal UserDetails userDetails, Model model) throws JsonProcessingException {
-        User user = UserUtils.getUser(userDetails);
-        tossPaymentsService.approvePayment(user,paymentKey,orderId,amount,model);
+            Model model) throws JsonProcessingException {
+        tossPaymentsService.approvePayment(paymentKey,orderId,amount,model);
 
 
         return "success";
@@ -74,8 +73,6 @@ public class TossPaymentsController {
         return "home";
     }
     @RequestMapping("/test")
-
-
     public String test(
             Model model){
         model.addAttribute("tosspayments_key", clientKey);

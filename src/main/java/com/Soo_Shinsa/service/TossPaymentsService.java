@@ -10,6 +10,6 @@ import org.springframework.ui.Model;
 
 
 public interface TossPaymentsService {
-    void approvePayment(User user, String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException;
+    void approvePayment(String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException;
     UserOrderDTO findItem(Long userId, Long orderId);
 }
