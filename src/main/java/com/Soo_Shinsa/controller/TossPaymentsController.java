@@ -2,6 +2,7 @@ package com.Soo_Shinsa.controller;
 
 
 
+import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.service.TossPaymentsService;
 
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
+@RequestMapping("/api")
 @Controller
 @RequiredArgsConstructor
 public class TossPaymentsController {
@@ -33,15 +37,36 @@ public class TossPaymentsController {
     public String approvePayment (
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
             @AuthenticationPrincipal UserDetails userDetails, Model model) throws JsonProcessingException {
-        model.addAttribute("tosspayments_key", clientKey);
         User user = UserUtils.getUser(userDetails);
         tossPaymentsService.approvePayment(user,paymentKey,orderId,amount,model);
         return "success";
     }
 
-    @RequestMapping("/home")
-    public String home(){
+    @RequestMapping("/home/users/{userId}/orders/{orderId}")
+    public String home(
+            @PathVariable Long userId,
+            @PathVariable Long orderId,
+            Model model){
+        UserOrderDTO item = tossPaymentsService.findItem(userId, orderId);
+        BigDecimal totalPrice = item.getOrder().getTotalPrice();
+        String orderName = item.getOrder().getOrderId();
+        String name = item.getUser().getName();
+
+
+        model.addAttribute("tosspayments_key", clientKey);
+
+        model.addAttribute("totalPrice", totalPrice != null ? totalPrice : 1000);
+
+        model.addAttribute("orderName", orderName);
+
+        model.addAttribute("name", name);
+
         return "home";
     }
-
+    @RequestMapping("/home")
+    public String test(
+            Model model){
+        model.addAttribute("tosspayments_key", clientKey);
+        return "home";
+    }
 }

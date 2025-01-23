@@ -20,7 +20,7 @@ public class Payment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String paymentKey; // 토스페이먼츠에서 제공하는 고유 결제 키
 
     @Column(nullable = false)
@@ -55,6 +55,14 @@ public class Payment extends BaseTimeEntity {
         this.user = user;
     }
 
+    public Payment(String orderId, BigDecimal amount, TossPayStatus status, TossPayMethod method, Orders order, User user) {
+        this.orderId = orderId;
+        this.amount = amount;
+        this.status = status;
+        this.method = method;
+        this.order = order;
+        this.user = user;
+    }
 
     public boolean isAmountValid() {
         return this.amount != null && this.order != null && this.amount.compareTo(order.getTotalPrice()) == 0;
