@@ -32,7 +32,7 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersResponseDto getOrderById(Long orderId, User user) {
 
         //오더를 찾아옴
-        Orders orderWithItems = ordersRepository.findByUserUserId(user.getUserId());
+        Orders orderWithItems = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더가 아닙니다."));;
 
         //주문이 없을시 예외 던짐
         if (orderWithItems == null) {

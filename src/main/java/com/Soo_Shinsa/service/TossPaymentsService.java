@@ -5,8 +5,11 @@ import com.Soo_Shinsa.dto.payment.PaymentApproveRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.ui.Model;
+
+import java.math.BigDecimal;
 
 public interface TossPaymentsService {
-    PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user);
-    PaymentResponseDto approvePayment(PaymentApproveRequestDto requestDto, User user);
+    void approvePayment(User user, String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException;
 }

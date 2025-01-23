@@ -1,63 +1,53 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <!-- SDK 추가 -->
-    <script src="https://js.tosspayments.com/v2/standard"></script>
+    <title>구매하기</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-<!-- 결제하기 버튼 -->
-<button class="button" style="margin-top: 30px" onclick="requestPayment()">결제하기</button>
-<script>
-    // ------  SDK 초기화 ------
-    // @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
-    const clientKey = "test_ck_E92LAa5PVbJYqXywkgYzV7YmpXyJ";
-    const customerKey = "ANONYMOUS";
-    const tossPayments = TossPayments(clientKey);
-    // 회원 결제
-    // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
-    const payment = tossPayments.payment({ customerKey });
-    // 비회원 결제
-    // const payment = tossPayments.payment({customerKey: TossPayments.ANONYMOUS})
-    // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
-    // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
-    async function requestPayment() {
-        // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-        // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-        // const method = "CARD";
-        // const data = {
-        //     amount : 4500,
-        //     orderId: "x6od_qmmdi0ql2QPWiMMq", // 고유 주문번호
-        //     orderName: "토스 티셔츠 외 2건",
-        //     customerName: "김토스",
-        //     successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-        //     failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-        // };
-        //
-        // payment.requestPayment(method, data);
+<section>
+    <h1>구매하기</h1>
+    <img src="/images/toss-tee.png" style="max-width: 100%" />
+    <h3>토스 티셔츠11</h3>
+    <span>54,300 원</span>
+    <!--<p>----------------------</p>
+    <div><label><input type="radio" name="method" value="카드" checked/>신용카드</label></div>
+    <div><label><input type="radio" name="method" value="가상계좌"/>가상계좌</label></div>
+    <p>----------------------</p>-->
+    <button id="payment-button">결제하기</button>
+</section>
+<script src="https://js.tosspayments.com/v1"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
-        await payment.requestPayment({
-            method: "CARD", // 카드 결제
-            amount: {
-                currency: "KRW",
-                value: 4500,
-            },
-            orderId: "x6od_qmmdi0ql2QPWiMMq", // 고유 주문번호
-            orderName: "토스 티셔츠 외 2건",
-            successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-            failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-            customerEmail: "customer123@gmail.com",
-            customerName: "김토스",
-            customerMobilePhone: "01012341234",
-            // 카드 결제에 필요한 정보
-            card: {
-                useEscrow: false,
-                flowMode: "DEFAULT", // 통합결제창 여는 옵션
-                useCardPoint: false,
-                useAppCardOnly: false,
-            },
-        });
-    }
+    var tossPayments = TossPayments("test_ck_E92LAa5PVbJYqXywkgYzV7YmpXyJ");
+    var button = document.getElementById("payment-button");
+
+    var orderId = new Date().getTime();
+
+    button.addEventListener("click", function () {
+        //var method = document.querySelector('input[name=method]:checked').value; // "카드" 혹은 "가상계좌"
+        var method = "카드";
+
+        var paymentData = {
+            amount: 2000,
+            orderId: orderId,
+            orderName: "토스 티셔츠11",
+            customerName: "이토페22",
+            successUrl: window.location.origin + "/success",
+            failUrl: window.location.origin + "/fail",
+        };
+
+        //if (method === '가상계좌') {
+        //    paymentData.virtualAccountCallbackUrl = window.location.origin + '/virtual-account/callback'
+        //}
+
+        tossPayments.requestPayment(method, paymentData);
+    });
+    /*]]>*/
 </script>
 </body>
 </html>
