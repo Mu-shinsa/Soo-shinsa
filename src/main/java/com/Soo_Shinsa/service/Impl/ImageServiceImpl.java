@@ -7,6 +7,7 @@ import com.Soo_Shinsa.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,11 +20,12 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
     private final S3Uploader s3Uploader;
 
+    @Transactional
+    @Override
     public Image uploadImage(MultipartFile file, String dirName) {
         try {
             // S3에 파일 업로드
             String imageUrl = s3Uploader.upload(file, dirName);
-
             // 비즈니스 로직: 데이터베이스에 이미지 정보 저장
             Image image = new Image(file.getOriginalFilename(), imageUrl);
             return imageRepository.save(image);
@@ -37,14 +39,25 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
-    public void deleteImage(Long imageId) {
-        Image image = imageRepository.findById(imageId)
-                .orElseThrow(() -> new IllegalArgumentException("이미지가 존재하지 않습니다."));
+    @Transactional
+    @Override
+    public void deleteImage(String imageUrl) {
+        if (imageUrl != null) {
+            s3Uploader.deleteFile(imageUrl);
+        }
+    }
 
-        // S3에서 파일 삭제
-        s3Uploader.deleteFile(image.getPath());
-
-        // 데이터베이스에서 정보 삭제
-        imageRepository.delete(image);
+    @Transactional
+    @Override
+    public Image updateImage(MultipartFile newFile, String oldImageUrl, String dirName) {
+        try {
+            String newImageUrl = s3Uploader.upload(newFile, dirName);
+            s3Uploader.deleteFile(oldImageUrl);
+            Image image = new Image(newFile.getOriginalFilename(), newImageUrl);
+            return imageRepository.save(image);
+        } catch (IOException e) {
+            log.error("이미지 업데이트 실패: {}", e.getMessage());
+            throw new RuntimeException("이미지 업데이트 중 오류가 발생했습니다.");
+        }
     }
 }

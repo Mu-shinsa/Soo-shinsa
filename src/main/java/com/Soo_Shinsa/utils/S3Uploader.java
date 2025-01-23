@@ -3,8 +3,10 @@ package com.Soo_Shinsa.utils;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,15 +18,11 @@ import java.net.URLDecoder;
 import java.util.UUID;
 
 @Slf4j
-@Service
+@Component
+@RequiredArgsConstructor
 public class S3Uploader {
     private final AmazonS3 amazonS3;
     private final String bucket;
-
-    public S3Uploader(AmazonS3 amazonS3, @Value("${cloud.aws.S3.bucket}") String bucket) {
-        this.amazonS3 = amazonS3;
-        this.bucket = bucket;
-    }
 
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
         // 파일 이름에서 공백 제거한 새로운 파일 이름 생성
@@ -81,10 +79,10 @@ public class S3Uploader {
         try {
             // URL 디코딩을 통해 원래의 파일 이름을 가져옵니다.
             String decodedFileName = URLDecoder.decode(fileName, "UTF-8");
-            log.info("Deleting file from S3: " + decodedFileName);
+            log.info("S3 파일 삭제: " + decodedFileName);
             amazonS3.deleteObject(bucket, decodedFileName);
         } catch (UnsupportedEncodingException e) {
-            log.error("Error while decoding the file name: {}", e.getMessage());
+            log.error("디코딩 하는 중 파일 이름이 잘못되었습니다.: {}", e.getMessage());
         }
     }
 
