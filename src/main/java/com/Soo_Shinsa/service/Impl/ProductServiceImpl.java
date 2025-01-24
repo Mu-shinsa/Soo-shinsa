@@ -1,18 +1,22 @@
 package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.constant.Role;
+import com.Soo_Shinsa.dto.product.FindProductResponseDto;
 import com.Soo_Shinsa.dto.product.ProductRequestDto;
 import com.Soo_Shinsa.dto.product.ProductResponseDto;
-import com.Soo_Shinsa.model.Brand;
-import com.Soo_Shinsa.model.Product;
-import com.Soo_Shinsa.model.User;
+import com.Soo_Shinsa.model.*;
 import com.Soo_Shinsa.repository.BrandRepository;
+import com.Soo_Shinsa.repository.ProductOptionRepository;
 import com.Soo_Shinsa.repository.ProductRepository;
 import com.Soo_Shinsa.repository.UserRepository;
+import com.Soo_Shinsa.service.ImageService;
 import com.Soo_Shinsa.service.ProductService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,26 +24,37 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    BrandRepository brandRepository;
-    UserRepository userRepository;
-    ProductRepository productRepository;
+    private final BrandRepository brandRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final ImageService imageService;
+    private final ProductOptionRepository productOptionRepository;
 
     @Transactional
     @Override
-    public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brand) {
+    public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        Brand brandId = brandRepository.findById(brand)
+        Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
 
-        Role findRole = userById.getRole();
+        checkUser(userById);
 
-        if(findRole == Role.CUSTOMER) {
-            throw new IllegalArgumentException("일반 사용자는 상품 등록을 할 수 없습니다.");
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            Image uploaded = imageService.uploadImage(imageFile, "products");
+            imageUrl = uploaded.getPath();
         }
-        Product product = new Product(dto.getName(), dto.getPrice(), dto.getStatus(), brandId);
+
+        Product product = Product.builder()
+                .price(dto.getPrice())
+                .name(dto.getName())
+                .productStatus(dto.getStatus())
+                .brand(brand)
+                .imageUrl(imageUrl)
+                .build();
 
         Product savedProduct = productRepository.save(product);
 
@@ -48,49 +63,72 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductResponseDto updateProduct(User user, ProductRequestDto dto, Long productId) {
+    public ProductResponseDto updateProduct(User user, ProductRequestDto dto, Long productId, MultipartFile imageFile) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        checkUser(user);
 
-        Product findProduct = productRepository.findById(productId)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        findProduct.update(dto.getName(), dto.getPrice(), dto.getStatus());
+        String newImageUrl = product.getImageUrl(); // 기존 이미지 URL 유지
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // 기존 이미지 삭제 후 새로운 이미지 업로드
+            Image updatedImage = imageService.updateImage(imageFile, product.getImageUrl(), "reviews");
+            newImageUrl = updatedImage.getPath();
+        }
 
-        Product savedProduct = productRepository.save(findProduct);
+        product.update(dto.getName(), dto.getPrice(), dto.getStatus(), newImageUrl);
+
+        Product savedProduct = productRepository.save(product);
 
         return ProductResponseDto.toDto(savedProduct);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public ProductResponseDto findProduct(Long productId) {
+    public FindProductResponseDto findProduct(Long productId) {
 
         Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        return ProductResponseDto.toDto(findProduct);
+        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(productId);
+
+        return FindProductResponseDto.toDto(findProduct, productOptions);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<ProductResponseDto> findAllProductByBrandId(Long brandId, Pageable pageable) {
+
+        Page<Product> products = productRepository.findAllProductByBrandId(brandId, pageable);
+
+        return products.map(ProductResponseDto::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<ProductResponseDto> findAllProduct(Pageable pageable) {
+
+        Page<Product> products = productRepository.findAllByBrand(pageable);
+
+        return products.map(ProductResponseDto::toDto);
     }
 
     @Transactional
-    @Override
-    public List<ProductResponseDto> findProductListByBrandId(Long brandId) {
+    public void deleteProduct(Long productId, User user) {
+        checkUser(user);
 
-        Brand findBrandId = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        List<Product> products = productRepository.findAllByBrandId(findBrandId);
+        productOptionRepository.deleteAllByProductId(productId);
 
-        return products.stream().map(ProductResponseDto::toDto).toList();
+        productRepository.delete(product);
     }
 
-    @Transactional
-    @Override
-    public List<ProductResponseDto> findAllProduct() {
-
-        List<Product> products = productRepository.findAll();
-
-        return products.stream().map(ProductResponseDto::toDto).toList();
+    private static void checkUser(User user) {
+        if (!user.getRole().equals(Role.ADMIN) && !user.getRole().equals(Role.VENDOR)) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
     }
 }
