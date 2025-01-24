@@ -1,11 +1,14 @@
-package com.Soo_Shinsa.service.Impl;
+package com.Soo_Shinsa.order;
 
 
-import com.Soo_Shinsa.dto.order.OrderItemRequestDto;
-import com.Soo_Shinsa.dto.order.OrderItemResponseDto;
-import com.Soo_Shinsa.model.*;
-import com.Soo_Shinsa.repository.*;
-import com.Soo_Shinsa.service.OrderItemService;
+
+import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
+import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
+import com.Soo_Shinsa.order.model.OrderItem;
+import com.Soo_Shinsa.order.model.Orders;
+import com.Soo_Shinsa.product.ProductRepository;
+import com.Soo_Shinsa.product.model.Product;
+import com.Soo_Shinsa.user.model.User;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

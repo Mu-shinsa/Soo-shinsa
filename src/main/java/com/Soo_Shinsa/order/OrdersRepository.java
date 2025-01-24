@@ -1,9 +1,10 @@
-package com.Soo_Shinsa.repository;
+package com.Soo_Shinsa.order;
 
 
 
 
-import com.Soo_Shinsa.model.Orders;
+
+import com.Soo_Shinsa.order.model.Orders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

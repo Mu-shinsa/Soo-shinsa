@@ -1,7 +1,8 @@
-package com.Soo_Shinsa.repository;
+package com.Soo_Shinsa.order;
 
 
-import com.Soo_Shinsa.model.OrderItem;
+
+import com.Soo_Shinsa.order.model.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

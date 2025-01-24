@@ -1,10 +1,11 @@
-package com.Soo_Shinsa.service;
+package com.Soo_Shinsa.order;
 
 
-import com.Soo_Shinsa.dto.order.OrderItemRequestDto;
-import com.Soo_Shinsa.dto.order.OrderItemResponseDto;
-import com.Soo_Shinsa.model.OrderItem;
-import com.Soo_Shinsa.model.User;
+
+import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
+import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
+import com.Soo_Shinsa.order.model.OrderItem;
+import com.Soo_Shinsa.user.model.User;
 
 import java.util.List;
 

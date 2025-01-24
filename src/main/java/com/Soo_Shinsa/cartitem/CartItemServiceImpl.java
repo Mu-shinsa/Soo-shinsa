@@ -1,16 +1,13 @@
-package com.Soo_Shinsa.service.Impl;
+package com.Soo_Shinsa.cartitem;
 
 
-import com.Soo_Shinsa.constant.Role;
-import com.Soo_Shinsa.dto.cartitem.CartItemResponseDto;
-import com.Soo_Shinsa.model.CartItem;
-import com.Soo_Shinsa.model.ProductOption;
-import com.Soo_Shinsa.model.Review;
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.repository.CartItemRepository;
-import com.Soo_Shinsa.repository.ProductOptionRepository;
-import com.Soo_Shinsa.repository.UserRepository;
-import com.Soo_Shinsa.service.CartItemService;
+
+
+import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
+import com.Soo_Shinsa.product.ProductOptionRepository;
+import com.Soo_Shinsa.product.model.ProductOption;
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,7 @@ public class CartItemServiceImpl implements CartItemService {
     //카트아이템을 생성
     @Transactional
     @Override
-    public CartItemResponseDto create(Long optionId,Integer quantity,User user) {
+    public CartItemResponseDto create(Long optionId, Integer quantity, User user) {
         //상품 옵션을 찾아옴
         ProductOption findOption = productOptionRepository.findById(optionId).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));
         //카트를 생성

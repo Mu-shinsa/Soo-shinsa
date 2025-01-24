@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.service.Impl;
+package com.Soo_Shinsa.order;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
@@ -6,14 +6,16 @@ import com.Soo_Shinsa.constant.TossPayStatus;
 import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
-import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.model.Payment;
-import com.Soo_Shinsa.repository.OrdersRepository;
-import com.Soo_Shinsa.repository.PaymentRepository;
-import com.Soo_Shinsa.repository.UserRepository;
-import com.Soo_Shinsa.service.TossPaymentsService;
 
+
+import com.Soo_Shinsa.order.model.Orders;
+
+import com.Soo_Shinsa.order.model.Payment;
+
+
+import com.Soo_Shinsa.user.PaymentRepository;
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +53,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
     @Transactional
-    public PaymentResponseDto createPayment(PaymentRequestDto requestDto,User user) {
+    public PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user) {
         // 주문 및 사용자 조회
         Orders order = ordersRepository.findById(requestDto.getOrder())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));

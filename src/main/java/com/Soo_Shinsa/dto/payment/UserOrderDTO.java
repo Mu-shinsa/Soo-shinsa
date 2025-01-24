@@ -1,7 +1,8 @@
 package com.Soo_Shinsa.dto.payment;
 
-import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.User;
+
+import com.Soo_Shinsa.order.model.Orders;
+import com.Soo_Shinsa.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

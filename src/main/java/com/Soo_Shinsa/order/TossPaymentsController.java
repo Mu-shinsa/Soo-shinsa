@@ -1,14 +1,14 @@
-package com.Soo_Shinsa.controller;
+package com.Soo_Shinsa.order;
 
 
 
 import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.repository.UserRepository;
-import com.Soo_Shinsa.service.TossPaymentsService;
 
+
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

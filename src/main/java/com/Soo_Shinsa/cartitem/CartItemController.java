@@ -1,11 +1,11 @@
-package com.Soo_Shinsa.controller;
+package com.Soo_Shinsa.cartitem;
 
 
 
-import com.Soo_Shinsa.dto.cartitem.CartItemRequestDto;
-import com.Soo_Shinsa.dto.cartitem.CartItemResponseDto;
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.service.CartItemService;
+
+import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
+import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
-package com.Soo_Shinsa.model;
+package com.Soo_Shinsa.order.model;
 
+import com.Soo_Shinsa.BaseTimeEntity;
 import com.Soo_Shinsa.constant.OrdersStatus;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 

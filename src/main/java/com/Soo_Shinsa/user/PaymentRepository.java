@@ -1,6 +1,6 @@
-package com.Soo_Shinsa.repository;
+package com.Soo_Shinsa.user;
 
-import com.Soo_Shinsa.model.Payment;
+import com.Soo_Shinsa.order.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {

@@ -1,13 +1,13 @@
-package com.Soo_Shinsa.controller;
+package com.Soo_Shinsa.order;
 
 
 
 import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 import com.Soo_Shinsa.dto.order.OrdersUpdateRequestDto;
 
-import com.Soo_Shinsa.dto.product.SingleProductOrderRequestDto;
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.service.OrdersService;
+
+import com.Soo_Shinsa.product.dto.SingleProductOrderRequestDto;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

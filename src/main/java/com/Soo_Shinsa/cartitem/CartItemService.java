@@ -1,10 +1,10 @@
-package com.Soo_Shinsa.service;
+package com.Soo_Shinsa.cartitem;
 
 
 
-import com.Soo_Shinsa.dto.cartitem.CartItemResponseDto;
-import com.Soo_Shinsa.model.CartItem;
-import com.Soo_Shinsa.model.User;
+
+import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
+import com.Soo_Shinsa.user.model.User;
 
 import java.util.List;
 
