@@ -10,6 +10,7 @@ import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
+import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.utils.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,16 +30,19 @@ public class OrdersServiceImpl implements OrdersService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final CartItemRepository cartItemRepository;
+    private final UserRepository userRepository;
 
 
     //주문을 찾아오고 주문이 없다면 예외를 던지고 dto로 변환
     @Transactional(readOnly = true)
     @Override
     public OrdersResponseDto getOrderById(Long orderId, User user) {
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더를 찾아옴
         Orders orderWithItems = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더가 아닙니다."));;
 
+        checkUserAndOrders(orderWithItems,findUser.getUserId());
         //주문이 없을시 예외 던짐
         if (orderWithItems == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders를 찾을 수 없습니다");
@@ -69,7 +73,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional
     @Override
     public OrdersResponseDto createSingleProductOrder(User user,Long productId, Integer quantity) {
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
@@ -77,6 +82,7 @@ public class OrdersServiceImpl implements OrdersService {
         Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BEFOREPAYMENT, user, new ArrayList<>());
 
 
+        checkUserAndOrders(order, findUser.getUserId());
         //주문아이템을생성
         OrderItem orderItem = new OrderItem(quantity, order, product);
         //오더에 오더아이템을 담음
@@ -92,7 +98,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional
     public OrdersResponseDto createOrderFromCart(User user,Pageable pageable) {
         // 사용자 확인
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Page<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId(),pageable);
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
@@ -101,7 +108,7 @@ public class OrdersServiceImpl implements OrdersService {
         // Orders 생성
         Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user, new ArrayList<>());
 
-        checkUser(order,user);
+        checkUserAndOrders(order, findUser.getUserId());
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
         for (CartItem cartItem : cartItems) {
             Product product = cartItem.getProductOption().getProduct();
@@ -137,16 +144,18 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto updateOrder(User user, Long orderId, OrdersStatus status) {
 
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("오더을 찾을 수 없습니다."));
         // 주문 저장
-        checkUser(findOrder,user);
+        checkUserAndOrders(findOrder,user.getUserId());
         findOrder.updateStatus(OrdersStatus.PAYMENTCOMPLETED);
         Orders savedOrder = ordersRepository.save(findOrder);
         return OrdersResponseDto.toDto(savedOrder);
     }
-    private static void checkUser(Orders orders,User user) {
-        if (orders.getUser().equals(user)) {
+
+    private static void checkUserAndOrders(Orders orders,Long userId) {
+        if (!orders.getUser().getUserId().equals(userId)) {
             throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
         }
     }
