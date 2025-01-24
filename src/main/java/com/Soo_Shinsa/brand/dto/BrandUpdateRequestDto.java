@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class BrandRequestDto {
+public class BrandUpdateRequestDto {
 
     private String registrationNum;
 
@@ -14,4 +14,5 @@ public class BrandRequestDto {
 
     private String context;
 
+    private BrandStatus status;
 }
