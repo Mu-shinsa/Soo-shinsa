@@ -4,7 +4,7 @@ import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.report.report.ReportProcessDto;
 import com.Soo_Shinsa.report.report.ReportRequestDto;
 import com.Soo_Shinsa.report.report.ReportResponseDto;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

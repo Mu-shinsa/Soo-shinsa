@@ -6,7 +6,7 @@ import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
 import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.OrderItemRepository;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -3,7 +3,7 @@ package com.Soo_Shinsa.report.report;
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.report.Report;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

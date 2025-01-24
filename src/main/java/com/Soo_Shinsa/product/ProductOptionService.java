@@ -2,7 +2,7 @@ package com.Soo_Shinsa.product;
 
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -3,7 +3,7 @@ package com.Soo_Shinsa.review;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

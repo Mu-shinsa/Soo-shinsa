@@ -2,7 +2,7 @@ package com.Soo_Shinsa.cartitem;
 
 import com.Soo_Shinsa.BaseTimeEntity;
 import com.Soo_Shinsa.product.model.ProductOption;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

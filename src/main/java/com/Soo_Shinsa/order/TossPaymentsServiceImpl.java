@@ -13,9 +13,9 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.model.Payment;
 
 
-import com.Soo_Shinsa.user.PaymentRepository;
-import com.Soo_Shinsa.user.UserRepository;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.PaymentRepository;
+import com.Soo_Shinsa.utils.user.UserRepository;
+import com.Soo_Shinsa.utils.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

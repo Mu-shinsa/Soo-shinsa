@@ -3,7 +3,7 @@ package com.Soo_Shinsa.review;
 import com.Soo_Shinsa.BaseTimeEntity;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.product.model.Product;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

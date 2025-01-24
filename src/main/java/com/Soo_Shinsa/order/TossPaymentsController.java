@@ -7,8 +7,8 @@ import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 
 
-import com.Soo_Shinsa.user.UserRepository;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.UserRepository;
+import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -26,7 +25,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.Map;
 
 @RequestMapping("/api")
 @Controller

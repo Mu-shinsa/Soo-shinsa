@@ -5,7 +5,7 @@ import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.report.report.ReportProcessDto;
 import com.Soo_Shinsa.report.report.ReportRequestDto;
 import com.Soo_Shinsa.report.report.ReportResponseDto;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

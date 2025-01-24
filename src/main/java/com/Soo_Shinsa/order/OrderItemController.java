@@ -5,7 +5,7 @@ package com.Soo_Shinsa.order;
 
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
-import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
