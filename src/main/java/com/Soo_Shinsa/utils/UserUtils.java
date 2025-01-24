@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.utils;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
-import com.Soo_Shinsa.model.User;
+import com.Soo_Shinsa.user.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserUtils {

@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.utils;
 
-import com.Soo_Shinsa.model.User;
-import com.Soo_Shinsa.repository.UserRepository;
+import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.user.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.persistence.EntityNotFoundException;
