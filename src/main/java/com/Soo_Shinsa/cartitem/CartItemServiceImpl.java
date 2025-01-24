@@ -1,15 +1,18 @@
 package com.Soo_Shinsa.cartitem;
 
 
-
-
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
-import com.Soo_Shinsa.product.ProductOptionRepository;
+import com.Soo_Shinsa.order.dto.OrdersResponseDto;
 import com.Soo_Shinsa.product.model.ProductOption;
+
+import com.Soo_Shinsa.product.ProductOptionRepository;
+
 import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,7 +31,10 @@ public class CartItemServiceImpl implements CartItemService {
     //카트아이템을 생성
     @Transactional
     @Override
-    public CartItemResponseDto create(Long optionId, Integer quantity, User user) {
+    public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
+        // 사용자 정보 가져오기
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //상품 옵션을 찾아옴
         ProductOption findOption = productOptionRepository.findById(optionId).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));
         //카트를 생성
@@ -42,9 +48,12 @@ public class CartItemServiceImpl implements CartItemService {
 //    //카트아이템 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public CartItemResponseDto findById(Long cartId) {
+    public CartItemResponseDto findById(Long cartId, Long userId) {
+        // 사용자 정보 가져오기
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
-        //카트 아이템 찾아옴
+//        //카트 아이템 찾아옴
         CartItem savedCart = findByIdOrElseThrow(cartId);
         //저장
         return CartItemResponseDto.toDto(savedCart);
@@ -52,21 +61,25 @@ public class CartItemServiceImpl implements CartItemService {
     //유저의 카트들을 다 가져옴
     @Transactional(readOnly = true)
     @Override
-    public List<CartItemResponseDto> findByAll(User user) {
+    public Page<CartItemResponseDto> findByAll(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+
         //로그인 유저의 카트목록들을 다 가져옴
-        List<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId());
+        Page<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId(),pageable);
         //dto 저장
-        return allCartItem.stream().map(CartItemResponseDto::toDto).toList();
+
+        return allCartItem.map(CartItemResponseDto::toDto);
     }
 
     //카트 수정
     @Transactional
     @Override
-    public CartItemResponseDto update(Long cartId,Integer quantity,User user) {
-        CartItem findCart = findByIdOrElseThrow(cartId);
-
-        checkUser(user, findCart);
+    public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //카트 아이템 검색
+        CartItem findCart = findByIdOrElseThrow(cartId);
         //가져온 카트 아이템 수량 변경
         findCart.updateCartItem(quantity);
         //저장
@@ -77,12 +90,11 @@ public class CartItemServiceImpl implements CartItemService {
     //카트 아이템 삭제
     @Transactional
     @Override
-    public CartItemResponseDto delete(Long cartId,User user) {
-
+    public CartItemResponseDto delete(Long cartId, Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //카트를 가져옴
         CartItem findCart = findByIdOrElseThrow(cartId);
-
-        checkUser(user,findCart);
         //삭제함
         cartItemRepository.delete(findCart);
         //dto로 변환
@@ -94,11 +106,5 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem findByIdOrElseThrow(Long id) {
         return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    private static void checkUser(User user, CartItem cartItem) {
-        if (!cartItem.getUser().getUserId().equals(user.getUserId())) {
-            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
-        }
     }
 }

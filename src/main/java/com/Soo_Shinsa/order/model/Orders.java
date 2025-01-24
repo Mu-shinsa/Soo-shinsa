@@ -21,7 +21,7 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String orderId = createOrderNumber();
+    private String orderId;
 
     @Column(nullable = false)
     private BigDecimal totalPrice;

@@ -42,7 +42,7 @@ public class CartItemResponseDto {
                 cartItem.getProductOption().getProduct().getProductStatus(), // 상품 상태
                 cartItem.getProductOption().getSize(), // 옵션 사이즈
                 cartItem.getProductOption().getColor(), // 옵션 색상
-                cartItem.getProductOption().getProductStatus()// 옵션 상태
+                cartItem.getProductOption().getProductStatus() // 옵션 상태
         );
     }
 }

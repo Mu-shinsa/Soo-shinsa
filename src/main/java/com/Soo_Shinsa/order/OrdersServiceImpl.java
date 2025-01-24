@@ -90,10 +90,10 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Transactional
-    public OrdersResponseDto createOrderFromCart(User user) {
+    public OrdersResponseDto createOrderFromCart(User user,Pageable pageable) {
         // 사용자 확인
 
-        List<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId());
+        Page<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId(),pageable);
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }

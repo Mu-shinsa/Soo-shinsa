@@ -60,9 +60,10 @@ public class OrdersController {
     }
     @PostMapping("/users/from-cart")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
-            @AuthenticationPrincipal UserDetails userDetails) {
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         User user = UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.createOrderFromCart(user);
+        OrdersResponseDto responseDto = ordersService.createOrderFromCart(user,pageable);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
 

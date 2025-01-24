@@ -1,9 +1,11 @@
 package com.Soo_Shinsa.cartitem;
 
 import com.Soo_Shinsa.BaseTimeEntity;
+import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,8 +29,13 @@ public class CartItem extends BaseTimeEntity {
     @JoinColumn(name = "productoption_Id", nullable = false)
     private ProductOption productOption;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
-    public CartItem(int quantity, User user, ProductOption productOption) {
+
+    @Builder
+    public CartItem(Integer quantity, User user, ProductOption productOption) {
         this.quantity = quantity;
         this.user = user;
         this.productOption = productOption;
@@ -36,6 +43,10 @@ public class CartItem extends BaseTimeEntity {
 
 
     public void updateCartItem(Integer quantity) {
+        if (quantity < 1) {
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+        }
+
         this.quantity = quantity;
     }
 }
