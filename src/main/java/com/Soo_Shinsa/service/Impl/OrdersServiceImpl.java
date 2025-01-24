@@ -131,9 +131,12 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto updateOrder(User user, Long orderId, OrdersStatus status) {
 
-        Orders order = new Orders(status , user, new ArrayList<>());
+
+        Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("오더을 찾을 수 없습니다."));
         // 주문 저장
-        Orders savedOrder = ordersRepository.save(order);
+
+        findOrder.updateStatus(OrdersStatus.PAYMENTCOMPLETED);
+        Orders savedOrder = ordersRepository.save(findOrder);
         return OrdersResponseDto.toDto(savedOrder);
     }
 
