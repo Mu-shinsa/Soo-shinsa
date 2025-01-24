@@ -1,20 +1,17 @@
 package com.Soo_Shinsa.model;
 
+import com.Soo_Shinsa.constant.ProductStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
 @Entity
-@DynamicInsert
-@DynamicUpdate
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product extends BaseTimeEntity {
@@ -22,31 +19,46 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @Length(min = 1, max = 255)
     private String name;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    @Length(min = 1, max = 15)
-    private String status;
+    private String imageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_Id", nullable = false)
     private Brand brand;
 
-    public Product(String name, BigDecimal price, String status, Brand brand) {
+    @Builder
+    public Product(String name, BigDecimal price, String imageUrl, ProductStatus productStatus, Brand brand) {
         this.name = name;
         this.price = price;
-        this.status = status;
+        this.imageUrl = imageUrl;
+        this.productStatus = productStatus;
         this.brand = brand;
     }
 
-    public void update(String name, BigDecimal price, String status) {
-        this.name = name;
-        this.price = price;
-        this.status = status;
+    public void update(String name, BigDecimal price, ProductStatus productStatus, String imageUrl) {
+
+        if (name != null) {
+            this.name = name;
+        }
+
+        if (price != null) {
+            this.price = price;
+        }
+
+        if (productStatus != null) {
+            this.productStatus = productStatus;
+        }
+
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
+
     }
 }
