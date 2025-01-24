@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.cartitem.dto;
 
 import com.Soo_Shinsa.cartitem.CartItem;
+import com.Soo_Shinsa.constant.ProductStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,12 +16,12 @@ public class CartItemResponseDto {
     private Integer quantity;      // 수량
     private String productName;    // 상품명
     private BigDecimal productPrice; // 상품 가격
-    private String productStatus;  // 상품 상태
+    private ProductStatus productStatus;  // 상품 상태
     private String optionSize;     // 옵션 사이즈
     private String optionColor;    // 옵션 색상
-    private String optionStatus;   // 옵션 상태
+    private ProductStatus optionStatus;   // 옵션 상태
 
-    public CartItemResponseDto(Long cartItemId, Integer quantity, String productName, BigDecimal productPrice, String productStatus, String optionSize, String optionColor, String optionStatus) {
+    public CartItemResponseDto(Long cartItemId, Integer quantity, String productName, BigDecimal productPrice, ProductStatus productStatus, String optionSize, String optionColor, ProductStatus optionStatus) {
         this.cartItemId = cartItemId;
         this.quantity = quantity;
         this.productName = productName;
@@ -38,10 +39,10 @@ public class CartItemResponseDto {
                 cartItem.getQuantity(),
                 cartItem.getProductOption().getProduct().getName(), // 상품명
                 cartItem.getProductOption().getProduct().getPrice(), // 상품 가격
-                cartItem.getProductOption().getProduct().getStatus(), // 상품 상태
+                cartItem.getProductOption().getProduct().getProductStatus(), // 상품 상태
                 cartItem.getProductOption().getSize(), // 옵션 사이즈
                 cartItem.getProductOption().getColor(), // 옵션 색상
-                cartItem.getProductOption().getStatus() // 옵션 상태
+                cartItem.getProductOption().getProductStatus()// 옵션 상태
         );
     }
 }
