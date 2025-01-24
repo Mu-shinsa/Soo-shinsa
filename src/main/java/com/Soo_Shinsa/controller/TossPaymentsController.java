@@ -56,9 +56,8 @@ public class TossPaymentsController {
     @RequestMapping("/success")
     public String approvePayment (
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
-
             Model model) throws JsonProcessingException {
-
+        tossPaymentsService.approvePayment(paymentKey,orderId,amount,model);
 
         return "success";
     }
@@ -70,6 +69,7 @@ public class TossPaymentsController {
             Model model){
         UserOrderDTO item = tossPaymentsService.findItem(userId, orderId);
         BigDecimal totalPrice = item.getOrder().getTotalPrice();
+
         String orderName = item.getOrder().getOrderId();
         String name = item.getUser().getName();
 

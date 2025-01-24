@@ -19,7 +19,7 @@
     var tossPayments = TossPayments(/*[[${tosspayments_key}]]*/);
     var button = document.getElementById("payment-button");
 
-    var orderId = new Date().getTime();
+    var orderId = [[${orderName}]]
 
     button.addEventListener("click", function () {
 

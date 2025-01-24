@@ -15,8 +15,7 @@ public class PaymentRequestDto {
     private String paymentKey; // 토스페이먼츠 결제 키
     @NotNull(message = "결제방법을 입력해주세요.")
     private TossPayMethod method; // 결제 수단 (CARD)
-    @NotNull(message = "오더Id는 필수값 입니다.")
-    private String orderId; // 주문 ID
+
     @NotNull(message = "오더는 필수값 입니다.")
     private Long order; // 주문 ID
 
@@ -24,10 +23,9 @@ public class PaymentRequestDto {
 
 
 
-    public PaymentRequestDto(String paymentKey, TossPayMethod method, String orderId,Long order) {
+    public PaymentRequestDto(String paymentKey, TossPayMethod method,Long order) {
         this.paymentKey = paymentKey;
         this.method = method;
-        this.orderId = orderId;
         this.order=order;
 
     }

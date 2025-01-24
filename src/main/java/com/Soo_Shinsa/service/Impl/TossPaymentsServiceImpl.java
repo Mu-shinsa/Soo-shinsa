@@ -30,9 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -61,7 +59,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         // Payment 엔티티 생성
         Payment payment = new Payment(
-                requestDto.getOrderId(),
+                order.getOrderId(),
                 order.getTotalPrice(),
                 TossPayStatus.READY,
                 TossPayMethod.CARD,
@@ -86,6 +84,13 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
 
+        Payment findPayment = paymentRepository.findByOrderId(orderId);
+
+
+        findPayment.update(TossPayStatus.DONE,paymentKey);
+
+
+        paymentRepository.save(findPayment);
 
         Map<String, String> payloadMap = new HashMap<>();
 
@@ -98,6 +103,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
+
 
 
     }
