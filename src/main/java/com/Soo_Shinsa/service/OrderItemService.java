@@ -16,6 +16,6 @@ public interface OrderItemService {
     OrderItemResponseDto findById(Long orderItemsId);
     List<OrderItemResponseDto> findByAll(User user);
 
-    OrderItemResponseDto update(Long orderItemsId,Integer quantity);
-    OrderItemResponseDto delete(Long orderItemsId);
+    OrderItemResponseDto update(Long orderItemsId,Integer quantity,User user);
+    OrderItemResponseDto delete(Long orderItemsId,User user);
 }

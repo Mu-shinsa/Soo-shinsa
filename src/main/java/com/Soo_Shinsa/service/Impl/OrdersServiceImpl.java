@@ -96,6 +96,7 @@ public class OrdersServiceImpl implements OrdersService {
         // Orders 생성
         Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user, new ArrayList<>());
 
+        checkUser(order,user);
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
         for (CartItem cartItem : cartItems) {
             Product product = cartItem.getProductOption().getProduct();
@@ -121,6 +122,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT,user, new ArrayList<>());
         // 주문 저장
+        checkUser(order,user);
         Orders savedOrder = ordersRepository.save(order);
 
 
@@ -134,11 +136,15 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("오더을 찾을 수 없습니다."));
         // 주문 저장
-
+        checkUser(findOrder,user);
         findOrder.updateStatus(OrdersStatus.PAYMENTCOMPLETED);
         Orders savedOrder = ordersRepository.save(findOrder);
         return OrdersResponseDto.toDto(savedOrder);
     }
-
+    private static void checkUser(Orders orders,User user) {
+        if (orders.getUser().equals(user)) {
+            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
+        }
+    }
 
 }

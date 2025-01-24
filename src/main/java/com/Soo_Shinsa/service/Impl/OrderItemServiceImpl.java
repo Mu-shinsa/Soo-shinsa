@@ -3,10 +3,7 @@ package com.Soo_Shinsa.service.Impl;
 
 import com.Soo_Shinsa.dto.order.OrderItemRequestDto;
 import com.Soo_Shinsa.dto.order.OrderItemResponseDto;
-import com.Soo_Shinsa.model.OrderItem;
-import com.Soo_Shinsa.model.Orders;
-import com.Soo_Shinsa.model.Product;
-import com.Soo_Shinsa.model.User;
+import com.Soo_Shinsa.model.*;
 import com.Soo_Shinsa.repository.*;
 import com.Soo_Shinsa.service.OrderItemService;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +73,12 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 수정
     @Transactional
     @Override
-    public OrderItemResponseDto update(Long orderItemsId, Integer quantity) {
+    public OrderItemResponseDto update(Long orderItemsId, Integer quantity,User user) {
+
         //오더 아이템을 찾아옴
         OrderItem findOrder = findByIdOrElseThrow(orderItemsId);
+
+        checkUser(findOrder,user);
         //찾아옴 오더아이템 수량을 변경
         findOrder.updateOrderItem(quantity);
         OrderItem save = orderItemRepository.save(findOrder);
@@ -88,11 +88,12 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 삭제
     @Override
     @Transactional
-    public OrderItemResponseDto delete(Long orderItemsId) {
+    public OrderItemResponseDto delete(Long orderItemsId,User user) {
 
         // OrderItem 조회
         OrderItem find = findByIdOrElseThrow(orderItemsId);
 
+        checkUser(find,user);
         // Orders 조회
         Orders order = ordersRepository.findById(find.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
@@ -108,5 +109,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public OrderItem findByIdOrElseThrow(Long id) {
         return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    private static void checkUser(OrderItem orderItem,User user) {
+        if (!orderItem.getOrder().getUser().equals(user)) {
+            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
+        }
     }
 }

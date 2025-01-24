@@ -39,9 +39,7 @@ public class CartItemController {
     //해당 유저의 특정카트를 읽음
     @GetMapping("/{cartId}/users")
     public ResponseEntity<CartItemResponseDto> findById(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long cartId){
-        UserUtils.getUser(userDetails);
         CartItemResponseDto findCart = cartItemService.findById(cartId);
         return new ResponseEntity<>(findCart, HttpStatus.OK);
     }
@@ -64,8 +62,8 @@ public class CartItemController {
             @PathVariable Long cartId,
             @Valid
             @RequestBody CartItemRequestDto dto){
-        UserUtils.getUser(userDetails);
-        CartItemResponseDto saved = cartItemService.update(cartId, dto.getQuantity());
+        User user = UserUtils.getUser(userDetails);
+        CartItemResponseDto saved = cartItemService.update(cartId, dto.getQuantity(),user);
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
     //특정 유저의 특정카트 삭제
@@ -73,8 +71,8 @@ public class CartItemController {
     public ResponseEntity<CartItemResponseDto> delete(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long cartId){
-        UserUtils.getUser(userDetails);
-        CartItemResponseDto deleteCartItem = cartItemService.delete(cartId);
+        User user = UserUtils.getUser(userDetails);
+        CartItemResponseDto deleteCartItem = cartItemService.delete(cartId,user);
         return new ResponseEntity<>(deleteCartItem,HttpStatus.OK);
     }
 }

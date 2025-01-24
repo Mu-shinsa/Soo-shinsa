@@ -14,7 +14,7 @@ public interface CartItemService {
     CartItemResponseDto findById(Long cartId);
     List<CartItemResponseDto> findByAll(User user);
     CartItem findByIdOrElseThrow(Long id);
-    CartItemResponseDto update(Long cartId,Integer quantity);
+    CartItemResponseDto update(Long cartId,Integer quantity,User user);
 
-    CartItemResponseDto delete(Long cartId);
+    CartItemResponseDto delete(Long cartId,User user);
 }

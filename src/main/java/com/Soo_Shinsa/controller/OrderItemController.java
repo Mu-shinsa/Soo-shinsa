@@ -36,9 +36,7 @@ public class OrderItemController {
     //특정유저의 특정 오더아이템 읽기
     @GetMapping("/{OrderItemsId}/users")
     public ResponseEntity<OrderItemResponseDto> findById(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long OrderItemsId){
-        UserUtils.getUser(userDetails);
         OrderItemResponseDto findOrder = orderItemService.findById(OrderItemsId);
         return new ResponseEntity<>(findOrder, HttpStatus.OK);
     }
@@ -57,8 +55,8 @@ public class OrderItemController {
             @PathVariable Long orderItemsId,
             @Valid
             @RequestBody OrderItemRequestDto dto) {
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto update = orderItemService.update(orderItemsId, dto.getQuantity());
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto update = orderItemService.update(orderItemsId, dto.getQuantity(),user);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
     //특정유저의 특정 오더 아이템 삭제
@@ -66,8 +64,8 @@ public class OrderItemController {
     public ResponseEntity<OrderItemResponseDto> delete(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderItemsId){
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto delete = orderItemService.delete(orderItemsId);
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto delete = orderItemService.delete(orderItemsId,user);
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
 }

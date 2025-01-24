@@ -1,9 +1,11 @@
 package com.Soo_Shinsa.service.Impl;
 
 
+import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.dto.cartitem.CartItemResponseDto;
 import com.Soo_Shinsa.model.CartItem;
 import com.Soo_Shinsa.model.ProductOption;
+import com.Soo_Shinsa.model.Review;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.CartItemRepository;
 import com.Soo_Shinsa.repository.ProductOptionRepository;
@@ -63,9 +65,11 @@ public class CartItemServiceImpl implements CartItemService {
     //카트 수정
     @Transactional
     @Override
-    public CartItemResponseDto update(Long cartId,Integer quantity) {
-        //카트 아이템 검색
+    public CartItemResponseDto update(Long cartId,Integer quantity,User user) {
         CartItem findCart = findByIdOrElseThrow(cartId);
+
+        checkUser(user, findCart);
+        //카트 아이템 검색
         //가져온 카트 아이템 수량 변경
         findCart.updateCartItem(quantity);
         //저장
@@ -76,10 +80,12 @@ public class CartItemServiceImpl implements CartItemService {
     //카트 아이템 삭제
     @Transactional
     @Override
-    public CartItemResponseDto delete(Long cartId) {
+    public CartItemResponseDto delete(Long cartId,User user) {
 
         //카트를 가져옴
         CartItem findCart = findByIdOrElseThrow(cartId);
+
+        checkUser(user,findCart);
         //삭제함
         cartItemRepository.delete(findCart);
         //dto로 변환
@@ -91,5 +97,11 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem findByIdOrElseThrow(Long id) {
         return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    private static void checkUser(User user, CartItem cartItem) {
+        if (!cartItem.getUser().getUserId().equals(user.getUserId())) {
+            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
+        }
     }
 }
