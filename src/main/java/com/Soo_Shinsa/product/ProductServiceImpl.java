@@ -35,12 +35,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
         Brand brand = brandRepository.findByIdOrElseThrow(brandId);
 
-        checkUser(userById);
+        checkUser(user);
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {

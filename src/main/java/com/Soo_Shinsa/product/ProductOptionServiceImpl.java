@@ -25,10 +25,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionResponseDto createOption(User user, ProductOptionRequestDto dto, Long productId) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
-        checkUserRole(userById);
+        checkUserRole(user);
 
         Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
@@ -44,10 +41,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionResponseDto updateOption(User user, ProductOptionRequestDto dto, Long productOptionId) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
-        checkUserRole(userById);
+        checkUserRole(user);
 
         ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
