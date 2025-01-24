@@ -8,6 +8,7 @@ import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
+import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.utils.user.model.User;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,18 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository ;
     private final OrdersRepository ordersRepository;
+    private final UserRepository userRepository;
     //오더 아이템 생성
     @Transactional
-    public OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto) {
+    public OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto,User user) {
 
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // 주문 조회
         Orders order = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
 
+        checkUserAndOrders(order,findUser.getUserId());
         // 상품 조회
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다.: " + requestDto.getProductId()));
@@ -55,11 +60,15 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 찾아오고 dto로 변환
     @Transactional(readOnly = true)
     @Override
-    public OrderItemResponseDto findById(Long orderItemsId) {
+    public OrderItemResponseDto findById(Long orderItemsId,User user) {
         //오더 아이템을 찾아옴
-        OrderItem byIdOrElseThrow = findByIdOrElseThrow(orderItemsId);
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
+
+        checkUserAndOrderItem(findOrderItem,findUser.getUserId());
         //dto로 변환
-        return OrderItemResponseDto.toDto(byIdOrElseThrow);
+        return OrderItemResponseDto.toDto(findOrderItem);
     }
 
 
@@ -77,11 +86,13 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional
     @Override
     public OrderItemResponseDto update(Long orderItemsId, Integer quantity,User user) {
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더 아이템을 찾아옴
         OrderItem findOrder = findByIdOrElseThrow(orderItemsId);
 
-        checkUser(findOrder,user);
+
+        checkUserAndOrderItem(findOrder,findUser.getUserId());
         //찾아옴 오더아이템 수량을 변경
         findOrder.updateOrderItem(quantity);
         OrderItem save = orderItemRepository.save(findOrder);
@@ -92,11 +103,12 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     @Transactional
     public OrderItemResponseDto delete(Long orderItemsId,User user) {
-
+        User findUser = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // OrderItem 조회
         OrderItem find = findByIdOrElseThrow(orderItemsId);
 
-        checkUser(find,user);
+        checkUserAndOrderItem(find,user.getUserId());
         // Orders 조회
         Orders order = ordersRepository.findById(find.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
@@ -114,8 +126,13 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    private static void checkUser(OrderItem orderItem,User user) {
-        if (!orderItem.getOrder().getUser().equals(user)) {
+    private static void checkUserAndOrders(Orders orders,Long userId) {
+        if (!orders.getUser().getUserId().equals(userId)) {
+            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
+        }
+    }
+    private static void checkUserAndOrderItem(OrderItem orderItem,Long userId) {
+        if (!orderItem.getOrder().getUser().getUserId().equals(userId)) {
             throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
         }
     }

@@ -10,11 +10,11 @@ import com.Soo_Shinsa.utils.user.model.User;
 import java.util.List;
 
 public interface OrderItemService {
-    OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto);
+    OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto,User user);
 
     OrderItem findByIdOrElseThrow(Long id);
 
-    OrderItemResponseDto findById(Long orderItemsId);
+    OrderItemResponseDto findById(Long orderItemsId,User user);
     List<OrderItemResponseDto> findByAll(User user);
 
     OrderItemResponseDto update(Long orderItemsId,Integer quantity,User user);

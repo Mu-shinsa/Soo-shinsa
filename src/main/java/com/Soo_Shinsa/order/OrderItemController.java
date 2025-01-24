@@ -27,15 +27,19 @@ public class OrderItemController {
     @PostMapping("/users")
     public ResponseEntity<OrderItemResponseDto> createOrderItem(
             @Valid
-            @RequestBody OrderItemRequestDto requestDto) {
-        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto);
+            @RequestBody OrderItemRequestDto requestDto,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto,user);
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
     //특정유저의 특정 오더아이템 읽기
     @GetMapping("/{OrderItemsId}/users")
     public ResponseEntity<OrderItemResponseDto> findById(
-            @PathVariable Long OrderItemsId){
-        OrderItemResponseDto findOrder = orderItemService.findById(OrderItemsId);
+            @PathVariable Long OrderItemsId,
+            @AuthenticationPrincipal UserDetails userDetails){
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto findOrder = orderItemService.findById(OrderItemsId,user);
         return new ResponseEntity<>(findOrder, HttpStatus.OK);
     }
     //특정 유저의 모든 오더아이템들을 읽기
