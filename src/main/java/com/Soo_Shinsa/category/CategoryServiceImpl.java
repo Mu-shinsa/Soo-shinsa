@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
         if(dto.hasParent()) {
             parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
         }
-        Category saveCategory = categoryRepository.save(findBrand,dto.saveParent(findBrand ,parent));
+        Category saveCategory = categoryRepository.save(findBrand, dto.saveParent(findBrand ,parent));
 
         return CategoryResponseDto.toDto(saveCategory);
     }
