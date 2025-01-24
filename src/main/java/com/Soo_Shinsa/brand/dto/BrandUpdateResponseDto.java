@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.brand.dto;
 
 import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.constant.BrandStatus;
 
 public class BrandUpdateResponseDto {
 
@@ -8,9 +9,9 @@ public class BrandUpdateResponseDto {
     private String registrationNum;
     private String name;
     private String context;
-    private String status;
+    private BrandStatus status;
 
-    public BrandUpdateResponseDto(Long id, String registrationNum, String name, String context, String status) {
+    public BrandUpdateResponseDto(Long id, String registrationNum, String name, String context, BrandStatus status) {
         this.id = id;
         this.registrationNum = registrationNum;
         this.name = name;

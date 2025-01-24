@@ -14,4 +14,6 @@ public class BrandRequestDto {
 
     private String context;
 
+    private BrandStatus status;
+
 }
