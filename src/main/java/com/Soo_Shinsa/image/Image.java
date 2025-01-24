@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.image;
 
 import com.Soo_Shinsa.constant.TargetType;
-import com.Soo_Shinsa.BaseTimeEntity;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.product.model;
 
 import com.Soo_Shinsa.constant.ProductStatus;
-import com.Soo_Shinsa.BaseTimeEntity;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

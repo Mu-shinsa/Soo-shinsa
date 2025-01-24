@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.cartitem;
 
-import com.Soo_Shinsa.BaseTimeEntity;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.user.model.User;
