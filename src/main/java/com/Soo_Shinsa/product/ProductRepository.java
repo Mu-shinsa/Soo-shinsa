@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -13,4 +15,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllProductByBrandId(@Param("brandId") Long brandId, Pageable pageable);
     Page<Product> findAllByBrand(Pageable pageable);
 
+    default Product findByIdOrElseThrow(Long productId) {
+        return findById(productId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다.")
+        );
+    }
 }

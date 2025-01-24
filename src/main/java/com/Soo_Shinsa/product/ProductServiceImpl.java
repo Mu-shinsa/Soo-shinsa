@@ -38,8 +38,7 @@ public class ProductServiceImpl implements ProductService {
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
+        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
 
         checkUser(userById);
 
@@ -68,8 +67,7 @@ public class ProductServiceImpl implements ProductService {
 
         checkUser(user);
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         String newImageUrl = product.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -89,8 +87,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public FindProductResponseDto findProduct(Long productId) {
 
-        Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
         List<ProductOption> productOptions = productOptionRepository.findAllByProductId(productId);
 
@@ -119,8 +116,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long productId, User user) {
         checkUser(user);
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         productOptionRepository.deleteAllByProductId(productId);
 

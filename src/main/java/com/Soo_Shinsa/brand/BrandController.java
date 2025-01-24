@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.brand;
 
-import com.Soo_Shinsa.brand.dto.BrandUpdateRequestDto;
 import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandRequestDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
@@ -20,7 +19,6 @@ import java.util.List;
 @RequestMapping("/brands")
 public class BrandController {
 
-    private final UserService userService;
     private final BrandService brandService;
 
     @PostMapping
