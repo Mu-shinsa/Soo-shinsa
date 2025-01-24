@@ -1,5 +1,9 @@
 package com.Soo_Shinsa.dto.product;
 
+import com.Soo_Shinsa.constant.ProductStatus;
+import com.Soo_Shinsa.model.Product;
+import com.Soo_Shinsa.model.ProductOption;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,5 +15,20 @@ public class ProductOptionRequestDto {
 
     private String color;
 
-    private String status;
+    private ProductStatus status;
+
+    public ProductOptionRequestDto(String size, String color, ProductStatus status) {
+        this.size = size;
+        this.color = color;
+        this.status = status;
+    }
+
+    public ProductOption toEntity(Product findProduct) {
+        return ProductOption.builder()
+                .size(size)
+                .color(color)
+                .productStatus(status)
+                .product(findProduct)
+                .build();
+    }
 }
