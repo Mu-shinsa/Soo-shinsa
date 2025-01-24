@@ -19,17 +19,16 @@ public class PaymentRequestDto {
     private String orderId; // 주문 ID
     @NotNull(message = "오더는 필수값 입니다.")
     private Long order; // 주문 ID
-    @NotNull(message = "오더는 필수값 입니다.")
-    private BigDecimal amount;
 
 
 
 
-    public PaymentRequestDto(String paymentKey, TossPayMethod method, String orderId,Long order,BigDecimal amount) {
+
+    public PaymentRequestDto(String paymentKey, TossPayMethod method, String orderId,Long order) {
         this.paymentKey = paymentKey;
         this.method = method;
         this.orderId = orderId;
         this.order=order;
-        this.amount=amount;
+
     }
 }

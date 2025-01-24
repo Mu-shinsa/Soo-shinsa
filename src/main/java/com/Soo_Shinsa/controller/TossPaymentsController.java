@@ -2,6 +2,8 @@ package com.Soo_Shinsa.controller;
 
 
 
+import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
+import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.repository.UserRepository;
@@ -10,9 +12,13 @@ import com.Soo_Shinsa.service.TossPaymentsService;
 import com.Soo_Shinsa.utils.UserUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -36,11 +42,22 @@ public class TossPaymentsController {
     private String clientKey;
 
 
+    // 결제 생성
+    @PostMapping("/create")
+    public ResponseEntity<PaymentResponseDto> createPayment(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid
+            @RequestBody PaymentRequestDto requestDto) {
+        User user = UserUtils.getUser(userDetails);
+        PaymentResponseDto responseDto = tossPaymentsService.createPayment(requestDto,user);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
     @RequestMapping("/success")
     public String approvePayment (
             @RequestParam String paymentKey, @RequestParam String orderId, @RequestParam Long amount,
+
             Model model) throws JsonProcessingException {
-        tossPaymentsService.approvePayment(paymentKey,orderId,amount,model);
 
 
         return "success";

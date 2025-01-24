@@ -3,11 +3,9 @@ package com.Soo_Shinsa.service.Impl;
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
 
-import com.Soo_Shinsa.dto.payment.PaymentApproveRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
 import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
-import com.Soo_Shinsa.model.OrderItem;
 import com.Soo_Shinsa.model.Orders;
 import com.Soo_Shinsa.model.User;
 import com.Soo_Shinsa.model.Payment;
@@ -32,7 +30,6 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.beans.factory.annotation.Value;
 
-import java.math.BigDecimal;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +50,31 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
     @Value("${toss.client-key}")
     private String clientKey;
+
+
+    @Transactional
+    public PaymentResponseDto createPayment(PaymentRequestDto requestDto,User user) {
+        // 주문 및 사용자 조회
+        Orders order = ordersRepository.findById(requestDto.getOrder())
+                .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
+
+
+        // Payment 엔티티 생성
+        Payment payment = new Payment(
+                requestDto.getOrderId(),
+                order.getTotalPrice(),
+                TossPayStatus.READY,
+                TossPayMethod.CARD,
+                order,
+                user
+
+        );
+
+        Payment savedPayment = paymentRepository.save(payment);
+
+        // 응답 DTO 생성 및 반환
+        return PaymentResponseDto.toDto(savedPayment);
+    }
 
 
     @Transactional
@@ -78,7 +100,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
 
-
     }
 
     @Transactional
@@ -88,17 +109,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더입니다."));
 
 
-
-        Payment payment = new Payment(
-                order.getOrderId(),
-                order.getTotalPrice(),
-                TossPayStatus.READY,
-                TossPayMethod.CARD,
-                order,
-                user
-        );
-
-        paymentRepository.save(payment);
 
         return new UserOrderDTO(user,order);
 

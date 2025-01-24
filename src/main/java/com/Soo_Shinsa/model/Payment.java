@@ -69,7 +69,11 @@ public class Payment extends BaseTimeEntity {
     }
 
     public void update(TossPayStatus status, String paymentKey) {
-            this.status = status;
-            this.paymentKey = paymentKey;
-        }
+        this.status = status;
+        this.paymentKey = paymentKey;
     }
+
+}
+
+
+
