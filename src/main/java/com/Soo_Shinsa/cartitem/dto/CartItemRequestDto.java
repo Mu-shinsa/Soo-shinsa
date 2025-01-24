@@ -19,4 +19,3 @@ public class CartItemRequestDto {
         this.quantity = quantity;
     }
 }
-

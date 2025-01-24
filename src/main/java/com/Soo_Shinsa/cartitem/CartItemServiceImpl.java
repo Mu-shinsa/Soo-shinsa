@@ -1,110 +1,123 @@
 package com.Soo_Shinsa.cartitem;
 
-
+import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
-import com.Soo_Shinsa.order.dto.OrdersResponseDto;
+import com.Soo_Shinsa.product.ProductRepository;
+import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-
 import com.Soo_Shinsa.product.ProductOptionRepository;
-
 import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class CartItemServiceImpl implements CartItemService {
+
     private final CartItemRepository cartItemRepository;
     private final ProductOptionRepository productOptionRepository;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
-    //카트아이템을 생성
     @Transactional
     @Override
-    public CartItemResponseDto create(Long optionId,Integer quantity,Long userId) {
-        // 사용자 정보 가져오기
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        //상품 옵션을 찾아옴
-        ProductOption findOption = productOptionRepository.findById(optionId).orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));
-        //카트를 생성
-        CartItem cartItem = new CartItem(quantity,user,findOption);
+    public CartItemResponseDto create(User user, CartItemRequestDto requestDto) {
+
+        Product product = productRepository.findById(requestDto.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(product.getId());
+
+        CartItem cartItem = CartItem.builder()
+                .quantity(requestDto.getQuantity())
+                .user(user)
+                .product(product)
+                .build();
 
         cartItemRepository.save(cartItem);
 
-        return CartItemResponseDto.toDto(cartItem);
+        return CartItemResponseDto.toDto(cartItem, productOptions);
     }
 
-//    //카트아이템 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public CartItemResponseDto findById(Long cartId, Long userId) {
+    public CartItemResponseDto findById(Long cartId, User user) {
         // 사용자 정보 가져오기
-        userRepository.findById(userId)
+        User userId = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
-//        //카트 아이템 찾아옴
-        CartItem savedCart = findByIdOrElseThrow(cartId);
-        //저장
-        return CartItemResponseDto.toDto(savedCart);
+        CartItem cartItem = cartItemRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id값이 존재하지 않습니다."));
+
+        //사용자의 카트인지 확인
+        checkUser(cartItem, userId);
+
+        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(cartItem.getProduct().getId());
+
+        return CartItemResponseDto.toDto(cartItem, productOptions);
     }
-    //유저의 카트들을 다 가져옴
+
     @Transactional(readOnly = true)
     @Override
     public Page<CartItemResponseDto> findByAll(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
-        //로그인 유저의 카트목록들을 다 가져옴
-        Page<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId(),pageable);
-        //dto 저장
+        Page<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId(), pageable);
 
-        return allCartItem.map(CartItemResponseDto::toDto);
+        return allCartItem.map(cartItem -> {
+            List<ProductOption> productOptions = productOptionRepository.findAllByProductId(cartItem.getProduct().getId());
+            return CartItemResponseDto.toDto(cartItem, productOptions);
+        });
     }
 
-    //카트 수정
     @Transactional
     @Override
-    public CartItemResponseDto update(Long cartId, Long userId,Integer quantity) {
-        userRepository.findById(userId)
+    public CartItemResponseDto update(Long cartId, User user, Integer quantity) {
+        User userId = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        //카트 아이템 검색
-        CartItem findCart = findByIdOrElseThrow(cartId);
-        //가져온 카트 아이템 수량 변경
-        findCart.updateCartItem(quantity);
-        //저장
-        CartItem saved = cartItemRepository.save(findCart);
-        //dto 변환
-        return CartItemResponseDto.toDto(saved);
-    }
-    //카트 아이템 삭제
-    @Transactional
-    @Override
-    public CartItemResponseDto delete(Long cartId, Long userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        //카트를 가져옴
-        CartItem findCart = findByIdOrElseThrow(cartId);
-        //삭제함
-        cartItemRepository.delete(findCart);
-        //dto로 변환
-        return CartItemResponseDto.toDto(findCart);
+
+        CartItem cartItem = cartItemRepository.findById(cartId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id값이 존재하지 않습니다."));
+
+        checkUser(cartItem, userId);
+
+        cartItem.updateCartItem(quantity);
+
+        CartItem saved = cartItemRepository.save(cartItem);
+
+        // 상품 옵션 조회
+        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(saved.getProduct().getId());
+
+        return CartItemResponseDto.toDto(saved, productOptions);
     }
 
-    //카트 아이템을 찾아옴
-    @Transactional(readOnly = true)
+
+    @Transactional
     @Override
-    public CartItem findByIdOrElseThrow(Long id) {
-        return cartItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void delete(Long cartId, User user) {
+        User userId = userRepository.findById(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+
+        CartItem cartItem = cartItemRepository.findById(cartId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 id값이 존재하지 않습니다."));
+
+        checkUser(cartItem, userId);
+
+        cartItemRepository.delete(cartItem);
+    }
+
+
+    private static void checkUser(CartItem cartItem, User userId) {
+        if (!cartItem.getUser().getUserId().equals(userId.getUserId())) {
+            throw new IllegalArgumentException("해당 사용자의 카트가 아닙니다.");
+        }
     }
 }

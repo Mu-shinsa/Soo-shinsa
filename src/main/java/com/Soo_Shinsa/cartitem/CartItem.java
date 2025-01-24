@@ -35,10 +35,11 @@ public class CartItem extends BaseTimeEntity {
 
 
     @Builder
-    public CartItem(Integer quantity, User user, ProductOption productOption) {
+    public CartItem(Integer quantity, User user, ProductOption productOption, Product product) {
         this.quantity = quantity;
         this.user = user;
         this.productOption = productOption;
+        this.product = product;
     }
 
 
