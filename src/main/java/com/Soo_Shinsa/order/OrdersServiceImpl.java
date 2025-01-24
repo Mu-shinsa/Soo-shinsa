@@ -4,8 +4,8 @@ import com.Soo_Shinsa.cartitem.CartItem;
 import com.Soo_Shinsa.cartitem.CartItemRepository;
 import com.Soo_Shinsa.constant.OrdersStatus;
 
-import com.Soo_Shinsa.dto.order.OrdersResponseDto;
 
+import com.Soo_Shinsa.order.dto.OrdersResponseDto;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
@@ -127,7 +127,6 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT,user, new ArrayList<>());
         // 주문 저장
-        checkUser(order,user);
         Orders savedOrder = ordersRepository.save(order);
 
 

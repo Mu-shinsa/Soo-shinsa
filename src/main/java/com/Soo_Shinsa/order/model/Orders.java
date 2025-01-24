@@ -38,6 +38,7 @@ public class Orders extends BaseTimeEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     public Orders(BigDecimal totalPrice, OrdersStatus status, User user, List<OrderItem> orderItems) {
+        this.orderId=createOrderNumber();
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;

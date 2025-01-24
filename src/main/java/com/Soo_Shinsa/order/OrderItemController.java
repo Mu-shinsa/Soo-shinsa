@@ -26,10 +26,8 @@ public class OrderItemController {
     //오더 아이템 생성
     @PostMapping("/users")
     public ResponseEntity<OrderItemResponseDto> createOrderItem(
-            @AuthenticationPrincipal UserDetails userDetails,
             @Valid
             @RequestBody OrderItemRequestDto requestDto) {
-        UserUtils.getUser(userDetails);
         OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto);
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
