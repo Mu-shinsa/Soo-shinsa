@@ -1,7 +1,9 @@
 package com.Soo_Shinsa.dto.product;
 
+import com.Soo_Shinsa.constant.ProductStatus;
 import com.Soo_Shinsa.model.Product;
 import com.Soo_Shinsa.model.ProductOption;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +14,11 @@ public class ProductOptionResponseDto {
     private Long id;
     private String size;
     private String color;
-    private String status;
+    private ProductStatus status;
     private Product product;
 
-    public ProductOptionResponseDto(Long id, String size, String color, String status, Product product) {
+    @Builder
+    public ProductOptionResponseDto(Long id, String size, String color, ProductStatus status, Product product) {
         this.id = id;
         this.size = size;
         this.color = color;
@@ -23,13 +26,12 @@ public class ProductOptionResponseDto {
         this.product = product;
     }
 
-    public static ProductOptionResponseDto toDto(ProductOption productoption) {
-        return new ProductOptionResponseDto(
-                productoption.getId(),
-                productoption.getSize(),
-                productoption.getColor(),
-                productoption.getStatus(),
-                productoption.getProduct()
-        );
+    public static ProductOptionResponseDto toDto(ProductOption savedOption) {
+        return ProductOptionResponseDto.builder()
+                .color(savedOption.getColor())
+                .product(savedOption.getProduct())
+                .status(ProductStatus.AVAILABLE)
+                .size(savedOption.getSize())
+                .build();
     }
 }
