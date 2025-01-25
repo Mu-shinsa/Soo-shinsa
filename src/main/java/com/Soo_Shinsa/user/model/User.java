@@ -3,7 +3,7 @@ package com.Soo_Shinsa.user.model;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
-import com.Soo_Shinsa.review.Review;
+import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;

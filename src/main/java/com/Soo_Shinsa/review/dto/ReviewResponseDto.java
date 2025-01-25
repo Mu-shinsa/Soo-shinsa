@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.review.dto;
 
-import com.Soo_Shinsa.review.Review;
+import com.Soo_Shinsa.review.model.Review;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
