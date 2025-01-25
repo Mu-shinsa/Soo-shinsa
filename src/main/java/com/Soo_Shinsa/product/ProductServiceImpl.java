@@ -10,15 +10,12 @@ import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-<<<<<<< HEAD
+
 import com.Soo_Shinsa.brand.BrandRepository;
 import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.image.ImageService;
-=======
-import com.Soo_Shinsa.user.UserRepository;
-import com.Soo_Shinsa.user.model.User;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

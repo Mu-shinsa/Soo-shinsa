@@ -8,16 +8,13 @@ import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
-<<<<<<< HEAD
 import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.OrderItemRepository;
+import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.image.ImageService;
-=======
-import com.Soo_Shinsa.review.model.Review;
-import com.Soo_Shinsa.user.model.User;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

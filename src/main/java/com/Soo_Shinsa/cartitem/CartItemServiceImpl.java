@@ -7,15 +7,10 @@ import com.Soo_Shinsa.product.ProductOptionRepository;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-<<<<<<< HEAD
-import com.Soo_Shinsa.product.ProductOptionRepository;
+
 import com.Soo_Shinsa.utils.user.UserRepository;
 import com.Soo_Shinsa.utils.user.model.User;
-import jakarta.persistence.EntityNotFoundException;
-=======
-import com.Soo_Shinsa.user.UserRepository;
-import com.Soo_Shinsa.user.model.User;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -114,7 +109,6 @@ public class CartItemServiceImpl implements CartItemService {
 
         cartItemRepository.delete(cartItem);
     }
-<<<<<<< HEAD
 
 
     private static void checkUser(CartItem cartItem, User userId) {
@@ -123,6 +117,3 @@ public class CartItemServiceImpl implements CartItemService {
         }
     }
 }
-=======
-}
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07

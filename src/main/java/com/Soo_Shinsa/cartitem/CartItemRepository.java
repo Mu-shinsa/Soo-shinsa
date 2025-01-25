@@ -15,5 +15,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
         return findById(cartId).orElseThrow(() -> new IllegalArgumentException(exceptionMessage));
     }
 
-    List<CartItem> findByUserUserId(Long userId);
+    Page<CartItem> findByUserUserId(Long userId,Pageable pageable);
 }

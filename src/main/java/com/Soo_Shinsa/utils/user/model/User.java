@@ -3,13 +3,12 @@ package com.Soo_Shinsa.utils.user.model;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
-<<<<<<< HEAD:src/main/java/com/Soo_Shinsa/utils/user/model/User.java
+
 import com.Soo_Shinsa.utils.user.dto.UserUpdateRequestDto;
-=======
+
 import com.Soo_Shinsa.report.model.Report;
 import com.Soo_Shinsa.review.model.Review;
-import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07:src/main/java/com/Soo_Shinsa/user/model/User.java
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

@@ -3,12 +3,11 @@ package com.Soo_Shinsa.product;
 import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
-<<<<<<< HEAD
+
 import com.Soo_Shinsa.utils.user.model.User;
-=======
+
 import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
-import com.Soo_Shinsa.user.model.User;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
+
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

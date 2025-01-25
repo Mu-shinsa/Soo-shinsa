@@ -1,18 +1,13 @@
 package com.Soo_Shinsa.order;
 
-<<<<<<< HEAD
-import com.Soo_Shinsa.cartitem.CartItem;
+
 import com.Soo_Shinsa.cartitem.CartItemRepository;
+import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.OrdersStatus;
 
 
 import com.Soo_Shinsa.order.dto.OrdersResponseDto;
-=======
-import com.Soo_Shinsa.cartitem.CartItemRepository;
-import com.Soo_Shinsa.constant.Status;
-import com.Soo_Shinsa.order.dto.OrdersResponseDto;
-import com.Soo_Shinsa.cartitem.model.CartItem;
->>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
+
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
@@ -107,8 +102,8 @@ public class OrdersServiceImpl implements OrdersService {
         // 사용자 확인
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        Page<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId(),pageable);
-        if (cartItems.isEmpty()) {
+        Page<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId(), pageable);
+        if (byUserUserId.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }
 
@@ -117,7 +112,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         checkUserAndOrders(order, findUser.getUserId());
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
-        for (CartItem cartItem : cartItems) {
+        for (CartItem cartItem : byUserUserId) {
             Product product = cartItem.getProductOption().getProduct();
             Integer quantity = cartItem.getQuantity();
 
@@ -130,7 +125,7 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.save(order);
 
         // 카트 비우기
-        cartItemRepository.deleteAll(cartItems);
+        cartItemRepository.deleteAll(byUserUserId);
 
         // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
