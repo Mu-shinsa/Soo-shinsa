@@ -83,9 +83,18 @@ public class User {
         }
     }
 
-    public void validateRole () {
+    public void validateAdminRole () {
         if ((!Role.ADMIN.equals(this.role))) {
             throw new IllegalArgumentException("관리자만 접근 가능합니다.");
+        }
+    }
+
+    /**
+     * 관리자(Admin) 또는 판매자(Vendor) 권한 검증
+     */
+    public void validateAdminOrVendorRole() {
+        if (!Role.ADMIN.equals(this.role) && !Role.VENDOR.equals(this.role)) {
+            throw new IllegalArgumentException("관리자 또는 판매자만 접근 가능합니다.");
         }
     }
 }
