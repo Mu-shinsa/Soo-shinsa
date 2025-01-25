@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 public interface ProductOptionService {
     ProductOptionResponseDto createOption(User user, ProductOptionRequestDto productOptionRequestDto, Long productId);
 
-    ProductOptionResponseDto updateOption(User user, ProductOptionRequestDto productOptionRequestDto, Long productOptionId);
+    ProductOptionResponseDto updateOption(User user, ProductOptionRequestDto dto, Long productId);
 
     ProductOptionResponseDto findOption(Long productOptionId);
 
