@@ -7,6 +7,9 @@ import com.Soo_Shinsa.report.dto.ReportResponseDto;
 import com.Soo_Shinsa.report.model.Report;
 import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +74,14 @@ public class ReportServiceImpl implements ReportService {
         user.validateReportUser(report);
 
         return ReportResponseDto.toDto(report);
+    }
+
+    @Override
+    public Page<ReportResponseDto> getAllReports(User user, int page, int size) {
+        user.validateAdminRole();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Report> reports = reportRepository.findAllReports(pageable);
+        return reports.map(ReportResponseDto::toDto);
     }
 
     /**
