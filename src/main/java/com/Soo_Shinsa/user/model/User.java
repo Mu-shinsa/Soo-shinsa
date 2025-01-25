@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.user.model;
 
-import com.Soo_Shinsa.cartitem.CartItem;
+import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
 import com.Soo_Shinsa.review.Review;

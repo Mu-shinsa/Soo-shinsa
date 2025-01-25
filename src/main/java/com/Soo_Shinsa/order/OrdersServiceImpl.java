@@ -3,7 +3,7 @@ package com.Soo_Shinsa.order;
 import com.Soo_Shinsa.cartitem.CartItemRepository;
 import com.Soo_Shinsa.constant.Status;
 import com.Soo_Shinsa.order.dto.OrdersResponseDto;
-import com.Soo_Shinsa.cartitem.CartItem;
+import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.model.Product;
