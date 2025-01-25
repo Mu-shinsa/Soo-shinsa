@@ -1,17 +1,18 @@
 package com.Soo_Shinsa.product;
 
 import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.brand.BrandRepository;
 import com.Soo_Shinsa.constant.Role;
+import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.image.Image;
+import com.Soo_Shinsa.image.ImageService;
 import com.Soo_Shinsa.product.dto.FindProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-import com.Soo_Shinsa.brand.BrandRepository;
-import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.UserRepository;
-import com.Soo_Shinsa.image.ImageService;
+import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, "products");
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT.name(), null);
             imageUrl = uploaded.getPath();
         }
 
