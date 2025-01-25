@@ -48,8 +48,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     @Value("${toss.secret-key}")
     private String secretKey;
 
-    @Value("${toss.client-key}")
-    private String clientKey;
 
 
     @Transactional

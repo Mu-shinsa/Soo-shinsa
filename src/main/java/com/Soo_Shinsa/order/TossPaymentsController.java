@@ -31,10 +31,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class TossPaymentsController {
     private final TossPaymentsService tossPaymentsService;
-    private final UserRepository userRepository;
 
-    @Value("${toss.secret-key}")
-    private String secretKey;
 
     @Value("${toss.client-key}")
     private String clientKey;
