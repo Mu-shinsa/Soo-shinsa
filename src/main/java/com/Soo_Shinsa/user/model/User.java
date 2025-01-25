@@ -3,6 +3,7 @@ package com.Soo_Shinsa.user.model;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
+import com.Soo_Shinsa.report.model.Report;
 import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
@@ -95,6 +96,12 @@ public class User {
     public void validateAdminOrVendorRole() {
         if (!Role.ADMIN.equals(this.role) && !Role.VENDOR.equals(this.role)) {
             throw new IllegalArgumentException("관리자 또는 판매자만 접근 가능합니다.");
+        }
+    }
+
+    public void validateReportUser(Report report) {
+        if (!report.getUser().getUserId().equals(this.userId)) {
+            throw new IllegalArgumentException("본인의 신고만 조회/처리 가능합니다.");
         }
     }
 }
