@@ -13,4 +13,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllProductByBrandId(@Param("brandId") Long brandId, Pageable pageable);
     Page<Product> findAllByBrand(Pageable pageable);
 
+    default Product findById(Long productId, String exceptionMessage) {
+        return findById(productId).orElseThrow(() -> new IllegalArgumentException(exceptionMessage));
+    }
+
 }
