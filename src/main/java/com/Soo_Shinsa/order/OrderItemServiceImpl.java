@@ -80,7 +80,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         //회원의 모든 아이템 오더를 리스트르 받아옴
         Page<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(user.getUserId(),pageable);
         //dto로 변환
-//        return orderItems.stream().map(OrderItemResponseDto::toDto).toList();
         return orderItems.map(OrderItemResponseDto::toDto);
     }
     //오더 아이템 수정
