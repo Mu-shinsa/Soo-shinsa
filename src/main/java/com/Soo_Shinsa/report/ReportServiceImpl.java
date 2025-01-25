@@ -49,7 +49,7 @@ public class ReportServiceImpl implements ReportService {
         report.process(processDto.getStatus());
 
         // 반려 상태라면 반려 사유 추가
-        if (processDto.getStatus() == ReportStatus.REJECTED) {
+        if (ReportStatus.REJECTED.equals(processDto.getStatus())) {
             report.addRejectReason(processDto.getRejectReason());
         } else {
             report.addRejectReason(null); // 반려 사유 초기화
