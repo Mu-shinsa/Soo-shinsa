@@ -1,7 +1,9 @@
 package com.Soo_Shinsa.user.model;
 
+import com.Soo_Shinsa.cartitem.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
+import com.Soo_Shinsa.review.Review;
 import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -67,5 +69,32 @@ public class User {
     }
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void validateReviewUser(Review review) {
+        if (!review.getUser().getUserId().equals(this.userId)) {
+            throw new IllegalArgumentException("본인의 리뷰만 수정/삭제 가능합니다.");
+        }
+    }
+
+    public void validateCartItemUser(CartItem cartItem) {
+        if (!cartItem.getUser().getUserId().equals(this.userId)) {
+            throw new IllegalArgumentException("본인의 장바구니만 추가/수정/삭제 가능합니다.");
+        }
+    }
+
+    public void validateAdminRole () {
+        if ((!Role.ADMIN.equals(this.role))) {
+            throw new IllegalArgumentException("관리자만 접근 가능합니다.");
+        }
+    }
+
+    /**
+     * 관리자(Admin) 또는 판매자(Vendor) 권한 검증
+     */
+    public void validateAdminOrVendorRole() {
+        if (!Role.ADMIN.equals(this.role) && !Role.VENDOR.equals(this.role)) {
+            throw new IllegalArgumentException("관리자 또는 판매자만 접근 가능합니다.");
+        }
     }
 }
