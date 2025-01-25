@@ -39,8 +39,7 @@ public class ProductServiceImpl implements ProductService {
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
+        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
 
         userById.validateAdminOrVendorRole();
 
