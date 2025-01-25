@@ -2,7 +2,7 @@ package com.Soo_Shinsa.report.dto;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
-import com.Soo_Shinsa.report.Report;
+import com.Soo_Shinsa.report.model.Report;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
