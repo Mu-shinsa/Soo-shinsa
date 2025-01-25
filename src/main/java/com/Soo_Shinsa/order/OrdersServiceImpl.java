@@ -146,7 +146,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto updateOrder(User user, Long orderId, OrdersStatus status) {
 
-        User findUser = userRepository.findById(user.getUserId())
+        userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("오더을 찾을 수 없습니다."));
         // 주문 저장

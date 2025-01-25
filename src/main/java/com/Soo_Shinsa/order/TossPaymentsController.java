@@ -87,10 +87,5 @@ public class TossPaymentsController {
 
         return "home";
     }
-    @RequestMapping("/test")
-    public String test(
-            Model model){
-        model.addAttribute("tosspayments_key", clientKey);
-        return "test";
-    }
+
 }
