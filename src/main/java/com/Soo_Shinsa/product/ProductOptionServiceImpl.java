@@ -1,14 +1,21 @@
 package com.Soo_Shinsa.product;
 
-import com.Soo_Shinsa.constant.Role;
+import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
+import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
+<<<<<<< HEAD
 import com.Soo_Shinsa.utils.user.model.User;
 import com.Soo_Shinsa.utils.user.UserRepository;
+=======
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
+>>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProductOptionServiceImpl implements ProductOptionService {
 
-    ProductOptionRepository productOptionRepository;
-    UserRepository userRepository;
-    ProductRepository productRepository;
+   private final ProductOptionRepository productOptionRepository;
+   private final UserRepository userRepository;
+   private final ProductRepository productRepository;
 
     @Transactional
     @Override
@@ -28,7 +35,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        checkUserRole(userById);
+        userById.validateAdminOrVendorRole();
 
         Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
@@ -43,22 +50,24 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Transactional
     @Override
-    public ProductOptionResponseDto updateOption(User user, ProductOptionRequestDto dto, Long productOptionId) {
+    public ProductOptionResponseDto updateOption(User user, ProductOptionUpdateDto dto, Long productOptionId) {
 
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        userById.validateAdminOrVendorRole();
 
-        checkUserRole(userById);
+        ProductOption findOption = productOptionRepository.findById(productOptionId, "존재하지 않는 옵션입니다.");
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+        Product associatedProduct = findOption.getProduct();
 
+        if (associatedProduct == null) {
+            throw new IllegalArgumentException("옵션에 연관된 상품이 없습니다.");
+        }
 
         findOption.update(dto.getSize(), dto.getColor(), dto.getStatus());
 
-        ProductOption savedOption = productOptionRepository.save(findOption);
 
-        return ProductOptionResponseDto.toDto(savedOption);
+        return ProductOptionResponseDto.toDto(findOption);
     }
 
     @Transactional(readOnly = true)
@@ -73,21 +82,16 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(ProductOptionRequestDto requestDto, Pageable pageable) {
+    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
 
         if (requestDto.getColor() == null && requestDto.getSize() == null) {
             throw new IllegalArgumentException("색상과 사이즈 중 하나는 필수입니다.");
         }
 
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProductOption> options = productOptionRepository.findProductsByOptionalSizeAndColor(requestDto.getSize(), requestDto.getColor(), pageable);
 
         return options.map(ProductOptionResponseDto::toDto);
-    }
-
-    private static void checkUserRole(User userById) {
-        if (!userById.getRole().equals(Role.ADMIN) && !userById.getRole().equals(Role.VENDOR)) {
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
     }
 
 }

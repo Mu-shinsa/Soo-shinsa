@@ -1,14 +1,18 @@
 package com.Soo_Shinsa.product;
 
+import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
+<<<<<<< HEAD
 import com.Soo_Shinsa.utils.user.model.User;
+=======
+import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
+import com.Soo_Shinsa.user.model.User;
+>>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
 import com.Soo_Shinsa.utils.UserUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +27,7 @@ public class ProductOptionController {
 
     @PostMapping("/products/{productId}")
     public ResponseEntity<ProductOptionResponseDto> createOption(@AuthenticationPrincipal UserDetails userDetails,
-                                                                 @RequestBody ProductOptionRequestDto productOptionRequestDto,
+                                                                 @Valid @RequestBody ProductOptionRequestDto productOptionRequestDto,
                                                                  @PathVariable Long productId) {
         User user = UserUtils.getUser(userDetails);
         ProductOptionResponseDto productOptionResponseDto = productOptionService.createOption(user, productOptionRequestDto, productId);
@@ -32,10 +36,10 @@ public class ProductOptionController {
 
     @PatchMapping("/{productOptionId}")
     public ResponseEntity<ProductOptionResponseDto> updateOption(@AuthenticationPrincipal UserDetails userDetails,
-                                                                 @RequestBody ProductOptionRequestDto productOptionRequestDto,
+                                                                 @RequestBody ProductOptionUpdateDto updateDto,
                                                                  @PathVariable Long productOptionId) {
         User user = UserUtils.getUser(userDetails);
-        ProductOptionResponseDto productOptionResponseDto = productOptionService.updateOption(user, productOptionRequestDto, productOptionId);
+        ProductOptionResponseDto productOptionResponseDto = productOptionService.updateOption(user, updateDto, productOptionId);
         return ResponseEntity.ok(productOptionResponseDto);
     }
 
@@ -46,9 +50,10 @@ public class ProductOptionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductOptionResponseDto>> findOptionListByProductId(@RequestBody ProductOptionRequestDto requestDto,
-                                                                                    @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ProductOptionResponseDto> productOptionResponseDto = productOptionService.findProductsByOptionalSizeAndColor(requestDto, pageable);
+    public ResponseEntity<Page<ProductOptionResponseDto>> findOptionListByProductId(@RequestBody FindProductOptionRequestDto requestDto,
+                                                                                    @RequestParam(defaultValue = "0") int page,
+                                                                                    @RequestParam(defaultValue = "10") int size) {
+        Page<ProductOptionResponseDto> productOptionResponseDto = productOptionService.findProductsByOptionalSizeAndColor(requestDto, page, size);
         return ResponseEntity.ok(productOptionResponseDto);
     }
 

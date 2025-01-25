@@ -1,5 +1,6 @@
-package com.Soo_Shinsa.report;
+package com.Soo_Shinsa.report.model;
 
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.utils.user.model.User;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Report {
+public class Report extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,6 +9,7 @@ import com.Soo_Shinsa.utils.UserUtils;
 import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +52,14 @@ public class ReportController {
         User user = UserUtils.getUser(userDetails);
         reportService.deleteReport(reportId, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllReports(@AuthenticationPrincipal UserDetailsImp userDetails,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "10") int size) {
+        User user = UserUtils.getUser(userDetails);
+        Page<ReportResponseDto> reports = reportService.getAllReports(user, page, size);
+        return ResponseEntity.ok(reports);
     }
 }

@@ -1,11 +1,18 @@
 package com.Soo_Shinsa.order;
 
+<<<<<<< HEAD
 import com.Soo_Shinsa.cartitem.CartItem;
 import com.Soo_Shinsa.cartitem.CartItemRepository;
 import com.Soo_Shinsa.constant.OrdersStatus;
 
 
 import com.Soo_Shinsa.order.dto.OrdersResponseDto;
+=======
+import com.Soo_Shinsa.cartitem.CartItemRepository;
+import com.Soo_Shinsa.constant.Status;
+import com.Soo_Shinsa.order.dto.OrdersResponseDto;
+import com.Soo_Shinsa.cartitem.model.CartItem;
+>>>>>>> 4b39b3825ec2c4739765ba1c6974be187a12dc07
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;

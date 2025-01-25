@@ -9,8 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT p FROM Product p WHERE p.brand.id = :brandId")
+    @Query("SELECT p FROM Product p WHERE p.brand.id = :brandId ORDER BY p.id DESC")
     Page<Product> findAllProductByBrandId(@Param("brandId") Long brandId, Pageable pageable);
+
     Page<Product> findAllByBrand(Pageable pageable);
+
+    default Product findById(Long productId, String exceptionMessage) {
+        return findById(productId).orElseThrow(() -> new IllegalArgumentException(exceptionMessage));
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.cartitem;
+package com.Soo_Shinsa.cartitem.model;
 
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.product.model.Product;
