@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.report;
+package com.Soo_Shinsa.report.model;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
