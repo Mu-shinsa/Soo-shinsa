@@ -8,9 +8,6 @@ import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,14 +50,16 @@ public class ProductController {
 
     @GetMapping("brands/{brandId}")
     public ResponseEntity<Page<ProductResponseDto>> findAllProductByBrandId(@PathVariable Long brandId,
-                                                                            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ProductResponseDto> productResponseDto = productService.findAllProductByBrandId(brandId, pageable);
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "10") int size) {
+        Page<ProductResponseDto> productResponseDto = productService.findAllProductByBrandId(brandId, page, size);
         return ResponseEntity.ok(productResponseDto);
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDto>> findAllProductList(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(pageable);
+    public ResponseEntity<Page<ProductResponseDto>> findAllProductList(@RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "10") int size) {
+        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(page, size);
         return ResponseEntity.ok(productResponseDto);
     }
 
