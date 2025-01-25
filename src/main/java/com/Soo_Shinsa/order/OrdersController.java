@@ -49,7 +49,7 @@ public class OrdersController {
     }
 
 //    단품 구매 생성
-    @PostMapping("/users/single-order")
+    @PostMapping("/users/orders")
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
@@ -58,7 +58,8 @@ public class OrdersController {
         OrdersResponseDto response = ordersService.createSingleProductOrder(user,requestDto.getProductId(), requestDto.getQuantity());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @PostMapping("/users/from-cart")
+    //카트에 담음 물건을 구매 생성
+    @PostMapping("/users/orders/carts")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {

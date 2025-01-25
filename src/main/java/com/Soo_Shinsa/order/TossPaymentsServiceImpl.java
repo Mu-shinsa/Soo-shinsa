@@ -94,8 +94,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         Map<String, String> payloadMap = new HashMap<>();
 
-
-
         payloadMap.put("orderId", orderId);
         payloadMap.put("amount", String.valueOf(amount));
 

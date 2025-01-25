@@ -34,33 +34,32 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // 주문 조회
-        Orders order = ordersRepository.findById(requestDto.getOrderId())
+        Orders findOrder = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
 
-        checkUserAndOrders(order,findUser.getUserId());
+        findUser.validateAndOrders(findOrder);
         // 상품 조회
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다.: " + requestDto.getProductId()));
         // OrderItem 생성 및 저장
         OrderItem orderItem = new OrderItem(
                 requestDto.getQuantity(),
-                order,
+                findOrder,
                 product
         );
 
         // OrderItem을 Order에 추가
-        order.addOrderItem(orderItem);
+        findOrder.addOrderItem(orderItem);
 
         // OrderItem 저장
         OrderItem savedOrderItem = orderItemRepository.save(orderItem);
 
         // 변경된 Order도 저장 (CascadeType.ALL로 인해 필요하지 않을 수도 있음)
-        ordersRepository.save(order);
+        ordersRepository.save(findOrder);
 
         return OrderItemResponseDto.toDto(savedOrderItem);
     }
     //오더 아이템 찾아오고 dto로 변환
-    @Transactional(readOnly = true)
     @Override
     public OrderItemResponseDto findById(Long orderItemsId,User user) {
         //오더 아이템을 찾아옴
@@ -68,14 +67,13 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
 
-        checkUserAndOrderItem(findOrderItem,findUser.getUserId());
+        findUser.validateAndOrderItem(findOrderItem);
         //dto로 변환
         return OrderItemResponseDto.toDto(findOrderItem);
     }
 
 
     //유저 오더아이템들을 찾아옴
-    @Transactional(readOnly = true)
     @Override
     public Page<OrderItemResponseDto> findByAll(User user, Pageable pageable) {
 
@@ -92,13 +90,13 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더 아이템을 찾아옴
-        OrderItem findOrder = findByIdOrElseThrow(orderItemsId);
+        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
 
 
-        checkUserAndOrderItem(findOrder,findUser.getUserId());
+        findUser.validateAndOrderItem(findOrderItem);
         //찾아옴 오더아이템 수량을 변경
-        findOrder.updateOrderItem(quantity);
-        OrderItem save = orderItemRepository.save(findOrder);
+        findOrderItem.updateOrderItem(quantity);
+        OrderItem save = orderItemRepository.save(findOrderItem);
         //dto로 변환
         return OrderItemResponseDto.toDto(save);
     }
@@ -109,34 +107,22 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // OrderItem 조회
-        OrderItem find = findByIdOrElseThrow(orderItemsId);
-
-        checkUserAndOrderItem(find,user.getUserId());
+        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
+        findUser.validateAndOrderItem(findOrderItem);
         // Orders 조회
-        Orders order = ordersRepository.findById(find.getOrder().getId())
+        Orders order = ordersRepository.findById(findOrderItem.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
         // OrderItem 삭제
-        order.removeOrderItem(find); // 연관 관계에서 제거
+        order.removeOrderItem(findOrderItem); // 연관 관계에서 제거
         ordersRepository.delete(order);// Order 저장 (OrderItem 자동 삭제)
         //dto 변환
-        return OrderItemResponseDto.toDto(find);
+        return OrderItemResponseDto.toDto(findOrderItem);
 
     }
     //오더 아이템을 찾아옴
-    @Transactional(readOnly = true)
     @Override
     public OrderItem findByIdOrElseThrow(Long id) {
         return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    private static void checkUserAndOrders(Orders orders,Long userId) {
-        if (!orders.getUser().getUserId().equals(userId)) {
-            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
-        }
-    }
-    private static void checkUserAndOrderItem(OrderItem orderItem,Long userId) {
-        if (!orderItem.getOrder().getUser().getUserId().equals(userId)) {
-            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
-        }
-    }
 }
