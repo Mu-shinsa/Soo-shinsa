@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.product;
 
+import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
 import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
@@ -45,7 +46,7 @@ public class ProductOptionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductOptionResponseDto>> findOptionListByProductId(@RequestBody ProductOptionRequestDto requestDto,
+    public ResponseEntity<Page<ProductOptionResponseDto>> findOptionListByProductId(@RequestBody FindProductOptionRequestDto requestDto,
                                                                                     @RequestParam(defaultValue = "0") int page,
                                                                                     @RequestParam(defaultValue = "10") int size) {
         Page<ProductOptionResponseDto> productOptionResponseDto = productOptionService.findProductsByOptionalSizeAndColor(requestDto, page, size);

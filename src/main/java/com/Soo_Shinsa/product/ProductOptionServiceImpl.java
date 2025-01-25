@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.product;
 
+import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
 import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
@@ -76,7 +77,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(ProductOptionRequestDto requestDto, int page, int size) {
+    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
 
         if (requestDto.getColor() == null && requestDto.getSize() == null) {
             throw new IllegalArgumentException("색상과 사이즈 중 하나는 필수입니다.");
