@@ -2,12 +2,14 @@ package com.Soo_Shinsa.product;
 
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
+import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +44,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Transactional
     @Override
-    public ProductOptionResponseDto updateOption(User user, ProductOptionRequestDto dto, Long productOptionId) {
+    public ProductOptionResponseDto updateOption(User user, ProductOptionUpdateDto dto, Long productOptionId) {
 
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
@@ -74,12 +76,13 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(ProductOptionRequestDto requestDto, Pageable pageable) {
+    public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(ProductOptionRequestDto requestDto, int page, int size) {
 
         if (requestDto.getColor() == null && requestDto.getSize() == null) {
             throw new IllegalArgumentException("색상과 사이즈 중 하나는 필수입니다.");
         }
 
+        Pageable pageable = PageRequest.of(page, size);
         Page<ProductOption> options = productOptionRepository.findProductsByOptionalSizeAndColor(requestDto.getSize(), requestDto.getColor(), pageable);
 
         return options.map(ProductOptionResponseDto::toDto);
