@@ -101,8 +101,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         return OrderItemResponseDto.toDto(save);
     }
     //오더 아이템 삭제
-    @Override
     @Transactional
+    @Override
+
     public OrderItemResponseDto delete(Long orderItemsId,User user) {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
