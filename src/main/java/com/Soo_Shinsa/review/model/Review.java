@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.review;
+package com.Soo_Shinsa.review.model;
 
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.order.model.OrderItem;
