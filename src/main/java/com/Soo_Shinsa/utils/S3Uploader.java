@@ -1,13 +1,13 @@
 package com.Soo_Shinsa.utils;
 
+import com.Soo_Shinsa.constant.FilePath;
+import com.Soo_Shinsa.constant.FileType;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -24,6 +25,9 @@ public class S3Uploader {
     private final AmazonS3 amazonS3;
     private final String bucket;
 
+    private static final long MAX_FILE_SIZE_BYTES = FilePath.MAX_FILE_SIZE_MB * 1024L * 1024L; // 10MB
+
+
     /**
      * S3로 파일 업로드
      * @param multipartFile
@@ -32,9 +36,9 @@ public class S3Uploader {
      * @throws IOException
      */
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
-        // 파일 이름에서 공백 제거한 새로운 파일 이름 생성
-        String originalFileName = multipartFile.getOriginalFilename();
+        validateFile(multipartFile);
 
+        String originalFileName = multipartFile.getOriginalFilename();
         // UUId를 통해 파일명 추가
         String uuid = UUID.randomUUID().toString();
         String uniqueFileName = uuid + "_" + originalFileName.replaceAll("\\s", "_");
@@ -48,49 +52,6 @@ public class S3Uploader {
         return uploadImageUrl;
     }
 
-    /**
-     * MultipartFile을 File로 변환
-     * @param multipartFile
-     * @return convertFile
-     * @throws IOException
-     */
-    private File convert(MultipartFile multipartFile) throws IOException {
-        String originalFileName = multipartFile.getOriginalFilename();
-        String uuid = UUID.randomUUID().toString();
-        String uniqueFileName = uuid + "_" + originalFileName.replaceAll("\\s", "_");
-
-        File convertFile = new File(uniqueFileName);
-        if (convertFile.createNewFile()) {
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                fos.write(multipartFile.getBytes());
-            } catch (IOException e) {
-                log.error("파일 변환 중 오류 발생: {}", e.getMessage());
-                throw e;
-            }
-            return convertFile;
-        }
-
-        throw new IllegalArgumentException(String.format("파일 변환 실패: %s", originalFileName));
-    }
-
-
-    /**
-     * 로컬에 생성된 파일 삭제
-     * @param uploadFile
-     */
-    private void removeNewFile(File uploadFile) {
-        if (uploadFile.delete()) {
-            log.info("로컬 파일이 삭제되었습니다.");
-            return;
-        }
-        log.error("로컬 파일이 삭제되지 않았습니다.");
-    }
-
-    private String putS3(File uploadFile, String fileName) {
-        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        return amazonS3.getUrl(bucket, fileName).toString();
-    }
 
     public void deleteFile (String fileName) {
         try {
@@ -108,5 +69,65 @@ public class S3Uploader {
         deleteFile(oldFileName);
         // 새로운 파일 업로드
         return upload(multipartFile, dirName);
+    }
+
+    /**
+     * MultipartFile을 File로 변환
+     * @param multipartFile
+     * @return convertFile
+     * @throws IOException
+     */
+    private File convert(MultipartFile multipartFile) throws IOException {
+        String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename(), "파일명은 필수입니다.");
+        String uuid = UUID.randomUUID().toString();
+        String uniqueFileName = uuid + "_" + originalFileName.replaceAll("\\s", "_");
+
+        File convertFile = new File(uniqueFileName);
+        if (convertFile.createNewFile()) {
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                fos.write(multipartFile.getBytes());
+            } catch (IOException e) {
+                log.error("파일 변환 중 오류 발생: {}", e.getMessage());
+                throw e;
+            }
+            return convertFile;
+        }
+
+        throw new IllegalArgumentException(String.format("파일 변환 실패: %s", originalFileName));
+    }
+
+    /**
+     * 로컬에 생성된 파일 삭제
+     * @param uploadFile
+     */
+    private void removeNewFile(File uploadFile) {
+        if (uploadFile.delete()) {
+            log.info("로컬 파일이 삭제되었습니다.");
+            throw new IllegalStateException("로컬 파일 삭제에 실패했습니다.");
+        }
+        log.error("로컬 파일이 삭제되지 않았습니다.");
+    }
+
+    private String putS3(File uploadFile, String fileName) {
+        amazonS3.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3.getUrl(bucket, fileName).toString();
+    }
+
+    private void validateFile(MultipartFile file) {
+        String originName = Objects.requireNonNull(file.getOriginalFilename(), "파일명은 필수입니다.");
+        if (originName.trim().isEmpty() || originName.lastIndexOf(".") <= 0) {
+            throw new IllegalArgumentException("잘못된 파일명입니다: " + originName);
+        }
+        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+            throw new IllegalArgumentException("파일 크기가 10MB를 초과할 수 없습니다.");
+        }
+
+        String extension = FileUtils.extractFileExtension(originName);
+        String mimeType = file.getContentType();
+
+        if (!FileType.isValid(extension, mimeType)) {
+            throw new IllegalArgumentException("확장자와 MIME 타입이 일치하지 않습니다: 확장자=" + extension + ", MIME 타입=" + mimeType);
+        }
     }
 }
