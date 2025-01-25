@@ -73,8 +73,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional
     @Override
     public OrdersResponseDto createSingleProductOrder(User user,Long productId, Integer quantity) {
-        User findUser = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
