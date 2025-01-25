@@ -7,8 +7,7 @@ import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
 import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 
 
-import com.Soo_Shinsa.utils.user.UserRepository;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

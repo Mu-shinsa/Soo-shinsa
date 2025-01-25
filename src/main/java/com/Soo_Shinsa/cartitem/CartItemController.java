@@ -3,9 +3,8 @@ package com.Soo_Shinsa.cartitem;
 
 import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
-
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
-import com.Soo_Shinsa.utils.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

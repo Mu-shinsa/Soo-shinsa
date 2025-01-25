@@ -4,7 +4,7 @@ import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
 
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 
 
 import org.springframework.data.domain.Page;

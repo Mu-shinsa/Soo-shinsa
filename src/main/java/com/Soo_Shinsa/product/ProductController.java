@@ -3,7 +3,7 @@ package com.Soo_Shinsa.product;
 import com.Soo_Shinsa.product.dto.FindProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

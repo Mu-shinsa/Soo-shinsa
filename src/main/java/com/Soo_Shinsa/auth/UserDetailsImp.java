@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.auth;
 
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

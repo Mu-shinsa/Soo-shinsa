@@ -4,7 +4,7 @@ import com.Soo_Shinsa.brand.dto.BrandRequestDto;
 import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
 import com.Soo_Shinsa.constant.BrandStatus;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 
 import lombok.RequiredArgsConstructor;
 

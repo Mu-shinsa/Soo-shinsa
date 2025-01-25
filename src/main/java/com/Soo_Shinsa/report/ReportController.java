@@ -6,7 +6,7 @@ import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
 
 import com.Soo_Shinsa.utils.UserUtils;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

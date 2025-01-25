@@ -2,7 +2,7 @@ package com.Soo_Shinsa.brand;
 
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.BrandStatus;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

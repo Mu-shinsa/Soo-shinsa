@@ -1,6 +1,6 @@
-package com.Soo_Shinsa.utils.user;
+package com.Soo_Shinsa.user;
 
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

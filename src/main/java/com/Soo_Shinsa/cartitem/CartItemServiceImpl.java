@@ -7,10 +7,8 @@ import com.Soo_Shinsa.product.ProductOptionRepository;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-
-import com.Soo_Shinsa.utils.user.UserRepository;
-import com.Soo_Shinsa.utils.user.model.User;
-
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -108,12 +106,5 @@ public class CartItemServiceImpl implements CartItemService {
         userId.validateCartItemUser(cartItem);
 
         cartItemRepository.delete(cartItem);
-    }
-
-
-    private static void checkUser(CartItem cartItem, User userId) {
-        if (!cartItem.getUser().getUserId().equals(userId.getUserId())) {
-            throw new IllegalArgumentException("해당 사용자의 카트가 아닙니다.");
-        }
     }
 }

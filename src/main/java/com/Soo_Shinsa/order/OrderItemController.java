@@ -5,10 +5,14 @@ package com.Soo_Shinsa.order;
 
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,10 +48,11 @@ public class OrderItemController {
     }
     //특정 유저의 모든 오더아이템들을 읽기
     @GetMapping("/users")
-    public ResponseEntity<List<OrderItemResponseDto>> readOrderItem(
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Page<OrderItemResponseDto>> readOrderItem(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         User user = UserUtils.getUser(userDetails);
-        List<OrderItemResponseDto> byAll = orderItemService.findByAll(user);
+        Page<OrderItemResponseDto> byAll = orderItemService.findByAll(user,pageable);
         return new ResponseEntity<>(byAll, HttpStatus.OK);
     }
     //특정 유저의 특정 오더아이템 수정

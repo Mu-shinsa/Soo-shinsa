@@ -3,7 +3,7 @@ package com.Soo_Shinsa.report.model;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

@@ -4,7 +4,7 @@ import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
 
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.model.User;
 
 import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
 

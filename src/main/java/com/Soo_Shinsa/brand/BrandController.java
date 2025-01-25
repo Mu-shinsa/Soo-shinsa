@@ -3,7 +3,7 @@ package com.Soo_Shinsa.brand;
 import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandRequestDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
-import com.Soo_Shinsa.utils.user.UserService;
+import com.Soo_Shinsa.user.UserService;
 import com.Soo_Shinsa.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

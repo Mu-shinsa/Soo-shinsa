@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.utils.user.model;
+package com.Soo_Shinsa.user.model;
 
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import jakarta.persistence.*;

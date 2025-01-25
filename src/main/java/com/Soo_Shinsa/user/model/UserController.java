@@ -1,10 +1,10 @@
-package com.Soo_Shinsa.utils.user.model;
+package com.Soo_Shinsa.user.model;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
-import com.Soo_Shinsa.utils.user.UserService;
+import com.Soo_Shinsa.user.UserService;
+import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.utils.UserUtils;
-import com.Soo_Shinsa.utils.user.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

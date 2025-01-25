@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.utils.user;
+package com.Soo_Shinsa.user;
 
 import com.Soo_Shinsa.order.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;

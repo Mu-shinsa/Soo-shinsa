@@ -2,6 +2,7 @@ package com.Soo_Shinsa.order;
 
 
 import com.Soo_Shinsa.cartitem.CartItemRepository;
+import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.OrdersStatus;
 
@@ -12,8 +13,8 @@ import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
-import com.Soo_Shinsa.utils.user.UserRepository;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,9 +59,10 @@ public class OrdersServiceImpl implements OrdersService {
     public Page<OrdersResponseDto> getAllByUserId(User user, Pageable pageable) {
 
         //오더를 찾아옴
-        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(user.getUserId(), pageable);
+        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(user.getUserId(),pageable);
 
         //주문이 없을시 예외 던짐
+
         if (allByUserUserId == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders를 찾을 수 없습니다");
         }
@@ -102,7 +104,7 @@ public class OrdersServiceImpl implements OrdersService {
         // 사용자 확인
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        Page<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId(), pageable);
+        List<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId());
         if (byUserUserId.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }

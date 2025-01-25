@@ -8,8 +8,10 @@ import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
-import com.Soo_Shinsa.utils.user.UserRepository;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -75,12 +77,13 @@ public class OrderItemServiceImpl implements OrderItemService {
     //유저 오더아이템들을 찾아옴
     @Transactional(readOnly = true)
     @Override
-    public List<OrderItemResponseDto> findByAll(User user) {
+    public Page<OrderItemResponseDto> findByAll(User user, Pageable pageable) {
 
         //회원의 모든 아이템 오더를 리스트르 받아옴
-        List<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(user.getUserId());
+        Page<OrderItem> orderItems = orderItemRepository.findAllByUserIdWithFetchJoin(user.getUserId(),pageable);
         //dto로 변환
-        return orderItems.stream().map(OrderItemResponseDto::toDto).toList();
+//        return orderItems.stream().map(OrderItemResponseDto::toDto).toList();
+        return orderItems.map(OrderItemResponseDto::toDto);
     }
     //오더 아이템 수정
     @Transactional

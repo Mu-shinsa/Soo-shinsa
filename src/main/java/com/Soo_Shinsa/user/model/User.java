@@ -1,10 +1,10 @@
-package com.Soo_Shinsa.utils.user.model;
+package com.Soo_Shinsa.user.model;
 
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
 
-import com.Soo_Shinsa.utils.user.dto.UserUpdateRequestDto;
+import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
 
 import com.Soo_Shinsa.report.model.Report;
 import com.Soo_Shinsa.review.model.Review;

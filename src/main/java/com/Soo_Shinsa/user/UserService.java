@@ -1,8 +1,8 @@
-package com.Soo_Shinsa.utils.user;
+package com.Soo_Shinsa.user;
 
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
-import com.Soo_Shinsa.utils.user.dto.*;
-import com.Soo_Shinsa.utils.user.model.User;
+import com.Soo_Shinsa.user.dto.*;
+import com.Soo_Shinsa.user.model.User;
 import jakarta.validation.constraints.NotBlank;
 
 public interface UserService {

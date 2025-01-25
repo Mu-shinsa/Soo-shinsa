@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.utils.user.dto;
+package com.Soo_Shinsa.user.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
