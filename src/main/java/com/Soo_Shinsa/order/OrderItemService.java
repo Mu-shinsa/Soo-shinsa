@@ -14,7 +14,6 @@ import java.util.List;
 public interface OrderItemService {
     OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto,User user);
 
-    OrderItem findByIdOrElseThrow(Long id);
 
     OrderItemResponseDto findById(Long orderItemsId,User user);
     Page<OrderItemResponseDto> findByAll(User user, Pageable pageable);

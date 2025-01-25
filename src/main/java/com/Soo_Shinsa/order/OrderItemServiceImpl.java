@@ -65,7 +65,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         //오더 아이템을 찾아옴
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
+        OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
 
         findUser.validateAndOrderItem(findOrderItem);
         //dto로 변환
@@ -89,7 +89,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더 아이템을 찾아옴
-        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
+        OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
 
 
         findUser.validateAndOrderItem(findOrderItem);
@@ -107,7 +107,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         // OrderItem 조회
-        OrderItem findOrderItem = findByIdOrElseThrow(orderItemsId);
+        OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
         findUser.validateAndOrderItem(findOrderItem);
         // Orders 조회
         Orders order = ordersRepository.findById(findOrderItem.getOrder().getId())
@@ -119,10 +119,6 @@ public class OrderItemServiceImpl implements OrderItemService {
         return OrderItemResponseDto.toDto(findOrderItem);
 
     }
-    //오더 아이템을 찾아옴
-    @Override
-    public OrderItem findByIdOrElseThrow(Long id) {
-        return orderItemRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
+
 
 }

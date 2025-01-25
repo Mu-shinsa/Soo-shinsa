@@ -42,7 +42,7 @@ public class OrdersServiceImpl implements OrdersService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         //오더를 찾아옴
-        Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더가 아닙니다."));;
+        Orders findOrder = ordersRepository.findByIdOrElseThrow(orderId);
 
         findUser.validateAndOrders(findOrder);
         //주문이 없을시 예외 던짐
@@ -145,7 +145,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        Orders findOrder = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("오더을 찾을 수 없습니다."));
+        Orders findOrder = ordersRepository.findByIdOrElseThrow(orderId);
         // 주문 저장
 
         findUser.validateAndOrders(findOrder);
