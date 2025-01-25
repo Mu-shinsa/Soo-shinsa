@@ -5,7 +5,6 @@ import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
 import com.Soo_Shinsa.user.model.User;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ReviewService {
@@ -17,7 +16,5 @@ public interface ReviewService {
 
     void delete(Long reviewId, User user);
 
-    Page<ReviewResponseDto> getAllReviewProduct(Long productId, Pageable pageable);
-
-
+    Page<ReviewResponseDto> getReviewsByProductId(Long productId, int page, int size);
 }

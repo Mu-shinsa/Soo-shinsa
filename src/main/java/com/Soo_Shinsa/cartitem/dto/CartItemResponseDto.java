@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.cartitem.dto;
 
-import com.Soo_Shinsa.cartitem.CartItem;
+import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
 import com.Soo_Shinsa.product.model.ProductOption;
 import lombok.Getter;

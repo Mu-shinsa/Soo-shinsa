@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.category;
 
-import com.Soo_Shinsa.BaseTimeEntity;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.brand.Brand;
 import jakarta.persistence.*;
 import lombok.Getter;

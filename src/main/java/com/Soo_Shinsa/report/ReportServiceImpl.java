@@ -1,12 +1,15 @@
 package com.Soo_Shinsa.report;
 
 import com.Soo_Shinsa.constant.ReportStatus;
-import com.Soo_Shinsa.constant.Role;
-import com.Soo_Shinsa.report.report.ReportProcessDto;
-import com.Soo_Shinsa.report.report.ReportRequestDto;
-import com.Soo_Shinsa.report.report.ReportResponseDto;
+import com.Soo_Shinsa.report.dto.ReportProcessDto;
+import com.Soo_Shinsa.report.dto.ReportRequestDto;
+import com.Soo_Shinsa.report.dto.ReportResponseDto;
+import com.Soo_Shinsa.report.model.Report;
 import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 신고 생성
+     *
      * @param requestDto
      * @return ReportResponseDto.toDto(report)
      */
@@ -30,6 +34,7 @@ public class ReportServiceImpl implements ReportService {
 
     /**
      * 신고 처리
+     *
      * @param reportId
      * @param processDto
      */
@@ -41,43 +46,47 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
 
         // 사용자 권한 검증
-        validateUser(user);
+        user.validateReportUser(report);
 
         // 신고 상태 처리
         report.process(processDto.getStatus());
 
         // 반려 상태라면 반려 사유 추가
-        if (processDto.getStatus() == ReportStatus.REJECTED) {
+        if (ReportStatus.REJECTED.equals(processDto.getStatus())) {
             report.addRejectReason(processDto.getRejectReason());
         } else {
             report.addRejectReason(null); // 반려 사유 초기화
         }
-
-        // 변경 사항 저장
-        reportRepository.save(report);
     }
 
     /**
      * 신고 조회
+     *
      * @param reportId
      * @return ReportResponseDto.toDto(report)
      */
-    @Transactional(readOnly = true)
     @Override
     public ReportResponseDto getReport(Long reportId, User user) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
 
         // 사용자 권한 검증
-        if (!user.getRole().equals(Role.ADMIN) && !report.getUser().getUserId().equals(user.getUserId())) {
-            throw new SecurityException("신고 조회 권한이 없습니다.");
-        }
+        user.validateReportUser(report);
 
         return ReportResponseDto.toDto(report);
     }
 
+    @Override
+    public Page<ReportResponseDto> getAllReports(User user, int page, int size) {
+        user.validateAdminRole();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Report> reports = reportRepository.findAllReports(pageable);
+        return reports.map(ReportResponseDto::toDto);
+    }
+
     /**
      * 신고 삭제
+     *
      * @param reportId
      */
     @Transactional
@@ -87,14 +96,7 @@ public class ReportServiceImpl implements ReportService {
             throw new IllegalArgumentException("해당 신고가 존재하지 않습니다." + reportId);
         }
 
-        validateUser(user);
-
+        user.validateAdminRole();
         reportRepository.deleteById(reportId);
-    }
-
-    private static void validateUser(User user) {
-        if (!user.getRole().equals(Role.ADMIN)) {
-            throw new SecurityException("신고를 삭제할 권한이 없습니다.");
-        }
     }
 }

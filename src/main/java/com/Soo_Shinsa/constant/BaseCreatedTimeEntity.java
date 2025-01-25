@@ -1,4 +1,4 @@
-package com.Soo_Shinsa;
+package com.Soo_Shinsa.constant;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

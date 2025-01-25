@@ -1,16 +1,18 @@
 package com.Soo_Shinsa.review;
 
+import com.Soo_Shinsa.constant.TargetType;
+import com.Soo_Shinsa.image.Image;
+import com.Soo_Shinsa.image.ImageService;
+import com.Soo_Shinsa.order.OrderItemRepository;
+import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
-import com.Soo_Shinsa.image.Image;
-import com.Soo_Shinsa.order.model.OrderItem;
-import com.Soo_Shinsa.order.OrderItemRepository;
+import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.model.User;
-import com.Soo_Shinsa.image.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, "reviews");
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.REVIEW.name(), orderItemId);
             imageUrl = uploaded.getPath();
         }
 
@@ -66,8 +68,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     @Override
     public ReviewResponseDto getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
 
         return ReviewResponseDto.toDto(review);
     }
@@ -82,10 +83,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto, User user, MultipartFile imageFile) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
 
-        validateUser(user, review);
+        user.validateReviewUser(review);
 
         String newImageUrl = review.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -95,9 +95,8 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         review.update(updateDto.getRate(), updateDto.getContent(), newImageUrl);
-        Review saveReview = reviewRepository.save(review);
 
-        return ReviewUpdateDto.toDto(saveReview);
+        return ReviewUpdateDto.toDto(review);
     }
 
     /**
@@ -105,15 +104,14 @@ public class ReviewServiceImpl implements ReviewService {
      *
      * @param productId
      * @param productId 상품 ID
-     * @param pageable  페이징 및 정렬 정보
+     * @param page      페이지 번호
+     * @param size      페이지 크기
      * @return reviews.map(ReviewResponseDto : : toDto);
      */
-    @Transactional(readOnly = true)
-    public Page<ReviewResponseDto> getAllReviewProduct(Long productId, Pageable pageable) {
-        // 상품 ID를 기반으로 리뷰 조회 (페이징 적용)
+    public Page<ReviewResponseDto> getReviewsByProductId(Long productId, int page, int size) {
+        // Pageable 객체를 Service에서 생성
+        Pageable pageable = PageRequest.of(page, size);
         Page<Review> reviews = reviewRepository.findAllByProductId(productId, pageable);
-
-        // Review -> ReviewResponseDto 변환
         return reviews.map(ReviewResponseDto::toDto);
     }
 
@@ -126,21 +124,14 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void delete(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 리뷰입니다."));
+        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
 
-        validateUser(user, review);
+        user.validateReviewUser(review);
 
         if (review.getImageUrl() != null) {
             imageService.deleteImage(review.getImageUrl()); // URL을 사용해 이미지 삭제
         }
 
         reviewRepository.delete(review);
-    }
-
-    private static void validateUser(User user, Review review) {
-        if (!review.getUser().getUserId().equals(user.getUserId())) {
-            throw new SecurityException("리뷰를 삭제할 권한이 없습니다.");
-        }
     }
 }
