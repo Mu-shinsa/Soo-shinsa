@@ -3,12 +3,12 @@ package com.Soo_Shinsa.cartitem;
 import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
 import com.Soo_Shinsa.cartitem.model.CartItem;
+import com.Soo_Shinsa.product.ProductOptionRepository;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-import com.Soo_Shinsa.user.model.User;
-import com.Soo_Shinsa.product.ProductOptionRepository;
 import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class CartItemServiceImpl implements CartItemService {
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
-        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(product.getId());
+        List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(product.getId());
 
         CartItem cartItem = CartItem.builder()
                 .quantity(requestDto.getQuantity())
@@ -57,7 +57,7 @@ public class CartItemServiceImpl implements CartItemService {
         //사용자의 카트인지 확인
         userId.validateCartItemUser(cartItem);
 
-        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(cartItem.getProduct().getId());
+        List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(cartItem.getProduct().getId());
 
         return CartItemResponseDto.toDto(cartItem, productOptions);
     }
@@ -70,7 +70,7 @@ public class CartItemServiceImpl implements CartItemService {
         Page<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId(), pageable);
 
         return allCartItem.map(cartItem -> {
-            List<ProductOption> productOptions = productOptionRepository.findAllByProductId(cartItem.getProduct().getId());
+            List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(cartItem.getProduct().getId());
             return CartItemResponseDto.toDto(cartItem, productOptions);
         });
     }
@@ -89,7 +89,7 @@ public class CartItemServiceImpl implements CartItemService {
 
 
         // 상품 옵션 조회
-        List<ProductOption> productOptions = productOptionRepository.findAllByProductId(cartItem.getProduct().getId());
+        List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(cartItem.getProduct().getId());
 
         return CartItemResponseDto.toDto(cartItem, productOptions);
     }
