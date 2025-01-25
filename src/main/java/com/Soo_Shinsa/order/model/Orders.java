@@ -38,19 +38,22 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Orders(BigDecimal totalPrice, OrdersStatus status, User user, List<OrderItem> orderItems) {
-        this.orderId=createOrderNumber();
+
+
+
+    public Orders(BigDecimal totalPrice, OrdersStatus status, User user) {
+        this.orderId = createOrderNumber();
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
-        this.orderItems = orderItems;
+        this.orderItems = new ArrayList<>(); // 명시적으로 초기화
     }
 
 
-    public Orders(OrdersStatus status, User user, List<OrderItem> orderItems) {
+
+    public Orders(OrdersStatus status, User user) {
         this.status = status;
         this.user = user;
-        this.orderItems = orderItems;
     }
 
     // 연관관계 오더 아이템 추가

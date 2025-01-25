@@ -78,7 +78,7 @@ public class OrdersServiceImpl implements OrdersService {
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         //주문번호를 생성 후 주문을 만들고
         // Orders 생성
-        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BEFOREPAYMENT, user, new ArrayList<>());
+        Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BEFOREPAYMENT, user);
 
 
         //주문아이템을생성
@@ -104,7 +104,7 @@ public class OrdersServiceImpl implements OrdersService {
         }
 
         // Orders 생성
-        Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user, new ArrayList<>());
+        Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user);
 
 
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
@@ -131,7 +131,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto createOrder(User user) {
 
-        Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT,user, new ArrayList<>());
+        Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT,user);
         // 주문 저장
         Orders savedOrder = ordersRepository.save(order);
 
