@@ -1,7 +1,6 @@
 package com.Soo_Shinsa.order;
 
 
-
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.order.model.OrderItem;
@@ -10,15 +9,11 @@ import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

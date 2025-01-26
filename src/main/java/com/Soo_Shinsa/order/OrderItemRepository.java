@@ -1,16 +1,13 @@
 package com.Soo_Shinsa.order;
 
 
-
 import com.Soo_Shinsa.order.model.OrderItem;
-import com.Soo_Shinsa.order.model.Orders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.List;
 

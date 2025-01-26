@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.dto.order;
+package com.Soo_Shinsa.order.dto;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
 import jakarta.validation.constraints.NotNull;

@@ -2,18 +2,11 @@ package com.Soo_Shinsa.order;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
-
-import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
-import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
-import com.Soo_Shinsa.dto.payment.UserOrderDTO;
-
-
+import com.Soo_Shinsa.order.dto.PaymentRequestDto;
+import com.Soo_Shinsa.order.dto.PaymentResponseDto;
+import com.Soo_Shinsa.order.dto.UserOrderDTO;
 import com.Soo_Shinsa.order.model.Orders;
-
 import com.Soo_Shinsa.order.model.Payment;
-
-
-import com.Soo_Shinsa.user.PaymentRepository;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,18 +14,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
