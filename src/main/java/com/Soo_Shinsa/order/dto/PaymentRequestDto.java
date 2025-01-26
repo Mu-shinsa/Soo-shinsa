@@ -1,29 +1,25 @@
 package com.Soo_Shinsa.order.dto;
 
-import com.Soo_Shinsa.constant.TossPayMethod;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
 public class PaymentRequestDto {
-    private String paymentKey; // 토스페이먼츠 결제 키
-    @NotNull(message = "결제방법을 입력해주세요.")
-    private TossPayMethod method; // 결제 수단 (CARD)
 
-    @NotNull(message = "오더는 필수값 입니다.")
-    private Long order; // 주문 ID
+    private String orderId;
+    private BigDecimal amount;
+    private String method;
+    private String customerEmail;
+    private String customerName;
 
-
-
-
-
-    public PaymentRequestDto(String paymentKey, TossPayMethod method,Long order) {
-        this.paymentKey = paymentKey;
+    public PaymentRequestDto(String orderId, BigDecimal amount, String method, String customerEmail, String customerName) {
+        this.orderId = orderId;
+        this.amount = amount;
         this.method = method;
-        this.order=order;
-
+        this.customerEmail = customerEmail;
+        this.customerName = customerName;
     }
 }

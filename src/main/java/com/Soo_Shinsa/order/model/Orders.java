@@ -5,8 +5,7 @@ import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

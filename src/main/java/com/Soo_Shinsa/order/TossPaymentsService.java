@@ -2,10 +2,9 @@ package com.Soo_Shinsa.order;
 
 
 
-
-import com.Soo_Shinsa.order.dto.PaymentRequestDto;
-import com.Soo_Shinsa.order.dto.PaymentResponseDto;
-import com.Soo_Shinsa.order.dto.UserOrderDTO;
+import com.Soo_Shinsa.dto.payment.PaymentRequestDto;
+import com.Soo_Shinsa.dto.payment.PaymentResponseDto;
+import com.Soo_Shinsa.dto.payment.UserOrderDTO;
 import com.Soo_Shinsa.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.ui.Model;
