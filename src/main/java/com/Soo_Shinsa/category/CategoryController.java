@@ -21,12 +21,12 @@ public class CategoryController {
 
     @PostMapping("brands/{brandId}")
     public ResponseEntity<CategoryResponseDto> create(
+            @PathVariable Long brandId,
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CategoryRequestDto dto,
-            @PathVariable Long brandId
+            @Valid @RequestBody CategoryRequestDto dto
     ) {
         User user = UserUtils.getUser(userDetails);
-        CategoryResponseDto saved = categoryService.create(user, dto, brandId);
+        CategoryResponseDto saved = categoryService.create(brandId, user, dto);
 
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }

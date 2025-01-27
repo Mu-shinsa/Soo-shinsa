@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryResponseDto create(User user, CategoryRequestDto dto, Long brandId) {
+    public CategoryResponseDto create(Long brandId, User user, CategoryRequestDto dto) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
         Long dtoParentId = dto.getParent();
@@ -33,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .parent(parent)
                 .name(dto.getName())
                 .build();
+
         categoryRepository.save(savedCategory);
 
         return CategoryResponseDto.toDto(savedCategory);
