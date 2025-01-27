@@ -22,7 +22,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
 
-
         Category parent = null;
         if (dto.getParent() != null) {
             parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
