@@ -24,18 +24,13 @@ public class CategoryServiceImpl implements CategoryService {
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
         Long dtoParentId = dto.getParent();
 
-        if(dtoParentId != null){
-            Category parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
-            Category savedCategory = new Category(
-                    findBrand,
-                    parent,
-                    dto.getName()
-            );
-            return CategoryResponseDto.toDto(savedCategory);
+        Category parent = null;
+        if (dtoParentId != null) {
+            parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
         }
         Category savedCategory = new Category(
                 findBrand,
-                null,
+                parent,
                 dto.getName()
         );
         return CategoryResponseDto.toDto(savedCategory);
