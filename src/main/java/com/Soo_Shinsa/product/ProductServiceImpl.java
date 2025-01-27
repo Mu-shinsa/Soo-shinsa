@@ -11,10 +11,8 @@ import com.Soo_Shinsa.product.dto.ProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-
-import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.UserRepository;
-
+import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT.name(), null);
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
             imageUrl = uploaded.getPath();
         }
 
@@ -78,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
         String newImageUrl = product.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
             // 기존 이미지 삭제 후 새로운 이미지 업로드
-            Image updatedImage = imageService.updateImage(imageFile, product.getImageUrl(), "reviews");
+            Image updatedImage = imageService.updateImage(imageFile, product.getImageUrl(), TargetType.PRODUCT);
             newImageUrl = updatedImage.getPath();
         }
 
