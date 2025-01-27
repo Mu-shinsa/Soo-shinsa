@@ -33,6 +33,11 @@ public class CategoryServiceImpl implements CategoryService {
                 parent,
                 dto.getName()
         );
+
+        categoryRepository.save(savedCategory);
+
         return CategoryResponseDto.toDto(savedCategory);
     }
+
+
 }
