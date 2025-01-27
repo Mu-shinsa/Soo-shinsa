@@ -1,18 +1,23 @@
 package com.Soo_Shinsa.order;
 
 
+
+
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
+import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,55 +26,51 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     //오더 아이템 생성
-    @PostMapping("/users/{userId}")
+    @PostMapping("/users")
     public ResponseEntity<OrderItemResponseDto> createOrderItem(
-            @AuthenticationPrincipal UserDetails userDetails,
             @Valid
             @RequestBody OrderItemRequestDto requestDto,
-            @PathVariable Long userId) {
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto,userId);
+            @AuthenticationPrincipal UserDetails userDetails) {
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto,user);
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
     //특정유저의 특정 오더아이템 읽기
-    @GetMapping("/{OrderItemsId}/users/{userId}")
+    @GetMapping("/{OrderItemsId}/users")
     public ResponseEntity<OrderItemResponseDto> findById(
-            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long OrderItemsId,
-            @PathVariable Long userId){
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto findOrder = orderItemService.findById(OrderItemsId, userId);
+            @AuthenticationPrincipal UserDetails userDetails){
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto findOrder = orderItemService.findById(OrderItemsId,user);
         return new ResponseEntity<>(findOrder, HttpStatus.OK);
     }
     //특정 유저의 모든 오더아이템들을 읽기
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<List<OrderItemResponseDto>> readOrderItem(
+    @GetMapping("/users")
+    public ResponseEntity<Page<OrderItemResponseDto>> readOrderItem(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long userId) {
-        UserUtils.getUser(userDetails);
-        List<OrderItemResponseDto> byAll = orderItemService.findByAll(userId);
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        User user = UserUtils.getUser(userDetails);
+        Page<OrderItemResponseDto> byAll = orderItemService.findByAll(user,pageable);
         return new ResponseEntity<>(byAll, HttpStatus.OK);
     }
     //특정 유저의 특정 오더아이템 수정
-    @PatchMapping("/{orderItemsId}/users/{userId}")
+    @PatchMapping("/{orderItemsId}/users")
     public ResponseEntity<OrderItemResponseDto> updateOrderItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderItemsId,
-            @PathVariable Long userId,
             @Valid
             @RequestBody OrderItemRequestDto dto) {
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto update = orderItemService.update(orderItemsId, userId, dto.getQuantity());
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto update = orderItemService.update(orderItemsId, dto.getQuantity(),user);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
     //특정유저의 특정 오더 아이템 삭제
-    @DeleteMapping("/{orderItemsId}/users/{userId}")
+    @DeleteMapping("/{orderItemsId}/users")
     public ResponseEntity<OrderItemResponseDto> delete(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long orderItemsId,
-            @PathVariable Long userId){
-        UserUtils.getUser(userDetails);
-        OrderItemResponseDto delete = orderItemService.delete(orderItemsId, userId);
+            @PathVariable Long orderItemsId){
+        User user = UserUtils.getUser(userDetails);
+        OrderItemResponseDto delete = orderItemService.delete(orderItemsId,user);
         return new ResponseEntity<>(delete, HttpStatus.OK);
     }
 }

@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.category;
 
-import com.Soo_Shinsa.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

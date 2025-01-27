@@ -1,10 +1,12 @@
 package com.Soo_Shinsa.order.model;
 
-import com.Soo_Shinsa.constant.Status;
+
 import com.Soo_Shinsa.constant.BaseTimeEntity;
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,14 +23,14 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String orderNumber=createOrderNumber();
+    private String orderId;
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrdersStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
@@ -37,23 +39,22 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Orders(BigDecimal totalPrice, Status status, User user, List<OrderItem> orderItems) {
+
+
+
+    public Orders(BigDecimal totalPrice, OrdersStatus status, User user) {
+        this.orderId = createOrderNumber();
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
-        this.orderItems = orderItems;
+        this.orderItems = new ArrayList<>(); // 명시적으로 초기화
     }
 
-    public Orders(BigDecimal totalPrice, User user, List<OrderItem> orderItems) {
-        this.totalPrice = totalPrice;
-        this.user = user;
-        this.orderItems = orderItems;
-    }
 
-    public Orders(Status status, User user, List<OrderItem> orderItems) {
+
+    public Orders(OrdersStatus status, User user) {
         this.status = status;
         this.user = user;
-        this.orderItems = orderItems;
     }
 
     // 연관관계 오더 아이템 추가
@@ -77,8 +78,10 @@ public class Orders extends BaseTimeEntity {
     }
 
     private String createOrderNumber(){
-        return orderNumber = "ORD-" + UUID.randomUUID();
-
+        return orderId = "ORD-" + UUID.randomUUID();
     }
 
+    public void updateStatus(OrdersStatus status) {
+        this.status = status;
+    }
 }

@@ -8,6 +8,7 @@ import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import static com.Soo_Shinsa.category.Category.rootParent;
 
 @Service
