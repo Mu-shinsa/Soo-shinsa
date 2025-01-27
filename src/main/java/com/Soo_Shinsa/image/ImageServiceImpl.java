@@ -20,17 +20,15 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public Image uploadImage(MultipartFile file, String targetType, Long targetId) {
+    public Image uploadImage(MultipartFile file, TargetType targetType, Long targetId) {
 
         try {
-            TargetType target = TargetType.valueOf(targetType.toUpperCase());
-
             // Image 클래스의 determinePath 메서드 사용
-            String dirName = Image.determinePath(target);
+            String dirName = Image.determinePath(targetType);
             // S3에 파일 업로드
             String imageUrl = s3Uploader.upload(file, dirName);
             // 비즈니스 로직: 데이터베이스에 이미지 정보 저장
-            Image image = new Image(targetId, target, file.getOriginalFilename(), imageUrl);
+            Image image = new Image(targetId, targetType, file.getOriginalFilename(), imageUrl);
 
             return imageRepository.save(image);
 
@@ -53,13 +51,12 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public Image updateImage(MultipartFile newFile, String oldImageUrl, String targetType) {
+    public Image updateImage(MultipartFile newFile, String oldImageUrl, TargetType targetType) {
         try {
 
-            TargetType target = TargetType.valueOf(targetType.toUpperCase());
-            String dirName = Image.determinePath(target);
+            String dirName = Image.determinePath(targetType);
             String newImageUrl = s3Uploader.updateFile(newFile, oldImageUrl, dirName);
-            Image image = new Image(newFile.getOriginalFilename(), target);
+            Image image = new Image(newFile.getOriginalFilename(), targetType);
             image.assignImageUrl(newImageUrl);
 
             return imageRepository.save(image);
