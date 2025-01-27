@@ -3,6 +3,7 @@ package com.Soo_Shinsa.category;
 import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +36,7 @@ public class Category extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
+    @Builder
     public Category(Brand brand, Category parent, String name) {
         this.brand = brand;
         this.parent = parent;
