@@ -46,7 +46,7 @@ public class OrdersController {
     }
 
 //    단품 구매 생성
-    @PostMapping()
+    @PostMapping("/single")
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
