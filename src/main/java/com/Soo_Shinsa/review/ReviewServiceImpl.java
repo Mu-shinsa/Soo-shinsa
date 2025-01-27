@@ -10,7 +10,6 @@ import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
 import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.model.User;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, TargetType.REVIEW.name(), orderItemId);
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.REVIEW, orderItemId);
             imageUrl = uploaded.getPath();
         }
 
@@ -91,7 +90,7 @@ public class ReviewServiceImpl implements ReviewService {
         String newImageUrl = review.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
             // 기존 이미지 삭제 후 새로운 이미지 업로드
-            Image updatedImage = imageService.updateImage(imageFile, review.getImageUrl(), "reviews");
+            Image updatedImage = imageService.updateImage(imageFile, review.getImageUrl(), TargetType.REVIEW);
             newImageUrl = updatedImage.getPath();
         }
 
