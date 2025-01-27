@@ -47,7 +47,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         Orders order = ordersRepository.findById(requestDto.getOrder())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
 
-
         Payment payment = new Payment(
                 order.getOrderId(),
                 order.getTotalPrice(),
@@ -55,12 +54,9 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
                 TossPayMethod.CARD,
                 order,
                 user
-
         );
 
         Payment savedPayment = paymentRepository.save(payment);
-
-
         return PaymentResponseDto.toDto(savedPayment);
     }
 
@@ -72,39 +68,29 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         Payment findPayment = paymentRepository.findByOrderId(orderId);
-
-
         findPayment.update(TossPayStatus.DONE, paymentKey);
-
-
         paymentRepository.save(findPayment);
 
         PayloadRequestDto payload = new PayloadRequestDto(orderId, String.valueOf(amount));
-
-
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
-
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
     }
 
+    @Transactional
     @Override
     public void cancelPayment(String paymentKey, String cancelReason) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         Payment findPayment = paymentRepository.findByPaymentKey(paymentKey);
 
-
         findPayment.update(TossPayStatus.CANCELED, paymentKey);
-
-
         paymentRepository.save(findPayment);
-        PayloadRequestDto payload = new PayloadRequestDto("cancelReason");
+
+        PayloadRequestDto payload = new PayloadRequestDto(cancelReason);
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
 
         // API 호출
@@ -114,17 +100,11 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     }
 
 
-
-
     @Transactional
-    public UserOrderDTO findItem(Long userId, Long orderId){
+    public UserOrderDTO findItem(Long userId, Long orderId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
         Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더입니다."));
-
-
-
-        return new UserOrderDTO(user,order);
+        return new UserOrderDTO(user, order);
 
 
     }
