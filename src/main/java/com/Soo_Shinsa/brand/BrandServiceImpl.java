@@ -1,13 +1,11 @@
 package com.Soo_Shinsa.brand;
 
 import com.Soo_Shinsa.brand.dto.BrandRequestDto;
-import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
+import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.constant.BrandStatus;
 import com.Soo_Shinsa.user.model.User;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +28,7 @@ public class BrandServiceImpl implements BrandService {
                 BrandStatus.APPLY,
                 user
         );
-        Brand saved = brandRepository.save(savedBrand);
+
         return BrandResponseDto.toDto(savedBrand);
     }
 
@@ -39,10 +37,10 @@ public class BrandServiceImpl implements BrandService {
     public BrandUpdateResponseDto update(User user, BrandRequestDto dto, Long brandId) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
-
         findBrand.update(dto.getRegistrationNum(),dto.getName(),dto.getContext(), dto.getStatus());
+        Brand saved = brandRepository.save(findBrand);
 
-        return BrandUpdateResponseDto.toDto(findBrand);
+        return BrandUpdateResponseDto.toDto(saved);
     }
 
     @Override

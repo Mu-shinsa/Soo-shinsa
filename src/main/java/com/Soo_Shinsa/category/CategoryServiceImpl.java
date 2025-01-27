@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -19,9 +18,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryResponseDto create(User user, CategoryRequestDto dto, Long brandId) {
+    public CategoryResponseDto create(Long brandId, User user, CategoryRequestDto dto) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
+
 
         Category parent = null;
         if (dto.getParent() != null) {
@@ -35,6 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
 
         categoryRepository.save(saveCategory);
+
         return CategoryResponseDto.toDto(saveCategory);
     }
 }
