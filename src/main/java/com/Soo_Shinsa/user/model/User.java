@@ -1,12 +1,7 @@
 package com.Soo_Shinsa.user.model;
 
-import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
-import com.Soo_Shinsa.order.model.OrderItem;
-import com.Soo_Shinsa.order.model.Orders;
-import com.Soo_Shinsa.report.model.Report;
-import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -74,46 +69,16 @@ public class User {
         this.password = password;
     }
 
-    public void validateReviewUser(Review review) {
-        if (!review.getUser().getUserId().equals(this.userId)) {
-            throw new IllegalArgumentException("본인의 리뷰만 수정/삭제 가능합니다.");
-        }
+    // 역할 검증 메소드
+    public boolean isAdmin() {
+        return Role.ADMIN.equals(this.role);
     }
 
-    public void validateCartItemUser(CartItem cartItem) {
-        if (!cartItem.getUser().getUserId().equals(this.userId)) {
-            throw new IllegalArgumentException("본인의 장바구니만 추가/수정/삭제 가능합니다.");
-        }
+    public boolean isVendor() {
+        return Role.VENDOR.equals(this.role);
     }
 
-    public void validateAdminRole () {
-        if ((!Role.ADMIN.equals(this.role))) {
-            throw new IllegalArgumentException("관리자만 접근 가능합니다.");
-        }
-    }
-
-    /**
-     * 관리자(Admin) 또는 판매자(Vendor) 권한 검증
-     */
-    public void validateAdminOrVendorRole() {
-        if (!Role.ADMIN.equals(this.role) && !Role.VENDOR.equals(this.role)) {
-            throw new IllegalArgumentException("관리자 또는 판매자만 접근 가능합니다.");
-        }
-    }
-
-    public void validateReportUser(Report report) {
-        if (!report.getUser().getUserId().equals(this.userId)) {
-            throw new IllegalArgumentException("본인의 신고만 조회/처리 가능합니다.");
-        }
-    }
-    public void validateAndOrders(Orders orders) {
-        if (!orders.getUser().getUserId().equals(userId)) {
-            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
-        }
-    }
-    public void validateAndOrderItem(OrderItem orderItem) {
-        if (!orderItem.getOrder().getUser().getUserId().equals(userId)) {
-            throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
-        }
+    public boolean isAdminOrVendor() {
+        return isAdmin() || isVendor();
     }
 }
