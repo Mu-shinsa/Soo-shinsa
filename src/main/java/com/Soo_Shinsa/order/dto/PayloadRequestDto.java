@@ -1,21 +1,21 @@
-package com.Soo_Shinsa.utils;
+package com.Soo_Shinsa.order.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class Payload {
+public class PayloadRequestDto {
     String orderId;
-    Long amount;
+    String amount;
     String cancelReason;
 
-    public Payload(String orderId, Long amount) {
+    public PayloadRequestDto(String orderId, String amount) {
         this.orderId = orderId;
         this.amount = amount;
     }
 
-    public Payload(String cancelReason) {
+    public PayloadRequestDto(String cancelReason) {
         this.cancelReason = cancelReason;
     }
 }
