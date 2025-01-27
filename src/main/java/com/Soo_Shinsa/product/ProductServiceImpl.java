@@ -97,14 +97,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDto> findAllProductByBrandId(Long brandId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productRepository.findAllProductByBrandId(brandId, pageable);
-
-        return products.map(ProductResponseDto::toDto);
-    }
-
-    @Override
     public Page<ProductResponseDto> findAllProduct(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAllByBrand(pageable);
