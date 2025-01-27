@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/brands")
 public class BrandController {
 
+    private final UserService userService;
     private final BrandService brandService;
 
     @PostMapping
