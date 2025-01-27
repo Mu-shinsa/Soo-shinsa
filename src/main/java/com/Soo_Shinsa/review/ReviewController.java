@@ -24,7 +24,7 @@ public class ReviewController {
 
     @PostMapping("/order-item/{orderItemId}")
     public ResponseEntity<ReviewResponseDto> createReview(@PathVariable Long orderItemId,
-                                                          @Valid @RequestBody ReviewRequestDto requestDto,
+                                                          @Valid @RequestPart ReviewRequestDto requestDto,
                                                           @RequestPart (required = false) MultipartFile imageFile,
                                                           @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
@@ -41,7 +41,7 @@ public class ReviewController {
 
     @PatchMapping("/{reviewId}")
     public ResponseEntity<ReviewUpdateDto> updateReview(@PathVariable Long reviewId,
-                                                        @Valid @RequestBody ReviewUpdateDto updateDto,
+                                                        @Valid @RequestPart ReviewUpdateDto updateDto,
                                                         @RequestPart(required = false) MultipartFile imageFile,
                                                         @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
