@@ -9,6 +9,7 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.model.Payment;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.Payload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +25,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Service
@@ -85,12 +84,19 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         paymentRepository.save(findPayment);
 
-        Map<String, String> payloadMap = new HashMap<>();
 
-        payloadMap.put("orderId", orderId);
-        payloadMap.put("amount", String.valueOf(amount));
+        Payload payload = new Payload(orderId,amount);
 
-        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
+
+
+
+//        Map<String, String> payloadMap = new HashMap<>();
+//        payloadMap.put("orderId", orderId);
+//        payloadMap.put("amount", String.valueOf(amount));
+
+//        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
+
+        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
@@ -113,16 +119,16 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         paymentRepository.save(findPayment);
 
-        Map<String, String> payloadMap = new HashMap<>();
+        Payload payload = new Payload("cancelReason");
 
-        payloadMap.put("cancelReason", cancelReason);
+//        Map<String, String> payloadMap = new HashMap<>();
+//        payloadMap.put("cancelReason", cancelReason);
+//        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
-        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
-        // paymentKey를 URL에 동적으로 추가
+        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
+
         String url = String.format("https://api.tosspayments.com/v1/payments/%s/cancel", paymentKey);
-
-        // API 호출
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(url, request, JsonNode.class);
 
     }
