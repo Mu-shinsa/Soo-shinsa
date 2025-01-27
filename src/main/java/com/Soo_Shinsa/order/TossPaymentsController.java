@@ -63,16 +63,10 @@ public class TossPaymentsController {
         String orderName = item.getOrder().getOrderId();
         String name = item.getUser().getName();
 
-
-
         model.addAttribute("tosspayments_key", clientKey);
-
         model.addAttribute("totalPrice", totalPrice);
-
         model.addAttribute("orderName", orderName);
-
         model.addAttribute("name", name);
-
         return "home";
 
     }
@@ -83,7 +77,6 @@ public class TossPaymentsController {
             @RequestParam String cancelReason
     ) throws JsonProcessingException {
         tossPaymentsService.cancelPayment(dto.getPaymentKey(), cancelReason);
-
         return "cancel";
     }
 
