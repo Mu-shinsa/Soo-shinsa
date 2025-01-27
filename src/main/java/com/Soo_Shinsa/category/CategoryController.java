@@ -29,4 +29,5 @@ public class CategoryController {
         CategoryResponseDto saved = categoryService.create(brandId, user, dto);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
 }
