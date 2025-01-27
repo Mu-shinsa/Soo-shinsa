@@ -77,6 +77,7 @@ public class TossPaymentsController {
         model.addAttribute("name", name);
 
         return "home";
+
     }
 
     @RequestMapping("/cancel")
