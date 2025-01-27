@@ -1,10 +1,8 @@
 package com.Soo_Shinsa.product.model;
 
-import com.Soo_Shinsa.constant.ProductStatus;
-import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.brand.Brand;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
+import com.Soo_Shinsa.constant.ProductStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,7 +30,7 @@ public class Product extends BaseTimeEntity {
     private ProductStatus productStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "brand_Id", nullable = false)
+    @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @Builder
