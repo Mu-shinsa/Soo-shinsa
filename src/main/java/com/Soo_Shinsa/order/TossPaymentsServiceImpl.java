@@ -2,6 +2,7 @@ package com.Soo_Shinsa.order;
 
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
+import com.Soo_Shinsa.order.dto.PayloadRequestDto;
 import com.Soo_Shinsa.order.dto.PaymentRequestDto;
 import com.Soo_Shinsa.order.dto.PaymentResponseDto;
 import com.Soo_Shinsa.order.dto.UserOrderDTO;
@@ -9,7 +10,6 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.model.Payment;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
-import com.Soo_Shinsa.utils.Payload;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,13 +41,11 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
     private String secretKey;
 
 
-
     @Transactional
     public PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user) {
 
         Orders order = ordersRepository.findById(requestDto.getOrder())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
-
 
 
         Payment payment = new Payment(
@@ -75,63 +73,46 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
 
-
         Payment findPayment = paymentRepository.findByOrderId(orderId);
 
 
-        findPayment.update(TossPayStatus.DONE,paymentKey);
+        findPayment.update(TossPayStatus.DONE, paymentKey);
 
 
         paymentRepository.save(findPayment);
 
+        PayloadRequestDto payload = new PayloadRequestDto(orderId, String.valueOf(amount));
 
-        Payload payload = new Payload(orderId,amount);
-
-
-
-
-//        Map<String, String> payloadMap = new HashMap<>();
-//        payloadMap.put("orderId", orderId);
-//        payloadMap.put("amount", String.valueOf(amount));
-
-//        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
-
     }
 
     @Override
-    public void cancelPayment(String paymentKey,String cancelReason) throws JsonProcessingException {
+    public void cancelPayment(String paymentKey, String cancelReason) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
 
-
         Payment findPayment = paymentRepository.findByPaymentKey(paymentKey);
 
 
-        findPayment.update(TossPayStatus.CANCELED,paymentKey);
+        findPayment.update(TossPayStatus.CANCELED, paymentKey);
 
 
         paymentRepository.save(findPayment);
-
-        Payload payload = new Payload("cancelReason");
-
-//        Map<String, String> payloadMap = new HashMap<>();
-//        payloadMap.put("cancelReason", cancelReason);
-//        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
-
-
+        PayloadRequestDto payload = new PayloadRequestDto("cancelReason");
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
 
-        String url = String.format("https://api.tosspayments.com/v1/payments/%s/cancel", paymentKey);
-        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(url, request, JsonNode.class);
+        // API 호출
+        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
+                "https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel", request, JsonNode.class);
 
     }
+
 
 
 

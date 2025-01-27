@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.order;
 
 
+import com.Soo_Shinsa.order.dto.PaymentCancelDto;
 import com.Soo_Shinsa.order.dto.PaymentRequestDto;
 import com.Soo_Shinsa.order.dto.PaymentResponseDto;
 import com.Soo_Shinsa.order.dto.UserOrderDTO;
@@ -76,12 +77,12 @@ public class TossPaymentsController {
 
     }
 
-    @RequestMapping("/cancel")
+    @PostMapping("/cancel")
     public String cancelPayment (
-            @RequestBody String paymentKey,
-            @RequestParam String cancelReason,
-            Model model) throws JsonProcessingException {
-        tossPaymentsService.cancelPayment(paymentKey,cancelReason);
+            @RequestBody PaymentCancelDto dto,
+            @RequestParam String cancelReason
+    ) throws JsonProcessingException {
+        tossPaymentsService.cancelPayment(dto.getPaymentKey(), cancelReason);
 
         return "cancel";
     }
