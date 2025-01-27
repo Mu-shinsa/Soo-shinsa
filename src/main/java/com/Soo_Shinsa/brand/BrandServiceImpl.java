@@ -1,13 +1,11 @@
 package com.Soo_Shinsa.brand;
 
 import com.Soo_Shinsa.brand.dto.BrandRequestDto;
-import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
+import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
 import com.Soo_Shinsa.constant.BrandStatus;
 import com.Soo_Shinsa.user.model.User;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.Soo_Shinsa.category.Category.rootParent;
-
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
@@ -24,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
 
- product/option/brand/address
+
         Category parent = null;
         if (dto.getParent() != null) {
             parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
@@ -37,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
 
         categoryRepository.save(saveCategory);
-      
+
         return CategoryResponseDto.toDto(saveCategory);
     }
 }
