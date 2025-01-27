@@ -12,6 +12,7 @@ import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,9 +65,8 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public Page<CartItemResponseDto> findByAll(Long userId, Pageable pageable) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+    public Page<CartItemResponseDto> findByAll(User user, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<CartItem> allCartItem = cartItemRepository.findAllByUserUserId(user.getUserId(), pageable);
 
