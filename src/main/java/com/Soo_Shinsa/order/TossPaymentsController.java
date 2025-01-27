@@ -79,4 +79,14 @@ public class TossPaymentsController {
         return "home";
     }
 
+    @RequestMapping("/cancel")
+    public String cancelPayment (
+            @RequestBody String paymentKey,
+            @RequestParam String cancelReason,
+            Model model) throws JsonProcessingException {
+        tossPaymentsService.cancelPayment(paymentKey,cancelReason);
+
+        return "cancel";
+    }
+
 }

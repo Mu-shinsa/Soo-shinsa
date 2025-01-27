@@ -16,4 +16,5 @@ public interface TossPaymentsService {
     PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user);
     void approvePayment(String paymentKey, String orderId, Long amount, Model model) throws JsonProcessingException;
     UserOrderDTO findItem(Long userId, Long orderId);
+    void cancelPayment(String paymentKey, String cancelReason) throws JsonProcessingException;
 }
