@@ -8,6 +8,7 @@ import com.Soo_Shinsa.image.ImageService;
 import com.Soo_Shinsa.product.dto.FindProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
+import com.Soo_Shinsa.product.dto.ProductUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.user.UserRepository;
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductResponseDto updateProduct(User user, ProductRequestDto dto, Long productId, MultipartFile imageFile) {
+    public ProductUpdateDto updateProduct(User user, ProductUpdateDto dto, Long productId, MultipartFile imageFile) {
 
 
         Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
@@ -81,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
 
         product.update(dto.getName(), dto.getPrice(), dto.getStatus(), newImageUrl);
 
-        return ProductResponseDto.toDto(product);
+        return ProductUpdateDto.toDto(product);
     }
 
     @Override
