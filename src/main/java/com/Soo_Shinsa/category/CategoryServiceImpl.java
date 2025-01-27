@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.Soo_Shinsa.category.Category.rootParent;
 
 @Service
 @RequiredArgsConstructor
@@ -20,17 +19,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryResponseDto create(Long brandId, User user, CategoryRequestDto dto) {
+    public CategoryResponseDto create(User user, CategoryRequestDto dto, Long brandId) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
+        Long dtoParentId = dto.getParent();
 
-        Category parent = rootParent();
-
-        if(dto.hasParent()) {
+        Category parent = null;
+        if (dtoParentId != null) {
             parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
         }
-        Category saveCategory = categoryRepository.save(findBrand, dto.saveParent(findBrand ,parent));
-
-        return CategoryResponseDto.toDto(saveCategory);
+        Category savedCategory = new Category(
+                findBrand,
+                parent,
+                dto.getName()
+        );
+        return CategoryResponseDto.toDto(savedCategory);
     }
 }
