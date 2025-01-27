@@ -91,14 +91,11 @@ public class OrdersServiceImpl implements OrdersService {
     @Transactional
     @Override
     public OrdersResponseDto createOrderFromCart(User user,Pageable pageable) {
-        // 사용자 확인
 
         List<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId());
         if (byUserUserId.isEmpty()) {
             throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
         }
-
-        // Orders 생성
         Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user);
 
 
@@ -107,18 +104,16 @@ public class OrdersServiceImpl implements OrdersService {
             Product product = cartItem.getProductOption().getProduct();
             Integer quantity = cartItem.getQuantity();
 
-            // OrderItem 생성
+
             OrderItem orderItem = new OrderItem(quantity, order, product);
             order.addOrderItem(orderItem); // Order에 추가 및 총 금액 계산
         }
 
-        // Orders 저장
         ordersRepository.save(order);
 
         // 카트 비우기
         cartItemRepository.deleteAll(byUserUserId);
 
-        // OrdersResponseDto로 변환하여 반환
         return OrdersResponseDto.toDto(order);
     }
 
@@ -127,11 +122,9 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersResponseDto createOrder(User user) {
 
         Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT,user);
-        // 주문 저장
         Orders savedOrder = ordersRepository.save(order);
 
 
-        // ResponseDto로 변환
         return OrdersResponseDto.toDto(savedOrder);
     }
     @Transactional
@@ -141,7 +134,6 @@ public class OrdersServiceImpl implements OrdersService {
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         Orders findOrder = ordersRepository.findByIdOrElseThrow(orderId);
-        // 주문 저장
 
         findUser.validateAndOrders(findOrder);
         findOrder.updateStatus(status);

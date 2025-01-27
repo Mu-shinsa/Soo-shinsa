@@ -63,14 +63,10 @@ public class TossPaymentsController {
         String name = item.getUser().getName();
 
 
-        System.out.println(totalPrice);
-        System.out.println(orderName);
-        System.out.println(name);
-
 
         model.addAttribute("tosspayments_key", clientKey);
 
-        model.addAttribute("totalPrice", totalPrice != null ? totalPrice : 1000);
+        model.addAttribute("totalPrice", totalPrice);
 
         model.addAttribute("orderName", orderName);
 
