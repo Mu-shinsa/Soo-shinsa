@@ -8,9 +8,6 @@ import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -46,10 +43,11 @@ public class CartItemController {
     //유저의 카트들을 모두 검색
     @GetMapping("/users")
     public ResponseEntity<Page<CartItemResponseDto>> findByIdAll(@AuthenticationPrincipal UserDetails userDetails,
-                                                                 @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+                                                                 @RequestParam (defaultValue = "0") int page,
+                                                                 @RequestParam (defaultValue = "10") int size){
 
         User user = UserUtils.getUser(userDetails);
-        Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user.getUserId(), pageable);
+        Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user, page, size);
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
