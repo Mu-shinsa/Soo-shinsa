@@ -27,7 +27,6 @@ public class CategoryController {
     ) {
         User user = UserUtils.getUser(userDetails);
         CategoryResponseDto saved = categoryService.create(brandId, user, dto);
-
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 }

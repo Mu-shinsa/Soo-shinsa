@@ -33,9 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .parent(parent)
                 .name(dto.getName())
                 .build();
-
         categoryRepository.save(savedCategory);
-
         return CategoryResponseDto.toDto(savedCategory);
     }
 }
