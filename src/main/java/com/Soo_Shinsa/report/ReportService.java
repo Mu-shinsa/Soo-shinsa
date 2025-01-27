@@ -3,8 +3,12 @@ package com.Soo_Shinsa.report;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
+
 import com.Soo_Shinsa.user.model.User;
+
+
 import org.springframework.data.domain.Page;
+
 
 public interface ReportService {
     ReportResponseDto createReport(ReportRequestDto requestDto, User user);

@@ -4,8 +4,12 @@ import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
-import com.Soo_Shinsa.report.model.Report;
+
+
 import com.Soo_Shinsa.user.model.User;
+
+import com.Soo_Shinsa.report.model.Report;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
