@@ -13,6 +13,7 @@ import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
         Brand brand = brandRepository.findById(brandId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
 
-        userById.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(userById);
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -71,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
 
-        user.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         String newImageUrl = product.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -113,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void deleteProduct(Long productId, User user) {
-        user.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
 
