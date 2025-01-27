@@ -4,12 +4,9 @@ import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
-
-
-import com.Soo_Shinsa.user.model.User;
-
 import com.Soo_Shinsa.report.model.Report;
-
+import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,7 +47,7 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
 
         // 사용자 권한 검증
-        user.validateReportUser(report);
+        EntityValidator.validateAdminAccess(user);
 
         // 신고 상태 처리
         report.process(processDto.getStatus());
@@ -75,14 +72,13 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
 
         // 사용자 권한 검증
-        user.validateReportUser(report);
-
+        EntityValidator.validateAdminAccess(user);
         return ReportResponseDto.toDto(report);
     }
 
     @Override
     public Page<ReportResponseDto> getAllReports(User user, int page, int size) {
-        user.validateAdminRole();
+        EntityValidator.validateAdminAccess(user);
         Pageable pageable = PageRequest.of(page, size);
         Page<Report> reports = reportRepository.findAllReports(pageable);
         return reports.map(ReportResponseDto::toDto);
@@ -100,7 +96,8 @@ public class ReportServiceImpl implements ReportService {
             throw new IllegalArgumentException("해당 신고가 존재하지 않습니다." + reportId);
         }
 
-        user.validateAdminRole();
+        EntityValidator.validateAdminAccess(user);
+
         reportRepository.deleteById(reportId);
     }
 }
