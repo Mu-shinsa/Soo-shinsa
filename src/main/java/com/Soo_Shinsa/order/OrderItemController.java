@@ -26,7 +26,7 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     //오더 아이템 생성
-    @PostMapping("/users")
+    @PostMapping()
     public ResponseEntity<OrderItemResponseDto> createOrderItem(
             @Valid
             @RequestBody OrderItemRequestDto requestDto,
@@ -36,7 +36,7 @@ public class OrderItemController {
         return new ResponseEntity<>(orderItem, HttpStatus.CREATED);
     }
     //특정유저의 특정 오더아이템 읽기
-    @GetMapping("/{OrderItemsId}/users")
+    @GetMapping("/{OrderItemsId}")
     public ResponseEntity<OrderItemResponseDto> findById(
             @PathVariable Long OrderItemsId,
             @AuthenticationPrincipal UserDetails userDetails){
@@ -45,7 +45,7 @@ public class OrderItemController {
         return new ResponseEntity<>(findOrder, HttpStatus.OK);
     }
     //특정 유저의 모든 오더아이템들을 읽기
-    @GetMapping("/users")
+    @GetMapping()
     public ResponseEntity<Page<OrderItemResponseDto>> readOrderItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -54,7 +54,7 @@ public class OrderItemController {
         return new ResponseEntity<>(byAll, HttpStatus.OK);
     }
     //특정 유저의 특정 오더아이템 수정
-    @PatchMapping("/{orderItemsId}/users")
+    @PatchMapping("/{orderItemsId}")
     public ResponseEntity<OrderItemResponseDto> updateOrderItem(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderItemsId,
@@ -65,7 +65,7 @@ public class OrderItemController {
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
     //특정유저의 특정 오더 아이템 삭제
-    @DeleteMapping("/{orderItemsId}/users")
+    @DeleteMapping("/{orderItemsId}")
     public ResponseEntity<OrderItemResponseDto> delete(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderItemsId){
