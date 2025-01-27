@@ -95,9 +95,39 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
+    }
 
+    @Override
+    public void cancelPayment(String paymentKey,String cancelReason) throws JsonProcessingException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+
+
+        Payment findPayment = paymentRepository.findByPaymentKey(paymentKey);
+
+
+        findPayment.update(TossPayStatus.CANCELED,paymentKey);
+
+
+        paymentRepository.save(findPayment);
+
+        Map<String, String> payloadMap = new HashMap<>();
+
+        payloadMap.put("cancelReason", cancelReason);
+
+        HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
+
+        // paymentKey를 URL에 동적으로 추가
+        String url = String.format("https://api.tosspayments.com/v1/payments/%s/cancel", paymentKey);
+
+        // API 호출
+        ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(url, request, JsonNode.class);
 
     }
+
+
 
     @Transactional
     public UserOrderDTO findItem(Long userId, Long orderId){
@@ -111,4 +141,6 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
 
     }
+
+
 }

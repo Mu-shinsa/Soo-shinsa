@@ -144,7 +144,7 @@ public class OrdersServiceImpl implements OrdersService {
         // 주문 저장
 
         findUser.validateAndOrders(findOrder);
-        findOrder.updateStatus(OrdersStatus.PAYMENTCOMPLETED);
+        findOrder.updateStatus(status);
         Orders savedOrder = ordersRepository.save(findOrder);
         return OrdersResponseDto.toDto(savedOrder);
     }
