@@ -22,20 +22,20 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto create(User user, CategoryRequestDto dto, Long brandId) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
-        Long dtoParentId = dto.getParent();
 
         Category parent = null;
-        if (dtoParentId != null) {
+        if (dto.getParent() != null) {
             parent = categoryRepository.findByIdOrElseThrow(dto.getParent());
         }
-        Category savedCategory = Category.builder()
+
+        Category saveCategory = Category.builder()
                 .brand(findBrand)
                 .parent(parent)
                 .name(dto.getName())
                 .build();
 
-        categoryRepository.save(savedCategory);
+        categoryRepository.save(saveCategory);
 
-        return CategoryResponseDto.toDto(savedCategory);
+        return CategoryResponseDto.toDto(saveCategory);
     }
 }
