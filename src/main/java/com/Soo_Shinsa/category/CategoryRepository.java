@@ -12,6 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByName(String name);
 
+
     default Category findByIdOrElseThrow(Long categoryId) {
         return findById(categoryId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 카테고리를 찾을 수 없습니다.")
