@@ -45,12 +45,12 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
     @Transactional
     public PaymentResponseDto createPayment(PaymentRequestDto requestDto, User user) {
-        // 주문 및 사용자 조회
+
         Orders order = ordersRepository.findById(requestDto.getOrder())
                 .orElseThrow(() -> new IllegalArgumentException("오더가 없습니다"));
 
 
-        // Payment 엔티티 생성
+
         Payment payment = new Payment(
                 order.getOrderId(),
                 order.getTotalPrice(),
@@ -63,7 +63,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
         Payment savedPayment = paymentRepository.save(payment);
 
-        // 응답 DTO 생성 및 반환
+
         return PaymentResponseDto.toDto(savedPayment);
     }
 

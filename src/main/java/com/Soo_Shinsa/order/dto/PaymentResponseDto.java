@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class PaymentResponseDto {
     private Long id;
     private TossPayMethod method;
-    private BigDecimal amount; // 결제 및 주문 금액을 단일 필드로 통합
+    private BigDecimal amount;
     private TossPayStatus status;
     private String userEmail;
     private String orderId;

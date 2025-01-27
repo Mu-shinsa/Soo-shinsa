@@ -26,7 +26,7 @@ public class OrdersController {
     private final OrdersService ordersService;
 
     //특정유저의 특정 오더 읽기
-    @GetMapping("/{orderId}/users")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrdersResponseDto> getOrderById(
             @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long orderId) {
@@ -46,7 +46,7 @@ public class OrdersController {
     }
 
 //    단품 구매 생성
-    @PostMapping("/users/orders")
+    @PostMapping()
     public ResponseEntity<OrdersResponseDto> createSingleProductOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
@@ -56,7 +56,7 @@ public class OrdersController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     //카트에 담음 물건을 구매 생성
-    @PostMapping("/users/orders/carts")
+    @PostMapping("/carts")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
             @AuthenticationPrincipal UserDetails userDetails,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -64,7 +64,7 @@ public class OrdersController {
         OrdersResponseDto responseDto = ordersService.createOrderFromCart(user,pageable);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
-
+    //오더 단일 생성
     @PostMapping()
     public ResponseEntity<OrdersResponseDto> createOrder(
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -72,7 +72,8 @@ public class OrdersController {
         OrdersResponseDto responseDto = ordersService.createOrder(user);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
-    @PatchMapping("/users")
+    //오더 수정
+    @PatchMapping()
     public ResponseEntity<OrdersResponseDto> updateOrder(
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid
