@@ -54,7 +54,6 @@ public class OrdersController {
         User user = UserUtils.getUser(userDetails);
         OrdersResponseDto response = ordersService.createSingleProductOrder(user,requestDto.getProductId(), requestDto.getQuantity());
         return new ResponseEntity<>(response, HttpStatus.CREATED);
-
     }
     //카트에 담음 물건을 구매 생성
     @PostMapping("/carts")
