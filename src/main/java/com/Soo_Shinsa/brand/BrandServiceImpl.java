@@ -30,7 +30,7 @@ public class BrandServiceImpl implements BrandService {
                 BrandStatus.APPLY,
                 user
         );
-        Brand saved = brandRepository.save(savedBrand);
+
         return BrandResponseDto.toDto(savedBrand);
     }
 
@@ -39,10 +39,10 @@ public class BrandServiceImpl implements BrandService {
     public BrandUpdateResponseDto update(User user, BrandRequestDto dto, Long brandId) {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
-
         findBrand.update(dto.getRegistrationNum(),dto.getName(),dto.getContext(), dto.getStatus());
+        Brand saved = brandRepository.save(findBrand);
 
-        return BrandUpdateResponseDto.toDto(findBrand);
+        return BrandUpdateResponseDto.toDto(saved);
     }
 
     @Override
