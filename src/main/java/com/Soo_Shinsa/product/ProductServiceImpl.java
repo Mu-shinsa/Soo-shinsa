@@ -41,7 +41,8 @@ public class ProductServiceImpl implements ProductService {
         User userById = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
+        Brand brand = brandRepository.findById(brandId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
 
         EntityValidator.validateAdminOrVendorAccess(userById);
 
@@ -97,10 +98,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductResponseDto> findAllProduct(Long brandId, int page, int size) {
-
         Brand brand = brandRepository.findByIdOrElseThrow(brandId);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productRepository.findAllByBrand(brandId, pageable);
+        Page<Product> products = productRepository.findAllByBrand(brand.getId(), pageable);
 
         return products.map(ProductResponseDto::toDto);
     }
