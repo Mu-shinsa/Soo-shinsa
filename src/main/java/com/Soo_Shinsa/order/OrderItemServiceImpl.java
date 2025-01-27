@@ -9,6 +9,7 @@ import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         Orders findOrder = ordersRepository.findById(requestDto.getOrderId())
                 .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
 
-        findUser.validateAndOrders(findOrder);
+        EntityValidator.validateAndOrders(findOrder,findUser.getUserId());
         Product product = productRepository.findById(requestDto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("상품이 없습니다.: " + requestDto.getProductId()));
         OrderItem orderItem = new OrderItem(
@@ -56,7 +57,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
         OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
 
-        findUser.validateAndOrderItem(findOrderItem);
+        EntityValidator.validateAndOrderItem(findOrderItem,findUser.getUserId());
         return OrderItemResponseDto.toDto(findOrderItem);
     }
 
@@ -78,7 +79,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
 
 
-        findUser.validateAndOrderItem(findOrderItem);
+        EntityValidator.validateAndOrderItem(findOrderItem,findUser.getUserId());
         findOrderItem.updateOrderItem(quantity);
         OrderItem save = orderItemRepository.save(findOrderItem);
         return OrderItemResponseDto.toDto(save);
@@ -92,7 +93,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
         OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
-        findUser.validateAndOrderItem(findOrderItem);
+        EntityValidator.validateAndOrderItem(findOrderItem,findUser.getUserId());
 
         Orders order = ordersRepository.findById(findOrderItem.getOrder().getId())
                 .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
