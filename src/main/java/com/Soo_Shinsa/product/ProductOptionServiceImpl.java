@@ -6,10 +6,8 @@ import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
 import com.Soo_Shinsa.product.dto.ProductOptionUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-
 import com.Soo_Shinsa.user.model.User;
-import com.Soo_Shinsa.user.UserRepository;
-
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,17 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductOptionServiceImpl implements ProductOptionService {
 
    private final ProductOptionRepository productOptionRepository;
-   private final UserRepository userRepository;
    private final ProductRepository productRepository;
 
     @Transactional
     @Override
     public ProductOptionResponseDto createOption(User user, ProductOptionRequestDto dto, Long productId) {
-
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
-        userById.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         Product findProduct = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
@@ -49,9 +42,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionResponseDto updateOption(User user, ProductOptionUpdateDto dto, Long productOptionId) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-        userById.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         ProductOption findOption = productOptionRepository.findById(productOptionId, "존재하지 않는 옵션입니다.");
 
