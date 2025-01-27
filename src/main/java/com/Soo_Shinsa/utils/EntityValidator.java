@@ -24,13 +24,11 @@ public class EntityValidator {
         }
     }
 
-
     public static void validateAndOrders(Orders orders,Long userId) {
         if (!orders.getUser().getUserId().equals(userId)) {
             throw new SecurityException("수정 또는 삭제할 권한이 없습니다.");
         }
     }
-
 
     public static void validateAndOrderItem(OrderItem orderItem,Long userId) {
         if (!orderItem.getOrder().getUser().getUserId().equals(userId)) {
