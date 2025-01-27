@@ -1,13 +1,16 @@
 package com.Soo_Shinsa.category;
 
-import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.constant.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 
 @Entity
 @Getter
@@ -38,13 +41,19 @@ public class Category extends BaseTimeEntity {
         this.name = name;
     }
 
-    // 부모 카테고리가 있다면
-    public static Category rootParent() {
-        return new Category();
+    public void addChild(Category child) {
+        this.children.add(child);
     }
 
-    // root 가 아니라면 true 반환하게
-    public boolean isNotRoot() {
-        return !this.equals(rootParent());
+    public static List<Long> getChildByParentId(Category category) {
+
+        if (category.getChildren() == null || category.getChildren().isEmpty()) {
+            return List.of(category.getId());
+        }
+        return category.getChildren()
+                .stream()
+                .map(Category::getChildByParentId)
+                .flatMap(List::stream)
+                .collect(toList());
     }
 }
