@@ -35,7 +35,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .build();
 
         categoryRepository.save(saveCategory);
-
         return CategoryResponseDto.toDto(saveCategory);
     }
 }
