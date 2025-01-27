@@ -49,10 +49,11 @@ public class ProductController {
         return ResponseEntity.ok(productResponseDto);
     }
 
-    @GetMapping
+    @GetMapping("/brands/{brandId}")
     public ResponseEntity<Page<ProductResponseDto>> findAllProductList(@RequestParam(defaultValue = "0") int page,
-                                                                       @RequestParam(defaultValue = "10") int size) {
-        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(page, size);
+                                                                       @RequestParam(defaultValue = "10") int size,
+                                                                       @PathVariable Long brandId) {
+        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(brandId, page, size);
         return ResponseEntity.ok(productResponseDto);
     }
 
