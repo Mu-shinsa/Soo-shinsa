@@ -9,6 +9,7 @@ import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
 
         //사용자의 카트인지 확인
-        userId.validateCartItemUser(cartItem);
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(cartItem.getProduct().getId());
 
@@ -83,8 +84,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
 
-        userId.validateCartItemUser(cartItem);
-
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
         cartItem.updateCartItem(quantity);
 
 
@@ -103,7 +103,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
 
-        userId.validateCartItemUser(cartItem);
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
 
         cartItemRepository.delete(cartItem);
     }

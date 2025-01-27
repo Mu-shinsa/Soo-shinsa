@@ -8,12 +8,12 @@ import com.Soo_Shinsa.image.ImageService;
 import com.Soo_Shinsa.product.dto.FindProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
+import com.Soo_Shinsa.product.dto.ProductUpdateDto;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-
-import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.UserRepository;
-
+import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,11 +43,11 @@ public class ProductServiceImpl implements ProductService {
 
         Brand brand = brandRepository.findByIdOrElseThrow(brandId);
 
-        userById.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(userById);
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT.name(), null);
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
             imageUrl = uploaded.getPath();
         }
 
@@ -66,23 +66,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     @Override
-    public ProductResponseDto updateProduct(User user, ProductRequestDto dto, Long productId, MultipartFile imageFile) {
+    public ProductUpdateDto updateProduct(User user, ProductUpdateDto dto, Long productId, MultipartFile imageFile) {
 
 
         Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
 
-        user.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         String newImageUrl = product.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
             // 기존 이미지 삭제 후 새로운 이미지 업로드
-            Image updatedImage = imageService.updateImage(imageFile, product.getImageUrl(), "reviews");
+            Image updatedImage = imageService.updateImage(imageFile, product.getImageUrl(), TargetType.PRODUCT);
             newImageUrl = updatedImage.getPath();
         }
 
         product.update(dto.getName(), dto.getPrice(), dto.getStatus(), newImageUrl);
 
-        return ProductResponseDto.toDto(product);
+        return ProductUpdateDto.toDto(product);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void deleteProduct(Long productId, User user) {
-        user.validateAdminOrVendorRole();
+        EntityValidator.validateAdminOrVendorAccess(user);
 
         Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
 

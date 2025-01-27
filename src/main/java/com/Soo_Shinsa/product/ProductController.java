@@ -3,6 +3,7 @@ package com.Soo_Shinsa.product;
 import com.Soo_Shinsa.product.dto.FindProductResponseDto;
 import com.Soo_Shinsa.product.dto.ProductRequestDto;
 import com.Soo_Shinsa.product.dto.ProductResponseDto;
+import com.Soo_Shinsa.product.dto.ProductUpdateDto;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class ProductController {
 
     @PostMapping("/brands/{brandId}")
     public ResponseEntity<ProductResponseDto> createProduct(@AuthenticationPrincipal UserDetails userDetails,
-                                                            @Valid @RequestBody ProductRequestDto productRequestDto,
+                                                            @Valid @RequestPart ProductRequestDto productRequestDto,
                                                             @RequestPart(required = false) MultipartFile imageFile,
                                                             @PathVariable Long brandId) {
 
@@ -33,12 +34,12 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ProductResponseDto> updateProduct(@AuthenticationPrincipal UserDetails userDetails,
-                                                            @RequestBody ProductRequestDto productRequestDto,
-                                                            @RequestPart(required = false) MultipartFile imageFile,
-                                                            @PathVariable Long productId) {
+    public ResponseEntity<ProductUpdateDto> updateProduct(@AuthenticationPrincipal UserDetails userDetails,
+                                                          @RequestPart ProductUpdateDto productUpdateDto,
+                                                          @RequestPart(required = false) MultipartFile imageFile,
+                                                          @PathVariable Long productId) {
         User user = UserUtils.getUser(userDetails);
-        ProductResponseDto productResponseDto = productService.updateProduct(user, productRequestDto, productId, imageFile);
+        ProductUpdateDto productResponseDto = productService.updateProduct(user, productUpdateDto, productId, imageFile);
         return ResponseEntity.ok(productResponseDto);
     }
 
