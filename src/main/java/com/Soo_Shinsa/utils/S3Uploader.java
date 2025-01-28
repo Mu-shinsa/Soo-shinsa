@@ -101,7 +101,7 @@ public class S3Uploader {
      * @param uploadFile
      */
     private void removeNewFile(File uploadFile) {
-        if (uploadFile.delete()) {
+        if (!uploadFile.delete()) {
             log.info("로컬 파일이 삭제되었습니다.");
             throw new IllegalStateException("로컬 파일 삭제에 실패했습니다.");
         }

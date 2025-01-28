@@ -19,16 +19,13 @@ public class ProductRequestDto {
     @NotNull(message = "가격은 필수 입니다.")
     private BigDecimal price;
 
-    @NotEmpty(message = "이미지 URL은 필수 값 입니다.")
-    private String imageUrl;
 
     private ProductStatus status;
 
     @Builder
-    public ProductRequestDto(String name, BigDecimal price, String imageUrl, ProductStatus status) {
+    public ProductRequestDto(String name, BigDecimal price, ProductStatus status) {
         this.name = name;
         this.price = price;
-        this.imageUrl = imageUrl;
         this.status = status;
     }
 }
