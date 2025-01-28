@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.dto;
+package com.Soo_Shinsa.statistics.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

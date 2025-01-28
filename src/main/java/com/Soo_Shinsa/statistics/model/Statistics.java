@@ -1,6 +1,6 @@
-package com.Soo_Shinsa.model;
+package com.Soo_Shinsa.statistics.model;
 
-import com.Soo_Shinsa.dto.OrderHistoryForStatistic;
+import com.Soo_Shinsa.statistics.dto.OrderHistoryForStatistic;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

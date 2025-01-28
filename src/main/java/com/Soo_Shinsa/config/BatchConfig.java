@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.config;
 
-import com.Soo_Shinsa.dto.OrderHistoryForStatistic;
-import com.Soo_Shinsa.model.Statistics;
-import com.Soo_Shinsa.repository.StatisticsRepository;
+import com.Soo_Shinsa.statistics.dto.OrderHistoryForStatistic;
+import com.Soo_Shinsa.statistics.model.Statistics;
+import com.Soo_Shinsa.statistics.StatisticsRepository;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
