@@ -58,7 +58,6 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return ProductOptionResponseDto.toDto(findOption);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ProductOptionResponseDto findOption(Long productOptionId) {
 
@@ -68,7 +67,6 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return ProductOptionResponseDto.toDto(findOption);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
 
