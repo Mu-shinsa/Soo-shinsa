@@ -29,8 +29,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         User findUser = userRepository.findById(user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
-        Orders findOrder = ordersRepository.findById(requestDto.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("주문이 없습니다.: " + requestDto.getOrderId()));
+        Orders findOrder = ordersRepository.findByIdOrElseThrow(requestDto.getOrderId());
 
         EntityValidator.validateAndOrders(findOrder,findUser.getUserId());
         Product product = productRepository.findById(requestDto.getProductId())
@@ -95,8 +94,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
         EntityValidator.validateAndOrderItem(findOrderItem,findUser.getUserId());
 
-        Orders order = ordersRepository.findById(findOrderItem.getOrder().getId())
-                .orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
+        Orders order = ordersRepository.findByIdOrElseThrow(findOrderItem.getOrder().getId());
 
         order.removeOrderItem(findOrderItem); // 연관 관계에서 제거
         ordersRepository.delete(order);// Order 저장 (OrderItem 자동 삭제)
@@ -104,6 +102,4 @@ public class OrderItemServiceImpl implements OrderItemService {
         return OrderItemResponseDto.toDto(findOrderItem);
 
     }
-
-
 }
