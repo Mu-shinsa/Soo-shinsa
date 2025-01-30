@@ -1,13 +1,14 @@
 package com.Soo_Shinsa.order;
 
 
+import com.Soo_Shinsa.exception.ALLException;
 import com.Soo_Shinsa.order.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+
+import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_ORDEROPTION;
 
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
@@ -23,7 +24,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     default OrderItem findByIdOrElseThrow(Long orderItemId) {
         return findById(orderItemId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "오더아이템를 찾을 수 없습니다")
-        );
+                () -> new ALLException(NOT_FOUND_ORDEROPTION));
     }
 }
