@@ -36,10 +36,11 @@ public class Category extends BaseTimeEntity {
     private String name;
 
     @Builder
-    public Category(Brand brand, Category parent, String name) {
+    public Category(Brand brand, Category parent, String name, List<Category> children) {
         this.brand = brand;
         this.parent = parent;
         this.name = name;
+        this.children = children;
     }
 
     public void addChild(Category child) {
