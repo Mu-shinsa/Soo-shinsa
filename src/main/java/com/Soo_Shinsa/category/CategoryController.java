@@ -2,6 +2,7 @@ package com.Soo_Shinsa.category;
 
 import com.Soo_Shinsa.category.dto.CategoryRequestDto;
 import com.Soo_Shinsa.category.dto.CategoryResponseDto;
+import com.Soo_Shinsa.category.dto.CategoryUpdateRequestDto;
 import com.Soo_Shinsa.category.dto.FindCategoryResponseDto;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
@@ -66,13 +67,14 @@ public class CategoryController {
         return new ResponseEntity<>(findAll, HttpStatus.OK);
     }
 
-//    @PatchMapping("/{categoryId}")
-//    public ResponseEntity<CategoryResponseDto> update(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @Valid @RequestBody CategoryUpdateRequestDto dto,
-//            @PathVariable Long categoryId
-//    ) {
-//        User user = UserUtils.getUser(userDetails);
-//        CategoryResponseDto update = categoryServicec.update
-//    }
+    @PatchMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponseDto> update(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody CategoryUpdateRequestDto dto,
+            @PathVariable Long categoryId
+    ) {
+        User user = UserUtils.getUser(userDetails);
+        CategoryResponseDto update = categoryService.update(user, dto, categoryId);
+        return new ResponseEntity<>(update, HttpStatus.OK);
+    }
 }
