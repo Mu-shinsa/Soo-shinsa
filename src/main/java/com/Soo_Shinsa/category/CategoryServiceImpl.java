@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Category> categories = categoryRepository.findAll(pageable);
+        Page<Category> categories = categoryRepository.findAllCategory(pageable);
 
         return categories.map(FindCategoryResponseDto::of);
     }
