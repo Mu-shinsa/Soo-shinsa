@@ -7,9 +7,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionController {
 
-    //커스텀
     @ExceptionHandler
-    public ResponseEntity<ExceptionResponseDto> ALLException(ALLException e) {
+    public ResponseEntity<ExceptionResponseDto> duplicatedException(DuplicatedException e) {
+        return new ResponseEntity<>(new ExceptionResponseDto(e.getErrorCode()), e.getErrorCode().getHttpStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponseDto> internalServerException(InternalServerException e) {
+        return new ResponseEntity<>(new ExceptionResponseDto(e.getErrorCode()), e.getErrorCode().getHttpStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponseDto> invalidInputException(InvalidInputException e) {
+        return new ResponseEntity<>(new ExceptionResponseDto(e.getErrorCode()), e.getErrorCode().getHttpStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponseDto> notFoundException(NotFoundException e) {
+        return new ResponseEntity<>(new ExceptionResponseDto(e.getErrorCode()), e.getErrorCode().getHttpStatus());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ExceptionResponseDto> noAuthorizedException(NoAuthorizedException e) {
         return new ResponseEntity<>(new ExceptionResponseDto(e.getErrorCode()), e.getErrorCode().getHttpStatus());
     }
 }

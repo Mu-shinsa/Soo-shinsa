@@ -101,8 +101,8 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
 
     @Transactional
     public UserOrderDTO findItem(Long userId, Long orderId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-        Orders order = ordersRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 오더입니다."));
+        User user = userRepository.findByIdOrElseThrow(userId);
+        Orders order = ordersRepository.findByIdOrElseThrow(orderId);
         return new UserOrderDTO(user, order);
     }
 }

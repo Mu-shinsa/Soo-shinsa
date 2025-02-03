@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ALLException extends RuntimeException {
+public class NotFoundException extends RuntimeException {
     private final ErrorCode errorCode;
 }

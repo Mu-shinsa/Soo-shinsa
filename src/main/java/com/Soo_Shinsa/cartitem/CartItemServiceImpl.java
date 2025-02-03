@@ -32,8 +32,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto create(User user, CartItemRequestDto requestDto) {
 
-        Product product = productRepository.findById(requestDto.getProductId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+        Product product = productRepository.findByIdOrElseThrow(requestDto.getProductId());
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(product.getId());
 
@@ -51,10 +50,9 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDto findById(Long cartId, User user) {
         // 사용자 정보 가져오기
-        User userId = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        User userId = userRepository.findByIdOrElseThrow(user.getUserId());
 
-        CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
+        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
         //사용자의 카트인지 확인
         EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
@@ -79,10 +77,9 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     @Override
     public CartItemResponseDto update(Long cartId, User user, Integer quantity) {
-        User userId = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        User userId = userRepository.findByIdOrElseThrow(user.getUserId());
 
-        CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
+        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
         EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
         cartItem.updateCartItem(quantity);
@@ -98,10 +95,9 @@ public class CartItemServiceImpl implements CartItemService {
     @Transactional
     @Override
     public void delete(Long cartId, User user) {
-        User userId = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        User userId = userRepository.findByIdOrElseThrow(user.getUserId());
 
-        CartItem cartItem = cartItemRepository.findById(cartId, "해당 id값이 존재하지 않습니다.");
+        CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
         EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
 

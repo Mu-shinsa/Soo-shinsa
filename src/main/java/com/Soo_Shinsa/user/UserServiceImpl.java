@@ -1,10 +1,9 @@
 package com.Soo_Shinsa.user;
 
+import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.constant.AuthenticationScheme;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
-import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
-
 import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.user.model.Grade;
 import com.Soo_Shinsa.user.model.User;
@@ -60,8 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public JwtAuthResponseDto login(LoginRequestDto dto) {
         //사용자 확인
-        User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = userRepository.findByEmailOrElseThrow(dto.getEmail());
 
         if (user.getStatus().equals(UserStatus.DELETED)) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
@@ -99,8 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailResponseDto updateUser(User user, UserUpdateRequestDto userUpdateRequestDto) {
         //user 검증
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        User userById = userRepository.findByIdOrElseThrow(user.getUserId());
         if (!passwordEncoder.matches(userUpdateRequestDto.getOldPassword(), userById.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
