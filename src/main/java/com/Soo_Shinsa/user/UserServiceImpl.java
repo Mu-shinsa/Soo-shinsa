@@ -4,6 +4,7 @@ import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.constant.AuthenticationScheme;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
+import com.Soo_Shinsa.exception.DuplicatedException;
 import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.exception.NoAuthorizedException;
 import com.Soo_Shinsa.user.dto.*;
@@ -117,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public void leave(String password, User user) {
         //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new NoAuthorizedException(DELETED_USER);
+            throw new DuplicatedException(DELETED_USER);
         }
 
         //탈퇴
