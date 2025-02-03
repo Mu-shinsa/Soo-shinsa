@@ -4,6 +4,7 @@ package com.Soo_Shinsa.order;
 import com.Soo_Shinsa.cartitem.CartItemRepository;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.OrdersStatus;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.order.dto.OrdersResponseDto;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
@@ -22,6 +23,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_CART;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +91,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         List<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId());
         if (byUserUserId.isEmpty()) {
-            throw new IllegalArgumentException("카트에 담긴 상품이 없습니다.");
+            throw new NotFoundException(NOT_FOUND_CART);
         }
         Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user);
 
