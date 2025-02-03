@@ -1,5 +1,8 @@
 package com.Soo_Shinsa.category;
 
+import com.Soo_Shinsa.category.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -8,10 +11,9 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    List<Category> findByParentId(Long parentId);
+    Page<Category> findAllCategory(Pageable pageable);
 
-    List<Category> findByName(String name);
-
+    List<Category> findByBrandId(Long brandId);
 
     default Category findByIdOrElseThrow(Long categoryId) {
         return findById(categoryId).orElseThrow(
