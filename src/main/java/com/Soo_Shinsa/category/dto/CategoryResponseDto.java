@@ -10,22 +10,17 @@ public class CategoryResponseDto {
 
     private Long id;
     private Long brand;
-    private Category parent;
+    private CategoryResponseDto parent;
     private String name;
 
-    public CategoryResponseDto(Long id, Long brand,Category parent, String name) {
-        this.id = id;
-        this.brand = brand;
-        this.parent = parent;
-        this.name = name;
+    public CategoryResponseDto(Category category) {
+        this.id = category.getId();
+        this.brand = category.getBrand().getId();
+        this.parent = (category.getParent() != null) ? new CategoryResponseDto(category.getParent()) : null;
+        this.name = category.getName();
     }
 
     public static CategoryResponseDto toDto(Category category) {
-        return new CategoryResponseDto(
-                category.getId(),
-                category.getBrand().getId(),
-                category.getParent(),
-                category.getName()
-        );
+        return new CategoryResponseDto(category);
     }
 }
