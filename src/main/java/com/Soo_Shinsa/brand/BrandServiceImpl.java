@@ -21,13 +21,15 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public BrandResponseDto create(User user, BrandRequestDto dto) {
 
-        Brand savedBrand = new Brand(
-                dto.getRegistrationNum(),
-                dto.getName(),
-                dto.getContext(),
-                BrandStatus.APPLY,
-                user
-        );
+        Brand savedBrand = Brand.builder()
+                .registrationNum(dto.getRegistrationNum())
+                .name(dto.getName())
+                .context(dto.getContext())
+                .status(BrandStatus.APPLY)
+                .user(user)
+                .build();
+
+        brandRepository.save(savedBrand);
 
         return BrandResponseDto.toDto(savedBrand);
     }
@@ -38,9 +40,8 @@ public class BrandServiceImpl implements BrandService {
 
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);
         findBrand.update(dto.getRegistrationNum(),dto.getName(),dto.getContext(), dto.getStatus());
-        Brand saved = brandRepository.save(findBrand);
 
-        return BrandUpdateResponseDto.toDto(saved);
+        return BrandUpdateResponseDto.toDto(findBrand);
     }
 
     @Override
