@@ -8,6 +8,7 @@ import com.Soo_Shinsa.category.dto.CategoryUpdateRequestDto;
 import com.Soo_Shinsa.category.dto.FindCategoryResponseDto;
 import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,9 +69,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<FindCategoryResponseDto> findAll(int page, int size, User user) {
 
+        EntityValidator.validateAdminAccess(user);
+
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<Category> categories = categoryRepository.findAllCategory(pageable);
+        Page<Category> categories = categoryRepository.findAll(pageable);
 
         return categories.map(FindCategoryResponseDto::of);
     }

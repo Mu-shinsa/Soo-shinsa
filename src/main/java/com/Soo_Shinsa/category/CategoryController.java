@@ -46,7 +46,7 @@ public class CategoryController {
         return new ResponseEntity<>(findCategory, HttpStatus.OK);
     }
 
-    @GetMapping("/{brandId}")
+    @GetMapping("brands/{brandId}")
     public ResponseEntity<List<FindCategoryResponseDto>> findByBrandId(
             @PathVariable Long brandId,
             @AuthenticationPrincipal UserDetails userDetails
@@ -64,7 +64,7 @@ public class CategoryController {
     ) {
         User user = UserUtils.getUser(userDetails);
         Page<FindCategoryResponseDto> findAll = categoryService.findAll(page, size, user);
-        return new ResponseEntity<>(findAll, HttpStatus.OK);
+        return ResponseEntity.ok(findAll);
     }
 
     @PatchMapping("/{categoryId}")
