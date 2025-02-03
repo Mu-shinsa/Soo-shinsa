@@ -1,5 +1,8 @@
 package com.Soo_Shinsa.constant;
 
+import lombok.Getter;
+
+@Getter
 public enum BrandStatus {
     APPLY("입점 신청"),
     OPEN("입점 승인"),

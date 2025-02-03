@@ -3,9 +3,9 @@ package com.Soo_Shinsa.brand;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.BrandStatus;
 import com.Soo_Shinsa.user.model.User;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -37,13 +37,14 @@ public class Brand  extends BaseTimeEntity {
     private String context;
 
     @Column(nullable = false)
-    @Length(min = 1, max = 15)
+    @Enumerated(EnumType.STRING)
     private BrandStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder
     public Brand(String registrationNum, String name, String context, BrandStatus status, User user) {
         this.registrationNum = registrationNum;
         this.name = name;
@@ -59,6 +60,7 @@ public class Brand  extends BaseTimeEntity {
     public void apply(BrandStatus status) {
         this.status = APPLY;
     }
+
     public void update(String registrationNum, String name, String context, BrandStatus status) {
         this.registrationNum = registrationNum;
         this.name = name;
