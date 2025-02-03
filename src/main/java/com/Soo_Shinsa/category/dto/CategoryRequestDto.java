@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CategoryRequestDto {
 
-    @NotNull(message = "브랜드 ID를 입력해주세요.")
-    private Long brand;
+//    @NotNull(message = "브랜드 ID를 입력해주세요.")
+//    private Long brand;
 
     private Long parent;
 
