@@ -4,13 +4,14 @@ import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.constant.AuthenticationScheme;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
+import com.Soo_Shinsa.exception.InternalServerException;
+import com.Soo_Shinsa.exception.NoAuthorizedException;
 import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.user.model.Grade;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.model.UserGrade;
 import com.Soo_Shinsa.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
+import static com.Soo_Shinsa.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
         //검증
         //중복체크
         if(userRepository.existsByEmail(dto.getEmail())){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+            throw new NoAuthorizedException(EMAIL_EXIST);
         }
 
         //user 생성
@@ -62,12 +64,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmailOrElseThrow(dto.getEmail());
 
         if (user.getStatus().equals(UserStatus.DELETED)) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+            throw new NoAuthorizedException(DELETED_USER);
         }
 
         //비밀번호 확인
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+            throw new NoAuthorizedException(WRONG_PASSWORD);
         }
 
 
@@ -99,7 +101,7 @@ public class UserServiceImpl implements UserService {
         //user 검증
         User userById = userRepository.findByIdOrElseThrow(user.getUserId());
         if (!passwordEncoder.matches(userUpdateRequestDto.getOldPassword(), userById.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new NoAuthorizedException(WRONG_PASSWORD);
         }
 
         //user 업데이트
@@ -115,7 +117,7 @@ public class UserServiceImpl implements UserService {
     public void leave(String password, User user) {
         //비밀번호 확인
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+            throw new NoAuthorizedException(DELETED_USER);
         }
 
         //탈퇴
@@ -128,7 +130,7 @@ public class UserServiceImpl implements UserService {
     private UserGrade createNewUserGrade() {
         //grade 검증
         Grade grade = gradeRepository.findByName(com.Soo_Shinsa.constant.Grade.ROOKIE.getName())
-                .orElseThrow(() -> new IllegalArgumentException("서버 오류"));
+                .orElseThrow(() -> new InternalServerException(WRONG_REQUEST));
 
         //userGrade 생성
         UserGrade userGrade = new UserGrade(grade);
