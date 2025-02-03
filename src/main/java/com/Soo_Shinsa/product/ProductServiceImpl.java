@@ -38,11 +38,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        User userById = userRepository.findByIdOrElseThrow(user.getUserId());
 
-        Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
+        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
 
         EntityValidator.validateAdminOrVendorAccess(userById);
 
@@ -70,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductUpdateDto updateProduct(User user, ProductUpdateDto dto, Long productId, MultipartFile imageFile) {
 
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         EntityValidator.validateAdminOrVendorAccess(user);
 
@@ -89,7 +87,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public FindProductResponseDto findProduct(Long productId) {
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(productId);
 
@@ -109,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long productId, User user) {
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         productOptionRepository.deleteAllByProductId(productId);
 

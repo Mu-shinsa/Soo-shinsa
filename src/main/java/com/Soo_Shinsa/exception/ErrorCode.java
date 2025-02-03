@@ -20,10 +20,13 @@ public enum ErrorCode {
     NOT_FOUND_USER("유저를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_FOUND_CART("카트를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_FOUND_PRODUCT("상품를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    NOT_FOUND_PRODUCTOPTION("상품옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_PRODUCT_OPTION("상품옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_FOUND_ORDER("오더를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    NOT_FOUND_ORDEROPTION("오더옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_ORDER_OPTION("오더옵션을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    NOT_FOUND_REVIEW("리뷰를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_REPORT("리폿을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_BRAND("브랜드를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     //잘못된 요청
     WRONG_REQUEST("지원하지 않는 요청입니다.", HttpStatus.SERVICE_UNAVAILABLE),
 

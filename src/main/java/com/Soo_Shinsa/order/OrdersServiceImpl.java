@@ -34,8 +34,7 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public OrdersResponseDto getOrderById(Long orderId, User user) {
-        User findUser = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        User findUser = userRepository.findByIdOrElseThrow(user.getUserId());
 
         Orders findOrder = ordersRepository.findByIdOrElseThrow(orderId);
 
@@ -68,8 +67,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto createSingleProductOrder(User user,Long productId, Integer quantity) {
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BEFOREPAYMENT, user);
 
@@ -127,8 +125,7 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     public OrdersResponseDto updateOrder(User user, Long orderId, OrdersStatus status) {
 
-        User findUser = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을수 없습니다."));
+        User findUser = userRepository.findByIdOrElseThrow(user.getUserId());
         Orders findOrder = ordersRepository.findByIdOrElseThrow(orderId);
 
         EntityValidator.validateAndOrders(findOrder,findUser.getUserId());

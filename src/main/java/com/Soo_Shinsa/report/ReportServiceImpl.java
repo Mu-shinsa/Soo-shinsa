@@ -43,8 +43,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void processReport(Long reportId, ReportProcessDto processDto, User user) {
         // 신고 엔티티 조회
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
+        Report report = reportRepository.findByIdOrElseThrow(reportId);
 
         // 사용자 권한 검증
         EntityValidator.validateAdminAccess(user);
@@ -68,8 +67,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ReportResponseDto getReport(Long reportId, User user) {
-        Report report = reportRepository.findById(reportId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 신고가 존재하지 않습니다. id=" + reportId));
+        Report report = reportRepository.findByIdOrElseThrow(reportId);
 
         // 사용자 권한 검증
         EntityValidator.validateAdminAccess(user);

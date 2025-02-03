@@ -1,14 +1,14 @@
 package com.Soo_Shinsa.order;
 
 
-import com.Soo_Shinsa.exception.ALLException;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.order.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_ORDEROPTION;
+import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_ORDER_OPTION;
 
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
@@ -24,6 +24,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     default OrderItem findByIdOrElseThrow(Long orderItemId) {
         return findById(orderItemId).orElseThrow(
-                () -> new ALLException(NOT_FOUND_ORDEROPTION));
+                () -> new NotFoundException(NOT_FOUND_ORDER_OPTION));
     }
 }

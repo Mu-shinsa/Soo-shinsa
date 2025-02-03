@@ -70,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     @Override
     public ReviewResponseDto getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
         return ReviewResponseDto.toDto(review);
     }
@@ -85,7 +85,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto, User user, MultipartFile imageFile) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
         EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 수정 권한이 없습니다.");
 
@@ -126,7 +126,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void delete(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
         EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 삭제 권한이 없습니다.");
 

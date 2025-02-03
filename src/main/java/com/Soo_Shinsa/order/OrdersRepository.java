@@ -1,10 +1,5 @@
 package com.Soo_Shinsa.order;
-
-
-
-
-
-import com.Soo_Shinsa.exception.ALLException;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.order.model.Orders;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +17,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
     default Orders findByIdOrElseThrow(Long orderId) {
         return findById(orderId).orElseThrow(
-                () -> new ALLException(NOT_FOUND_ORDER));
+                () -> new NotFoundException(NOT_FOUND_ORDER));
     }
 
 }

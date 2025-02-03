@@ -27,8 +27,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     public ProductOptionResponseDto createOption(User user, ProductOptionRequestDto dto, Long productId) {
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
 
         ProductOption option = dto.toEntity(findProduct);
@@ -44,7 +43,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId, "존재하지 않는 옵션입니다.");
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         Product associatedProduct = findOption.getProduct();
 
@@ -61,8 +60,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     @Override
     public ProductOptionResponseDto findOption(Long productOptionId) {
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         return ProductOptionResponseDto.toDto(findOption);
     }
