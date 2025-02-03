@@ -6,6 +6,7 @@ import com.Soo_Shinsa.category.dto.CategoryRequestDto;
 import com.Soo_Shinsa.category.dto.CategoryResponseDto;
 import com.Soo_Shinsa.category.dto.CategoryUpdateRequestDto;
 import com.Soo_Shinsa.category.dto.FindCategoryResponseDto;
+import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

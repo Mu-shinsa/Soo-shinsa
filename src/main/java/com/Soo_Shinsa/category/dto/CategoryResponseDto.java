@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.category.dto;
 
-import com.Soo_Shinsa.category.Category;
+import com.Soo_Shinsa.category.model.Category;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

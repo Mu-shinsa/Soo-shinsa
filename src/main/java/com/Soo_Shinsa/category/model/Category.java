@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.category;
+package com.Soo_Shinsa.category.model;
 
 import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.constant.BaseTimeEntity;

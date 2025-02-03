@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.category;
 
+import com.Soo_Shinsa.category.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
