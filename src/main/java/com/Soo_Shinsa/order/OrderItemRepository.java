@@ -13,4 +13,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
         return findById(orderItemId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_ORDER_OPTION));
     }
+
+    void deleteAllByProductId(Long productId);
 }

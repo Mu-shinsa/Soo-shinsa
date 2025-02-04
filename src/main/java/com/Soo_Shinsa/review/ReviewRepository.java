@@ -11,4 +11,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     default Review findByIdOrElseThrow(Long reviewId) {
         return findById(reviewId).orElseThrow(() -> new NotFoundException(NOT_FOUND_REVIEW));
     }
+
+    void deleteAllByProductId(Long productId);
 }

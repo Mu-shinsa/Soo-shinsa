@@ -7,10 +7,12 @@ import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.image.ImageService;
+import com.Soo_Shinsa.order.OrderItemRepository;
 import com.Soo_Shinsa.product.dto.*;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.product.model.QProduct;
+import com.Soo_Shinsa.review.ReviewRepository;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
@@ -38,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductOptionRepository productOptionRepository;
     private final JPAQueryFactory queryFactory;
     private final CategoryRepository categoryRepository;
+    private final ReviewRepository reviewRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Transactional
     @Override
@@ -150,6 +154,8 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = productRepository.findByIdOrElseThrow(productId);
 
+        reviewRepository.deleteAllByProductId(productId);
+        orderItemRepository.deleteAllByProductId(productId);
         productOptionRepository.deleteAllByProductId(productId);
 
         productRepository.delete(product);
