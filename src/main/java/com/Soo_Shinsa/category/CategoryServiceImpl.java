@@ -61,6 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         List<Category> findCategories = categoryRepository.findByBrandId(brandId);
 
+
         return findCategories.stream()
                 .map(FindCategoryResponseDto::of)
                 .collect(Collectors.toList());
@@ -84,6 +85,8 @@ public class CategoryServiceImpl implements CategoryService {
         Category findCategory = categoryRepository.findByIdOrElseThrow(categoryId);
 
         findCategory.update(dto.getName());
+
+        categoryRepository.save(findCategory);
 
         return CategoryResponseDto.toDto(findCategory);
     }
