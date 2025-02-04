@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Grade {
+public enum GradeType {
     ROOKIE("ROOKIE"),
     BRONZE("BRONZE"),
     SILVER("SILVER"),

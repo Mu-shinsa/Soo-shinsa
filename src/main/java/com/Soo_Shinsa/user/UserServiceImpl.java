@@ -2,11 +2,12 @@ package com.Soo_Shinsa.user;
 
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.constant.AuthenticationScheme;
+import com.Soo_Shinsa.constant.GradeType;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
 import com.Soo_Shinsa.exception.DuplicatedException;
-import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.exception.NoAuthorizedException;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.user.model.Grade;
 import com.Soo_Shinsa.user.model.User;
@@ -129,14 +130,14 @@ public class UserServiceImpl implements UserService {
 
 
     private UserGrade createNewUserGrade() {
-        //grade 검증
-        Grade grade = gradeRepository.findByName(com.Soo_Shinsa.constant.Grade.ROOKIE.getName())
-                .orElseThrow(() -> new InternalServerException(WRONG_REQUEST));
+        // Grade 검증
+        Grade grade = gradeRepository.findByName(GradeType.ROOKIE)
+                .orElseThrow(() -> new NotFoundException(WRONG_REQUEST));
 
-        //userGrade 생성
+        // UserGrade 생성
         UserGrade userGrade = new UserGrade(grade);
 
-        //저장
+        // 저장
         userGradeRepository.save(userGrade);
         return userGrade;
     }
