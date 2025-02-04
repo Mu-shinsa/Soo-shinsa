@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.user.model;
 
 import com.Soo_Shinsa.constant.BaseTimeEntity;
+import com.Soo_Shinsa.constant.GradeType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class Grade extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private com.Soo_Shinsa.constant.Grade name;
+    private GradeType name;
 
     @Column(nullable = false)
     private BigDecimal pointRate;
@@ -26,5 +27,9 @@ public class Grade extends BaseTimeEntity {
     private BigDecimal requirement;
 
 
-
+    public Grade(GradeType name, BigDecimal pointRate, BigDecimal requirement) {
+        this.name = name;
+        this.pointRate = pointRate;
+        this.requirement = requirement;
+    }
 }
