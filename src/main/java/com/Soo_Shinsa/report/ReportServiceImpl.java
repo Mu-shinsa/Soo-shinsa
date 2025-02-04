@@ -41,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
 
         if (TargetType.BRAND.equals(requestDto.getTargetType())) {
             if (!brandRepository.existsById(requestDto.getTargetId())) {
-                throw new NotFoundException(ErrorCode.NOT_FOUND_REPORT);
+                throw new NotFoundException(ErrorCode.NOT_FOUND_BRAND);
             }
         }
 
