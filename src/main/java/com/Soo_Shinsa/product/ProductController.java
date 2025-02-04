@@ -1,9 +1,6 @@
 package com.Soo_Shinsa.product;
 
-import com.Soo_Shinsa.product.dto.FindProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductRequestDto;
-import com.Soo_Shinsa.product.dto.ProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductUpdateDto;
+import com.Soo_Shinsa.product.dto.*;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
@@ -52,8 +49,9 @@ public class ProductController {
     @GetMapping("/brands/{brandId}")
     public ResponseEntity<Page<ProductResponseDto>> findAllProductList(@RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "10") int size,
+                                                                       @RequestBody FindProductRequestDto requestDto,
                                                                        @PathVariable Long brandId) {
-        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(brandId, page, size);
+        Page<ProductResponseDto> productResponseDto = productService.findAllProduct(brandId, requestDto, page, size);
         return ResponseEntity.ok(productResponseDto);
     }
 
