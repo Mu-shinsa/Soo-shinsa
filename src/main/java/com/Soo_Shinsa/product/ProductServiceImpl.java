@@ -2,20 +2,23 @@ package com.Soo_Shinsa.product;
 
 import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.brand.BrandRepository;
+import com.Soo_Shinsa.category.CategoryRepository;
+import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.image.ImageService;
-import com.Soo_Shinsa.product.dto.FindProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductRequestDto;
-import com.Soo_Shinsa.product.dto.ProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductUpdateDto;
+import com.Soo_Shinsa.product.dto.*;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
+import com.Soo_Shinsa.product.model.QProduct;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,14 +36,16 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
     private final ProductOptionRepository productOptionRepository;
+    private final JPAQueryFactory queryFactory;
+    private final CategoryRepository categoryRepository;
 
     @Transactional
     @Override
     public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
         User userById = userRepository.findByIdOrElseThrow(user.getUserId());
-
         Brand brand = brandRepository.findByIdOrElseThrow(brandId);
+        Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
 
         EntityValidator.validateAdminOrVendorAccess(userById);
 
@@ -55,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
                 .name(dto.getName())
                 .productStatus(dto.getStatus())
                 .brand(brand)
+                .category(category)
                 .imageUrl(imageUrl)
                 .build();
 
@@ -95,12 +101,47 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDto> findAllProduct(Long brandId, int page, int size) {
+    public Page<ProductResponseDto> findAllProduct(Long brandId, FindProductRequestDto requestDto, int page, int size) {
         Brand brand = brandRepository.findByIdOrElseThrow(brandId);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productRepository.findAllByBrand(brand.getId(), pageable);
+        QProduct product = QProduct.product;
 
-        return products.map(ProductResponseDto::toDto);
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(product.brand.id.eq(brand.getId()));
+
+        if (requestDto.getNameKeyword() != null && !requestDto.getNameKeyword().isEmpty()) {
+            builder.and(product.name.containsIgnoreCase(requestDto.getNameKeyword()));
+        }
+
+        if (requestDto.getMinPrice() != null) {
+            builder.and(product.price.goe(requestDto.getMinPrice()));
+        }
+
+        if (requestDto.getMaxPrice() != null) {
+            builder.and(product.price.loe(requestDto.getMaxPrice()));
+        }
+
+        if (requestDto.getCategoryId() != null) {
+            builder.and(product.category.id.eq(requestDto.getCategoryId()));
+        }
+
+        List<Product> products = queryFactory.selectFrom(product)
+                .where(builder)
+                .orderBy(product.price.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory.selectFrom(product)
+                .where(builder)
+                .fetch()
+                .size();
+
+
+        List<ProductResponseDto> productResponseDtos =
+                products.stream().map(ProductResponseDto::toDto).toList();
+
+        return new PageImpl<>(productResponseDtos, pageable, total);
     }
 
     @Transactional
