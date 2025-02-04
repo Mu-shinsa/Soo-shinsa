@@ -53,6 +53,7 @@ public class Orders extends BaseTimeEntity {
 
 
     public Orders(OrdersStatus status, User user) {
+        this.orderId = createOrderNumber();
         this.status = status;
         this.user = user;
     }

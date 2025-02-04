@@ -58,10 +58,9 @@ public class OrdersController {
     //카트에 담음 물건을 구매 생성
     @PostMapping("/carts")
     public ResponseEntity<OrdersResponseDto> createOrderFromCart(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @AuthenticationPrincipal UserDetails userDetails) {
         User user = UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.createOrderFromCart(user,pageable);
+        OrdersResponseDto responseDto = ordersService.createOrderFromCart(user);
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }
     //오더 단일 생성
