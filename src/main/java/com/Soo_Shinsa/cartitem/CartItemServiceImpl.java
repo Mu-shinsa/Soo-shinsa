@@ -6,6 +6,8 @@ import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.cartitem.model.QCartItem;
 import com.Soo_Shinsa.constant.ProductStatus;
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.product.ProductOptionRepository;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
@@ -44,7 +46,7 @@ public class CartItemServiceImpl implements CartItemService {
         Product product = productRepository.findByIdOrElseThrow(requestDto.getProductId());
 
         if (product.getProductStatus().equals(ProductStatus.SOLD_OUT) || product.getProductStatus().equals(ProductStatus.UNAVAILABLE)) {
-            throw new IllegalArgumentException("해당 상품을 이용하실 수 없습니다.");
+            throw new InternalServerException(ErrorCode.CAN_NOT_USE_PRODUCT);
         }
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(product.getId());
