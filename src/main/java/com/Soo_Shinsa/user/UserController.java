@@ -6,7 +6,6 @@ import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +57,7 @@ public class UserController {
     }
     @PatchMapping
     public ResponseEntity<UserDetailResponseDto> updateUser(@AuthenticationPrincipal UserDetails userDetails,
-                                                            @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+                                                            @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         UserDetailResponseDto userDetailResponseDto = userService.updateUser(UserUtils.getUser(userDetails),userUpdateRequestDto);
         return ResponseEntity.ok(userDetailResponseDto);
     }

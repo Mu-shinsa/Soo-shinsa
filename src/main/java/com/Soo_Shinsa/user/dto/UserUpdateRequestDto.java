@@ -12,12 +12,5 @@ public class UserUpdateRequestDto {
     @NotBlank(message = "기존 비밀번호를 입력해주세요.")
     private String oldPassword;
     private String newPassword;
-
-    public UserUpdateRequestDto(String name, String phoneNum, String oldPassword, String newPassword) {
-        this.name = name;
-        this.phoneNum = phoneNum;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-    }
 }
 
