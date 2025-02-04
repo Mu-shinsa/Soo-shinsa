@@ -1,5 +1,8 @@
 package com.Soo_Shinsa.product;
 
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.InvalidInputException;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
@@ -14,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.Soo_Shinsa.exception.ErrorCode.SELECT_COLOR_OR_SIZE;
 
 @Service
 @RequiredArgsConstructor
@@ -53,7 +58,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         Product associatedProduct = findOption.getProduct();
 
         if (associatedProduct == null) {
-            throw new IllegalArgumentException("옵션에 연관된 상품이 없습니다.");
+            throw new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT);
         }
 
         findOption.update(dto.getSize(), dto.getColor(), dto.getStatus());
@@ -74,7 +79,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
 
         if (requestDto.getColor() == null && requestDto.getSize() == null) {
-            throw new IllegalArgumentException("색상과 사이즈 중 하나는 필수입니다.");
+            throw new InvalidInputException(SELECT_COLOR_OR_SIZE);
         }
 
         Pageable pageable = PageRequest.of(page, size);

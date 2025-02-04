@@ -39,7 +39,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDto createReview(Long orderItemId, ReviewRequestDto requestDto, User user, MultipartFile imageFile) {
         OrderItem orderItem = orderItemRepository.findByIdOrElseThrow(orderItemId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId(), "리뷰 생성 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId());
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -87,7 +87,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto, User user, MultipartFile imageFile) {
         Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 수정 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId());
 
         String newImageUrl = review.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -128,7 +128,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void delete(Long reviewId, User user) {
         Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 삭제 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId());
 
         if (review.getImageUrl() != null) {
             imageService.deleteImage(review.getImageUrl()); // URL을 사용해 이미지 삭제

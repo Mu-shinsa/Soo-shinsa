@@ -16,15 +16,14 @@ import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_CART;
+import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_ORDER;
 
 @Service
 @RequiredArgsConstructor
@@ -51,15 +50,15 @@ public class OrdersServiceImpl implements OrdersService {
     public Page<OrdersResponseDto> getAllByUserId(User user, Pageable pageable) {
 
 
-        Page<Orders> allByUserUserId = ordersRepository.findAllByUserUserId(user.getUserId(),pageable);
+        Page<Orders> findOrders = ordersRepository.findAllByUserUserId(user.getUserId(),pageable);
 
 
 
-        if (allByUserUserId == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders를 찾을 수 없습니다");
+        if (findOrders == null) {
+            throw new NotFoundException(NOT_FOUND_ORDER);
         }
 
-        return allByUserUserId.map(OrdersResponseDto::toDto);
+        return findOrders.map(OrdersResponseDto::toDto);
     }
 
 

@@ -56,7 +56,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
         //사용자의 카트인지 확인
-        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId());
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(cartItem.getProduct().getId());
 
@@ -82,7 +82,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
-        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId());
         cartItem.updateCartItem(quantity);
 
 
@@ -100,7 +100,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         CartItem cartItem = cartItemRepository.findByIdOrElseThrow(cartId);
 
-        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId(), "해당 사용자의 카트가 아닙니다.");
+        EntityValidator.validateUserOwnership(userId.getUserId(), cartItem.getUser().getUserId());
 
         cartItemRepository.delete(cartItem);
     }
