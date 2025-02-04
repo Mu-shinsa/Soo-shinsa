@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.review;
 
+import com.Soo_Shinsa.review.dto.ReviewRateDto;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
@@ -16,5 +17,5 @@ public interface ReviewService {
 
     void delete(Long reviewId, User user);
 
-    Page<ReviewResponseDto> getReviewsByProductId(Long productId, int page, int size);
+    Page<ReviewResponseDto> getReviewsByProductId(Long productId, ReviewRateDto reviewRateDto, int page, int size);
 }

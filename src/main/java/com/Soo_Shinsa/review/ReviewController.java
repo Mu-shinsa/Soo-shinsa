@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.review;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
+import com.Soo_Shinsa.review.dto.ReviewRateDto;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
@@ -51,9 +52,10 @@ public class ReviewController {
 
     @GetMapping("/product/{productId}")
     public ResponseEntity<Page<ReviewResponseDto>> getAllReviewByProductId(@PathVariable Long productId,
+                                                                           @Valid @RequestBody ReviewRateDto reviewRateDto,
                                                                            @RequestParam (defaultValue = "0") int page,
                                                                            @RequestParam (defaultValue = "10") int size) {
-        Page<ReviewResponseDto> reviews = reviewService.getReviewsByProductId(productId, page, size);
+        Page<ReviewResponseDto> reviews = reviewService.getReviewsByProductId(productId, reviewRateDto, page, size);
         return ResponseEntity.ok(reviews);
     }
 

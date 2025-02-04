@@ -15,8 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
@@ -25,10 +23,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("brands/{brandId}")
-    public ResponseEntity<CategoryResponseDto> create(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CategoryRequestDto dto,
-            @PathVariable Long brandId
+    public ResponseEntity<CategoryResponseDto> create(@AuthenticationPrincipal UserDetails userDetails,
+                                                      @Valid @RequestBody CategoryRequestDto dto,
+                                                      @PathVariable Long brandId
     ) {
         User user = UserUtils.getUser(userDetails);
         CategoryResponseDto saved = categoryService.create(brandId, user, dto);
@@ -37,41 +34,30 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDto> findById(
-            @PathVariable Long categoryId,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        User user = UserUtils.getUser(userDetails);
-        CategoryResponseDto findCategory = categoryService.findById(categoryId, user);
+    public ResponseEntity<CategoryResponseDto> findById(@PathVariable Long categoryId) {
+        CategoryResponseDto findCategory = categoryService.findById(categoryId);
         return new ResponseEntity<>(findCategory, HttpStatus.OK);
     }
 
     @GetMapping("brands/{brandId}")
-    public ResponseEntity<List<FindCategoryResponseDto>> findByBrandId(
-            @PathVariable Long brandId,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        User user = UserUtils.getUser(userDetails);
-        List<FindCategoryResponseDto> findCategoryByBrandId = categoryService.findByBrandId(brandId, user);
+    public ResponseEntity<Page<FindCategoryResponseDto>> findByBrandId(@PathVariable Long brandId,
+                                                                       @RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "10") int size) {
+        Page<FindCategoryResponseDto> findCategoryByBrandId = categoryService.findByBrandId(brandId, page, size);
         return new ResponseEntity<>(findCategoryByBrandId, HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<Page<FindCategoryResponseDto>> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        User user = UserUtils.getUser(userDetails);
-        Page<FindCategoryResponseDto> findAll = categoryService.findAll(page, size, user);
+    public ResponseEntity<Page<FindCategoryResponseDto>> findAll(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        Page<FindCategoryResponseDto> findAll = categoryService.findAll(page, size);
         return ResponseEntity.ok(findAll);
     }
 
     @PatchMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponseDto> update(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CategoryUpdateRequestDto dto,
-            @PathVariable Long categoryId
+    public ResponseEntity<CategoryResponseDto> update(@AuthenticationPrincipal UserDetails userDetails,
+                                                      @Valid @RequestBody CategoryUpdateRequestDto dto,
+                                                      @PathVariable Long categoryId
     ) {
         User user = UserUtils.getUser(userDetails);
         CategoryResponseDto update = categoryService.update(user, dto, categoryId);
