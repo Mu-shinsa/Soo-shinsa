@@ -3,6 +3,8 @@ package com.Soo_Shinsa.report;
 import com.Soo_Shinsa.brand.BrandRepository;
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
@@ -39,19 +41,19 @@ public class ReportServiceImpl implements ReportService {
 
         if (TargetType.BRAND.equals(requestDto.getTargetType())) {
             if (!brandRepository.existsById(requestDto.getTargetId())) {
-                throw new IllegalArgumentException("해당 브랜드가 존재하지 않습니다." + requestDto.getTargetId());
+                throw new NotFoundException(ErrorCode.NOT_FOUND_REPORT);
             }
         }
 
         if (TargetType.PRODUCT.equals(requestDto.getTargetType())) {
             if (!productRepository.existsById(requestDto.getTargetId())) {
-                throw new IllegalArgumentException("해당 상품이 존재하지 않습니다." + requestDto.getTargetId());
+                throw new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT);
             }
         }
 
         if (TargetType.REVIEW.equals(requestDto.getTargetType())) {
             if (!reviewRepository.existsById(requestDto.getTargetId())) {
-                throw new IllegalArgumentException("해당 리뷰가 존재하지 않습니다." + requestDto.getTargetId());
+                throw new NotFoundException(ErrorCode.NOT_FOUND_REVIEW);
             }
         }
 
@@ -125,7 +127,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public void deleteReport(Long reportId, User user) {
         if (!reportRepository.existsById(reportId)) {
-            throw new IllegalArgumentException("해당 신고가 존재하지 않습니다." + reportId);
+            throw new NotFoundException(ErrorCode.NOT_FOUND_REPORT);
         }
 
         EntityValidator.validateAdminAccess(user);
