@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.cartitem;
 
 
+import com.Soo_Shinsa.cartitem.dto.CartItemDateRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
 import com.Soo_Shinsa.user.model.User;
@@ -43,11 +44,12 @@ public class CartItemController {
     //유저의 카트들을 모두 검색
     @GetMapping("/users")
     public ResponseEntity<Page<CartItemResponseDto>> findByIdAll(@AuthenticationPrincipal UserDetails userDetails,
+                                                                 @RequestBody CartItemDateRequestDto requestDto,
                                                                  @RequestParam (defaultValue = "0") int page,
                                                                  @RequestParam (defaultValue = "10") int size){
 
         User user = UserUtils.getUser(userDetails);
-        Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user, page, size);
+        Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user, requestDto, page, size);
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
