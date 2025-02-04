@@ -4,9 +4,8 @@ import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
-
-import com.Soo_Shinsa.utils.UserUtils;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping
-    public ResponseEntity<ReportResponseDto> createReport(@Valid ReportRequestDto requestDto,
+    public ResponseEntity<ReportResponseDto> createReport(@Valid @RequestBody ReportRequestDto requestDto,
                                                           @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
         ReportResponseDto report = reportService.createReport(requestDto, user);

@@ -1,10 +1,14 @@
 package com.Soo_Shinsa.report;
 
+import com.Soo_Shinsa.brand.BrandRepository;
 import com.Soo_Shinsa.constant.ReportStatus;
+import com.Soo_Shinsa.constant.TargetType;
+import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
 import com.Soo_Shinsa.report.model.Report;
+import com.Soo_Shinsa.review.ReviewRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
+    private final ReviewRepository reviewRepository;
+    private final BrandRepository brandRepository;
+    private final ProductRepository productRepository;
 
     /**
      * 신고 생성
@@ -29,8 +36,35 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     @Override
     public ReportResponseDto createReport(ReportRequestDto requestDto, User user) {
-        Report report = reportRepository.save(requestDto.toEntity(user));
-        return ReportResponseDto.toDto(report);
+
+        if (TargetType.BRAND.equals(requestDto.getTargetType())) {
+            if (!brandRepository.existsById(requestDto.getTargetId())) {
+                throw new IllegalArgumentException("해당 브랜드가 존재하지 않습니다." + requestDto.getTargetId());
+            }
+        }
+
+        if (TargetType.PRODUCT.equals(requestDto.getTargetType())) {
+            if (!productRepository.existsById(requestDto.getTargetId())) {
+                throw new IllegalArgumentException("해당 상품이 존재하지 않습니다." + requestDto.getTargetId());
+            }
+        }
+
+        if (TargetType.REVIEW.equals(requestDto.getTargetType())) {
+            if (!reviewRepository.existsById(requestDto.getTargetId())) {
+                throw new IllegalArgumentException("해당 리뷰가 존재하지 않습니다." + requestDto.getTargetId());
+            }
+        }
+
+        Report report = Report.builder()
+                .targetId(requestDto.getTargetId())
+                .targetType(requestDto.getTargetType())
+                .status(requestDto.getStatus())
+                .content(requestDto.getContent())
+                .user(user)
+                .build();
+
+        Report saveReport = reportRepository.save(report);
+        return ReportResponseDto.toDto(saveReport);
     }
 
     /**
