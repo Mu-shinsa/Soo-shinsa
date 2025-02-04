@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.category.dto;
 
-import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.category.model.Category;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,7 @@ public class FindCategoryResponseDto {
 
     private Long id;
 
-    private Brand brand;
+    private Long brandId;
 
     private Long parent;
 
@@ -27,7 +26,7 @@ public class FindCategoryResponseDto {
     public static FindCategoryResponseDto of(Category category) {
         return new FindCategoryResponseDto(
                 category.getId(),
-                category.getBrand(),
+                category.getBrand().getId(),
                 category.getParent() != null ? category.getParent().getId() : null,
                 category.getName(),
                 category.getChildren()
@@ -36,9 +35,9 @@ public class FindCategoryResponseDto {
                         .collect(Collectors.toList())
         );
     }
-    public FindCategoryResponseDto(Long id, Brand brand, Long parent, String name, List<FindCategoryResponseDto> children ) {
+    public FindCategoryResponseDto(Long id, Long brandId, Long parent, String name, List<FindCategoryResponseDto> children ) {
         this.id = id;
-        this.brand = brand;
+        this.brandId = brandId;
         this.parent = parent;
         this.name = name;
         this.children = children;
