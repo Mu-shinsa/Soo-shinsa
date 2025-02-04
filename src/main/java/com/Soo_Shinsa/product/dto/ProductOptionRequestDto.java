@@ -4,6 +4,7 @@ import com.Soo_Shinsa.constant.ProductStatus;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +18,7 @@ public class ProductOptionRequestDto {
     @NotEmpty(message = "색상은 필수 값 입니다.")
     private String color;
 
-    @NotEmpty(message = "상태는 필수 값 입니다.")
+    @NotNull(message = "상태는 필수 값 입니다.")
     private ProductStatus status;
 
     public ProductOptionRequestDto(String size, String color, ProductStatus status) {

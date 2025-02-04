@@ -30,7 +30,12 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
 
-        ProductOption option = dto.toEntity(findProduct);
+        ProductOption option = ProductOption.builder()
+                .product(findProduct)
+                .size(dto.getSize())
+                .color(dto.getColor())
+                .product(findProduct)
+                .build();
 
         ProductOption savedOption = productOptionRepository.save(option);
 

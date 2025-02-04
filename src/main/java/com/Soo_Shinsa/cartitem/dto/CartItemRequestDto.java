@@ -14,8 +14,12 @@ public class CartItemRequestDto {
     @NotNull(message = "수량을 입력해주세요.")
     private Integer quantity;
 
-    public CartItemRequestDto(Long productId, Integer quantity) {
+    @NotNull(message = "상품 옵션 아이디를 입력해주세요.")
+    private Long productOptionId;
+
+    public CartItemRequestDto(Long productId, Integer quantity, Long productOptionId) {
         this.productId = productId;
         this.quantity = quantity;
+        this.productOptionId = productOptionId;
     }
 }
