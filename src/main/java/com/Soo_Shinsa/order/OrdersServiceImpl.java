@@ -87,17 +87,17 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Transactional
     @Override
-    public OrdersResponseDto createOrderFromCart(User user,Pageable pageable) {
+    public OrdersResponseDto createOrderFromCart(User user) {
 
-        List<CartItem> byUserUserId = cartItemRepository.findByUserUserId(user.getUserId());
-        if (byUserUserId.isEmpty()) {
+        List<CartItem> cartItems = cartItemRepository.findByUserUserId(user.getUserId());
+        if (cartItems.isEmpty()) {
             throw new NotFoundException(NOT_FOUND_CART);
         }
         Orders order = new Orders(OrdersStatus.BEFOREPAYMENT, user);
 
 
         // CartItem 데이터를 기반으로 OrderItem 생성 및 추가
-        for (CartItem cartItem : byUserUserId) {
+        for (CartItem cartItem : cartItems) {
             Product product = cartItem.getProductOption().getProduct();
             Integer quantity = cartItem.getQuantity();
 
@@ -109,7 +109,7 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepository.save(order);
 
         // 카트 비우기
-        cartItemRepository.deleteAll(byUserUserId);
+        cartItemRepository.deleteAll(cartItems);
 
         return OrdersResponseDto.toDto(order);
     }

@@ -11,7 +11,7 @@ public interface OrdersService {
     OrdersResponseDto getOrderById(Long orderId, User user);
     Page<OrdersResponseDto> getAllByUserId(User user, Pageable pageable);
     OrdersResponseDto createSingleProductOrder(User user, Long productId, Integer quantity);
-    OrdersResponseDto createOrderFromCart(User user,Pageable pageable);
+    OrdersResponseDto createOrderFromCart(User user);
 
     OrdersResponseDto createOrder (User user);
 
