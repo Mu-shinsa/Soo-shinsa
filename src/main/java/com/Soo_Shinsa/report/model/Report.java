@@ -61,16 +61,16 @@ public class Report extends BaseTimeEntity {
             case APPROVED:
             case REJECTED:
             case RESOLVED:
+                this.status = status;
                 break; // 유효한 상태는 그대로 진행
             default:
-                this.status = status;
                 throw new IllegalArgumentException("status는 OPEN, IN_PROGRESS, APPROVED, REJECTED, RESOLVED 중 하나여야 합니다.");
         }
     }
 
 
     public void addRejectReason(String rejectReason) {
-        if (rejectReason == null) {
+        if (ReportStatus.REJECTED.equals(this.status) && rejectReason == null) {
             throw new IllegalArgumentException("rejectReason은 필수 입니다.");
         }
 
