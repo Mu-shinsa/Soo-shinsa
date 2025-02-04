@@ -124,6 +124,7 @@ public class UserServiceImpl implements UserService {
 
         //탈퇴
         user.delete();
+        userRepository.save(user);
     }
 
 
