@@ -12,7 +12,6 @@ public interface OrdersService {
     OrdersResponseDto createSingleProductOrder(User user, Long productId, Integer quantity);
     OrdersResponseDto createOrderFromCart(User user);
 
-    OrdersResponseDto createOrder (User user);
 
     OrdersResponseDto updateOrder (User user, Long orderId, OrdersStatus status);
 }

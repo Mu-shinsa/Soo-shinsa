@@ -1,11 +1,10 @@
 package com.Soo_Shinsa.order;
 
-import com.Soo_Shinsa.constant.ProductStatus;
-import com.Soo_Shinsa.exception.ErrorCode;
-import com.Soo_Shinsa.exception.InternalServerException;
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.order.dto.OrderDateRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
+import com.Soo_Shinsa.order.dto.OrdersResponseDto;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.product.ProductRepository;
@@ -21,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,30 +34,36 @@ public class OrderItemServiceImpl implements OrderItemService {
     //오더 아이템 생성
     @Transactional
     @Override
-    public OrderItemResponseDto createOrderItem(OrderItemRequestDto requestDto, User user) {
-
+    public OrdersResponseDto createOrderItem(OrderItemRequestDto requestDto, User user) {
         User findUser = userRepository.findByIdOrElseThrow(user.getUserId());
-        Orders findOrder = ordersRepository.findByIdOrElseThrow(requestDto.getOrderId());
-
-        EntityValidator.validateAndOrders(findOrder, findUser.getUserId());
+        Orders findOrder = ordersRepository.findById(requestDto.getOrderId()).orElse(null);
         Product product = productRepository.findByIdOrElseThrow(requestDto.getProductId());
-        if (product.getProductStatus().equals(ProductStatus.SOLD_OUT) || product.getProductStatus().equals(ProductStatus.UNAVAILABLE)) {
-            throw new InternalServerException(ErrorCode.CAN_NOT_USE_PRODUCT);
+
+        if(findOrder==null) {
+
+            Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT, user);
+            ordersRepository.save(order);
+            OrderItem orderItem = new OrderItem(
+                    requestDto.getQuantity(),
+                    order,
+                    product
+
+            );
+            order.addOrderItem(orderItem);orderItemRepository.save(orderItem);
+            Orders saveOrder = ordersRepository.save(order);
+            return OrdersResponseDto.toDto(saveOrder);
+
         }
+        EntityValidator.validateAndOrders(findOrder, findUser.getUserId());
         OrderItem orderItem = new OrderItem(
                 requestDto.getQuantity(),
                 findOrder,
                 product
         );
-
         findOrder.addOrderItem(orderItem);
-
-        OrderItem savedOrderItem = orderItemRepository.save(orderItem);
-
-
-        ordersRepository.save(findOrder);
-
-        return OrderItemResponseDto.toDto(savedOrderItem);
+        orderItemRepository.save(orderItem);
+        Orders saveOrder = ordersRepository.save(findOrder);
+        return OrdersResponseDto.toDto(saveOrder);
     }
 
     @Override

@@ -108,16 +108,6 @@ public class OrdersServiceImpl implements OrdersService {
         return OrdersResponseDto.toDto(order);
     }
 
-    @Transactional
-    @Override
-    public OrdersResponseDto createOrder(User user) {
-
-        Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT, user);
-        Orders savedOrder = ordersRepository.save(order);
-
-
-        return OrdersResponseDto.toDto(savedOrder);
-    }
 
     @Transactional
     @Override

@@ -66,15 +66,6 @@ public class OrdersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    //오더 단일 생성
-    @PostMapping()
-    public ResponseEntity<CommonResponse<OrdersResponseDto>> createOrder(@AuthenticationPrincipal UserDetails userDetails) {
-        User user = UserUtils.getUser(userDetails);
-        OrdersResponseDto responseDto = ordersService.createOrder(user);
-        CommonResponse<OrdersResponseDto> response = new CommonResponse<>(ResponseMessage.ORDER_CREATE_SUCCESS, responseDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     //오더 수정
     @PatchMapping()
     public ResponseEntity<CommonResponse<OrdersResponseDto>> updateOrder(@AuthenticationPrincipal UserDetails userDetails,

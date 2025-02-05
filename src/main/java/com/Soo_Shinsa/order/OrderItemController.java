@@ -3,6 +3,7 @@ package com.Soo_Shinsa.order;
 import com.Soo_Shinsa.order.dto.OrderDateRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
+import com.Soo_Shinsa.order.dto.OrdersResponseDto;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.CommonResponse;
 import com.Soo_Shinsa.utils.ResponseMessage;
@@ -24,11 +25,11 @@ public class OrderItemController {
 
     //오더 아이템 생성
     @PostMapping
-    public ResponseEntity<CommonResponse<OrderItemResponseDto>> createOrderItem(@Valid @RequestBody OrderItemRequestDto requestDto,
-                                                                               @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CommonResponse<OrdersResponseDto>> createOrderItem(@Valid @RequestBody OrderItemRequestDto requestDto,
+                                                                             @AuthenticationPrincipal UserDetails userDetails) {
         User user = UserUtils.getUser(userDetails);
-        OrderItemResponseDto orderItem = orderItemService.createOrderItem(requestDto, user);
-        CommonResponse<OrderItemResponseDto> response = new CommonResponse<>(ResponseMessage.ORDER_ITEM_CREATE_SUCCESS, orderItem);
+        OrdersResponseDto orderItem = orderItemService.createOrderItem(requestDto, user);
+        CommonResponse<OrdersResponseDto> response = new CommonResponse<>(ResponseMessage.ORDER_ITEM_CREATE_SUCCESS, orderItem);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
