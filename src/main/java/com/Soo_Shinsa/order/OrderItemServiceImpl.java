@@ -1,5 +1,8 @@
 package com.Soo_Shinsa.order;
 
+import com.Soo_Shinsa.constant.ProductStatus;
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.order.dto.OrderDateRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
@@ -45,6 +48,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         EntityValidator.validateAndOrders(findOrder, findUser.getUserId());
         Product product = productRepository.findByIdOrElseThrow(requestDto.getProductId());
+        if (product.getProductStatus().equals(ProductStatus.SOLD_OUT) || product.getProductStatus().equals(ProductStatus.UNAVAILABLE)) {
+            throw new InternalServerException(ErrorCode.CAN_NOT_USE_PRODUCT);
+        }
         OrderItem orderItem = new OrderItem(
                 requestDto.getQuantity(),
                 findOrder,

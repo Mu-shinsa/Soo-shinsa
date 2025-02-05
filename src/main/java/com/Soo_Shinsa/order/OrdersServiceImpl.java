@@ -3,6 +3,9 @@ package com.Soo_Shinsa.order;
 import com.Soo_Shinsa.cartitem.CartItemRepository;
 import com.Soo_Shinsa.cartitem.model.CartItem;
 import com.Soo_Shinsa.constant.OrdersStatus;
+import com.Soo_Shinsa.constant.ProductStatus;
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.order.dto.OrderDateRequestDto;
 import com.Soo_Shinsa.order.dto.OrdersResponseDto;
@@ -95,6 +98,9 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersResponseDto createSingleProductOrder(User user, Long productId, Integer quantity) {
 
         Product product = productRepository.findByIdOrElseThrow(productId);
+        if (product.getProductStatus().equals(ProductStatus.SOLD_OUT) || product.getProductStatus().equals(ProductStatus.UNAVAILABLE)) {
+            throw new InternalServerException(ErrorCode.CAN_NOT_USE_PRODUCT);
+        }
 
         Orders order = new Orders(product.getPrice().multiply(BigDecimal.valueOf(quantity)), OrdersStatus.BEFOREPAYMENT, user);
 
