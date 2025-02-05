@@ -1,8 +1,8 @@
 package com.Soo_Shinsa.order.dto;
 
 import com.Soo_Shinsa.constant.OrdersStatus;
-
 import com.Soo_Shinsa.order.model.Orders;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +24,8 @@ public class OrdersResponseDto {
 
     private List<OrderItemResponseDto> orderItems;
 
+
+    @Builder
     public OrdersResponseDto(Long id, String orderId, BigDecimal totalPrice, OrdersStatus status, Long userId, List<OrderItemResponseDto> orderItems) {
         this.id = id;
         this.orderId = orderId;
@@ -34,16 +36,14 @@ public class OrdersResponseDto {
     }
 
     public static OrdersResponseDto toDto(Orders orders) {
-        return new OrdersResponseDto(
-                orders.getId(),
-                orders.getOrderId(),
-                orders.getTotalPrice(),
-                orders.getStatus(),
-                orders.getUser().getUserId(),
-                orders.getOrderItems().stream()
-                        .map(OrderItemResponseDto::toDto) // OrderItemResponseDto의 toDto 사용
-                        .collect(Collectors.toList())
-        );
+        return OrdersResponseDto.builder()
+                .id(orders.getId())
+                .orderId(orders.getOrderId())
+                .totalPrice(orders.getTotalPrice())
+                .status(orders.getStatus())
+                .userId(orders.getUser().getUserId())
+                .orderItems(orders.getOrderItems().stream().map(OrderItemResponseDto::toDto).collect(Collectors.toList()))
+                .build();
     }
 
 }
