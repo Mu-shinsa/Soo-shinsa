@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.order.dto;
 
 import com.Soo_Shinsa.order.model.OrderItem;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,7 @@ public class OrderItemResponseDto {
     private Integer quantity;
     private BigDecimal price;
 
-
+    @Builder
     public OrderItemResponseDto(Long orderItemId, Long productId, String productName, Integer quantity, BigDecimal price) {
         this.orderItemId = orderItemId;
         this.productId = productId;
@@ -26,13 +27,12 @@ public class OrderItemResponseDto {
     }
 
     public static OrderItemResponseDto toDto(OrderItem orderItem) {
-        return new OrderItemResponseDto(
-                orderItem.getId(),
-                orderItem.getProduct().getId(),
-                orderItem.getProduct().getName(),
-                orderItem.getQuantity(),
-                orderItem.getProduct().getPrice()
-
-        );
+        return OrderItemResponseDto.builder()
+                .orderItemId(orderItem.getId())
+                .productId(orderItem.getProduct().getId())
+                .productName(orderItem.getProduct().getName())
+                .quantity(orderItem.getQuantity())
+                .price(orderItem.getProduct().getPrice())
+                .build();
     }
 }
