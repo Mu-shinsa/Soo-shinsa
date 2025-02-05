@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.category.dto;
 
 import com.Soo_Shinsa.category.model.Category;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,23 +24,22 @@ public class FindCategoryResponseDto {
     private List<FindCategoryResponseDto> children = new ArrayList<>();
 
 
-    public static FindCategoryResponseDto of(Category category) {
-        return new FindCategoryResponseDto(
-                category.getId(),
-                category.getBrand().getId(),
-                category.getParent() != null ? category.getParent().getId() : null,
-                category.getName(),
-                category.getChildren()
-                        .stream()
-                        .map(FindCategoryResponseDto::of)
-                        .collect(Collectors.toList())
-        );
-    }
-    public FindCategoryResponseDto(Long id, Long brandId, Long parent, String name, List<FindCategoryResponseDto> children ) {
+    @Builder
+    public FindCategoryResponseDto(Long id, Long brandId, Long parent, String name, List<FindCategoryResponseDto> children) {
         this.id = id;
         this.brandId = brandId;
         this.parent = parent;
         this.name = name;
         this.children = children;
+    }
+
+    public static FindCategoryResponseDto of(Category category) {
+        return FindCategoryResponseDto.builder()
+                .id(category.getId())
+                .brandId(category.getBrand().getId())
+                .name(category.getName())
+                .parent(category.getParent().getId())
+                .children(category.getChildren().stream().map(FindCategoryResponseDto::of).collect(Collectors.toList()))
+                .build();
     }
 }
