@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.statistics.model;
+package com.Soo_Shinsa.statistics;
 
 import com.Soo_Shinsa.statistics.dto.OrderHistoryForStatistic;
 import jakarta.persistence.*;
@@ -19,7 +19,7 @@ public class Statistics {
 
     //제품 관련 정보
     private String productName;
-    private BigDecimal price;
+    private BigDecimal totalPrice;
     private String categoryName;
     private String brandName;
 
@@ -34,7 +34,7 @@ public class Statistics {
 
     public Statistics(OrderHistoryForStatistic orderHistory) {
         this.productName = orderHistory.getProductName();
-        this.price = orderHistory.getPrice();
+        this.totalPrice = orderHistory.getPrice();
         this.categoryName = null;
         this.brandName = orderHistory.getBrandName();
 

@@ -19,7 +19,7 @@ public class OrderHistoryForStatistic {
     private BigDecimal price;
 
     private String productName;
-//    private String categoryName;
+    private String categoryName;
     private String brandName;
 
 
