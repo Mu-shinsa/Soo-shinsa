@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class CategoryRepositoryImpl implements CategoryCustomRepository {
+public class CategoryCustomRepositoryImpl implements CategoryCustomRepository {
     private final JPAQueryFactory queryFactory;
 
 

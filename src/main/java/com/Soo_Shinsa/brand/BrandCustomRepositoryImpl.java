@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class BrandRepositoryImpl implements BrandCustomRepository{
+public class BrandCustomRepositoryImpl implements BrandCustomRepository{
 
     private final JPAQueryFactory queryFactory;
 

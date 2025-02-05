@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 @RequiredArgsConstructor
-public class ProductOptionRepositoryImpl implements ProductOptionCustomRepository {
+public class ProductOptionCustomRepositoryImpl implements ProductOptionCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 

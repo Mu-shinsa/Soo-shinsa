@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import java.sql.Timestamp;
 
 @RequiredArgsConstructor
-public class CartItemRepositoryImpl implements CartItemCustomRepository {
+public class CartItemCustomRepositoryImpl implements CartItemCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
