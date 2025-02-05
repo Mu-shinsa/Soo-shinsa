@@ -4,7 +4,7 @@
 
 <mapper namespace="com.Soo_Shinsa.statistics.StatisticsMybatisRepository">
 
-    <select id="getBrandList" parameterType="com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto" resultType="string">
+    <select id="getBrandList" parameterType="com.Soo_Shinsa.statistics.dto.StatisticsRequestDto" resultType="string">
         select distinct brand_name
         from statistics
         where 1=1
@@ -23,7 +23,7 @@
 
         order by 1;
     </select>
-    <select id="getDateList"  parameterType="com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto" resultType="string">
+    <select id="getDateList"  parameterType="com.Soo_Shinsa.statistics.dto.StatisticsRequestDto" resultType="string">
         select distinct date_format(order_date,#{periodType.dateFormat})
         from statistics
         where 1=1
@@ -43,7 +43,7 @@
         order by 1;
     </select>
 
-    <select id="getBodyDataList" parameterType="map" resultType="decimal">
+    <select id="getBodyDataListForSales" parameterType="map" resultType="decimal">
         select cast(sum(if(total_price is null, 0, total_price)) as decimal ) as total_price
         from (select total_price, brand_name, order_date
         from statistics

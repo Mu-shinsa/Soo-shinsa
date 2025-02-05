@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticsForSaleRequestDto {
+public class StatisticsRequestDto {
 
     //출력 종류
     //연간/월간/주간/일간
@@ -31,20 +30,13 @@ public class StatisticsForSaleRequestDto {
 
     private String orderStatus;
 
-    //검색 조건
-    private BigDecimal startPrice;
-    private BigDecimal endPrice;
 
-    public StatisticsForSaleRequestDto(BigDecimal startPrice, BigDecimal endPrice, PeriodType periodType, List<String> categoryList, List<String> brandList, String startDate, String endDate) {
-        this.startPrice = startPrice;
-        this.endPrice = endPrice;
-        this.periodType=periodType;
-        this.categoryList=categoryList;
-        this.brandList=brandList;
-        this.startDate= startDate;
-        this.endDate= endDate;
+    public StatisticsRequestDto(PeriodType periodType, List<String> categoryList, List<String> brandList, String startDate, String endDate) {
+        this.periodType = periodType;
+        this.categoryList = categoryList;
+        this.brandList = brandList;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
-    public StatisticsRequestDto toStatisticsRequestDto(){
-        return new StatisticsRequestDto(periodType, categoryList, brandList, startDate, endDate);
-    }
+
 }

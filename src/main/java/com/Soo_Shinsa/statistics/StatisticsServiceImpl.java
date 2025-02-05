@@ -24,12 +24,14 @@ public class StatisticsServiceImpl implements StatisticsService {
     public StatisticsResponseDto getStatisticsOfSales(StatisticsForSaleRequestDto requestDto) {
         StatisticsResponseDto dto = new StatisticsResponseDto();
 
-        List<String> dateList = repository.getDateList(requestDto);
-        List<String> brandList = repository.getBrandList(requestDto);
+        StatisticsRequestDto statisticsRequestDto = requestDto.toStatisticsRequestDto();
+
+        List<String> dateList = repository.getDateList(statisticsRequestDto);
+        List<String> brandList = repository.getBrandList(statisticsRequestDto);
         StatisticsHeaderResponseDto statisticsHeaderResponseDto = new StatisticsHeaderResponseDto(dateList, brandList);
 
         for (String brand : brandList) {
-            List<String> dataList = repository.getBodyDataList(requestDto, brand)
+            List<String> dataList = repository.getBodyDataListForSales(requestDto, brand)
                     .stream()
                     .map(data -> {
                         if (requestDto.getStartPrice() != null && requestDto.getEndPrice() != null) {
@@ -50,7 +52,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         //총합 추가
         brandList.add(StatisticsEnum.TOTAL.getName());
         dto.addHeaderData(statisticsHeaderResponseDto);
-        dto.addBodyData(repository.getBodyDataList(requestDto, null)
+        dto.addBodyData(repository.getBodyDataListForSales(requestDto, null)
                 .stream()
                 .map(BigDecimal::toString)
                 .toList());
