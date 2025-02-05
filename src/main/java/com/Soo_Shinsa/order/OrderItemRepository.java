@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_ORDER_OPTION;
 
 
-public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+public interface OrderItemRepository extends JpaRepository<OrderItem, Long>, OrderItemCustomRepository {
 
     default OrderItem findByIdOrElseThrow(Long orderItemId) {
         return findById(orderItemId).orElseThrow(
