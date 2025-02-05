@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.sql.Timestamp;
 
 @RequiredArgsConstructor
-public class OrderRepositoryImpl implements OrderCustomRepository {
+public class OrderCustomRepositoryImpl implements OrderCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
