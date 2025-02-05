@@ -11,16 +11,12 @@ import com.Soo_Shinsa.order.OrderItemRepository;
 import com.Soo_Shinsa.product.dto.*;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
-import com.Soo_Shinsa.product.model.QProduct;
 import com.Soo_Shinsa.review.ReviewRepository;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,7 +34,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
     private final ProductOptionRepository productOptionRepository;
-    private final JPAQueryFactory queryFactory;
     private final CategoryRepository categoryRepository;
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
@@ -106,46 +101,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductResponseDto> findAllProduct(Long brandId, FindProductRequestDto requestDto, int page, int size) {
-        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
-        Pageable pageable = PageRequest.of(page, size);
-        QProduct product = QProduct.product;
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(product.brand.id.eq(brand.getId()));
-
-        if (requestDto.getNameKeyword() != null && !requestDto.getNameKeyword().isEmpty()) {
-            builder.and(product.name.containsIgnoreCase(requestDto.getNameKeyword()));
-        }
-
-        if (requestDto.getMinPrice() != null) {
-            builder.and(product.price.goe(requestDto.getMinPrice()));
-        }
-
-        if (requestDto.getMaxPrice() != null) {
-            builder.and(product.price.loe(requestDto.getMaxPrice()));
-        }
-
-        if (requestDto.getCategoryId() != null) {
-            builder.and(product.category.id.eq(requestDto.getCategoryId()));
-        }
-
-        List<Product> products = queryFactory.selectFrom(product)
-                .where(builder)
-                .orderBy(product.price.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        long total = queryFactory.selectFrom(product)
-                .where(builder)
-                .fetch()
-                .size();
-
-
-        List<ProductResponseDto> productResponseDtos =
-                products.stream().map(ProductResponseDto::toDto).toList();
-
-        return new PageImpl<>(productResponseDtos, pageable, total);
+         Pageable pageable = PageRequest.of(page, size);
+         return productRepository.findAllProduct(brandId, requestDto, pageable);
     }
 
     @Transactional

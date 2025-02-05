@@ -8,25 +8,18 @@ import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
 import com.Soo_Shinsa.order.model.OrderItem;
 import com.Soo_Shinsa.order.model.Orders;
-import com.Soo_Shinsa.order.model.QOrderItem;
 import com.Soo_Shinsa.product.ProductRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -36,7 +29,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final ProductRepository productRepository;
     private final OrdersRepository ordersRepository;
     private final UserRepository userRepository;
-    private final JPAQueryFactory queryFactory;
 
     //오더 아이템 생성
     @Transactional
@@ -81,40 +73,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public Page<OrderItemResponseDto> findByAll(User user, OrderDateRequestDto dateRequestDto, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-
-        QOrderItem orderItem = QOrderItem.orderItem;
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(orderItem.order.user.userId.eq(user.getUserId()));
-
-        if (dateRequestDto.getStartDate() != null) {
-            builder.and(orderItem.order.createdAt.goe(Timestamp.valueOf(dateRequestDto.getStartDate().atStartOfDay())));
-        }
-
-        if (dateRequestDto.getEndDate() != null) {
-            builder.and(orderItem.order.createdAt.loe(Timestamp.valueOf(dateRequestDto.getEndDate().atTime(23, 59, 59))));
-        }
-
-        List<OrderItem> orderItems =
-                queryFactory.selectFrom(orderItem)
-                        .where(builder)
-                        .orderBy(orderItem.createdAt.desc())
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize())
-                        .fetch();
-
-        long total = queryFactory
-                .select(orderItem.count())
-                .from(orderItem)
-                .where(builder)
-                .fetch()
-                .size();
-
-        List<OrderItemResponseDto> orderItemResponseDtos = orderItems.stream()
-                .map(OrderItemResponseDto::toDto)
-                .toList();
-
-        return new PageImpl<>(orderItemResponseDtos, pageable, total);
+        return orderItemRepository.findByAll(user, dateRequestDto, pageable);
     }
 
     //오더 아이템 수정

@@ -50,7 +50,8 @@ public enum ErrorCode {
     NO_CONNECT("수정 또는 삭제할 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
     SELECT_COLOR_OR_SIZE("색상과 사이즈 중 하나는 필수입니다.",HttpStatus.BAD_REQUEST),
     FAIL_UPLOAD_FILE("이미지 업로드 중 오류가 발생했습니다.",HttpStatus.BAD_REQUEST),
-    CAN_NOT_USE_PRODUCT("해당 상품을 사용할 수 없습니다.",HttpStatus.BAD_REQUEST);
+    CAN_NOT_USE_PRODUCT("해당 상품을 사용할 수 없습니다.",HttpStatus.BAD_REQUEST),
+    NOT_ACTIVE_USER("활동이 정지된 회원 입니다", HttpStatus.BAD_REQUEST);
     private final String message;
     private final HttpStatus httpStatus;
 

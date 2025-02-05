@@ -32,14 +32,14 @@ public class ProductResponseDto {
     }
 
     public static ProductResponseDto toDto(Product product) {
-        return new ProductResponseDto(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getProductStatus(),
-                product.getBrand().getId(),
-                product.getCategory().getId(),
-                product.getImageUrl()
-        );
+        return ProductResponseDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .status(product.getProductStatus())
+                .brandId(product.getBrand().getId())
+                .categoryId(product.getCategory().getId())
+                .imageUrl(product.getImageUrl())
+                .build();
     }
 }

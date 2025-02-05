@@ -26,7 +26,6 @@ public class ReviewResponseDto {
         this.content = content;
     }
 
-
     public static ReviewResponseDto toDto(Review review) {
         return ReviewResponseDto.builder()
                 .id(review.getId())
