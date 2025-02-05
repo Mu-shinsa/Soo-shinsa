@@ -69,4 +69,29 @@
 
     </select>
 
+    <select id="getBodyDataListForCount" parameterType="map" resultType="string">
+        select cast(sum(if(quantity is null, 0, quantity)) as char ) as quantity
+        from (select quantity, brand_name, order_date
+        from statistics
+        where order_date between #{dto.startDate} and #{dto.endDate}
+        <if test="brand != null">
+            and brand_name = #{brand}
+        </if>) t
+        right outer join
+        (select distinct date_format(order_date, #{dto.periodType.dateFormat}) as order_date
+        from statistics) d
+        on date_format(t.order_date, #{dto.periodType.dateFormat}) = d.order_date
+
+
+        <if test="dto.categoryList != null">
+            and category_name in #{dto.categoryList}
+        </if>
+        <if test="dto.orderStatus != null">
+            and order_status = #{dto.orderStatus}
+        </if>
+
+        group by d.order_date
+        order by d.order_date
+
+    </select>
 </mapper>

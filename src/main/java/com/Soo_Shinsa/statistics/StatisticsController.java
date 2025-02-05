@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.statistics;
 
+import com.Soo_Shinsa.statistics.dto.StatisticsRequestDto;
 import com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto;
 import com.Soo_Shinsa.statistics.dto.StatisticsResponseDto;
 import jakarta.validation.Valid;
@@ -21,5 +22,9 @@ public class StatisticsController {
     @GetMapping("/sales")
     public ResponseEntity<StatisticsResponseDto> getStatisticsOfSales(@Valid @RequestBody StatisticsForSaleRequestDto requestDto) {
         return ResponseEntity.ok(statisticsService.getStatisticsOfSales(requestDto));
+    }
+    @GetMapping("/count")
+    public ResponseEntity<StatisticsResponseDto> getStatisticsOfCount(@Valid @RequestBody StatisticsRequestDto requestDto) {
+        return ResponseEntity.ok(statisticsService.getStatisticsOfCount(requestDto));
     }
 }

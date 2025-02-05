@@ -1,18 +1,12 @@
 package com.Soo_Shinsa.statistics;
 
 import com.Soo_Shinsa.constant.StatisticsEnum;
-import com.Soo_Shinsa.statistics.dto.StatisticsBodyResponseDto;
-import com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto;
-import com.Soo_Shinsa.statistics.dto.StatisticsHeaderResponseDto;
-import com.Soo_Shinsa.statistics.dto.StatisticsResponseDto;
+import com.Soo_Shinsa.statistics.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +25,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         StatisticsHeaderResponseDto statisticsHeaderResponseDto = new StatisticsHeaderResponseDto(dateList, brandList);
 
         for (String brand : brandList) {
-            List<String> dataList = repository.getBodyDataListForSales(requestDto, brand)
+            List<String> dataList = repository.getBodyDataListForSales(statisticsRequestDto, brand)
                     .stream()
                     .map(data -> {
                         if (requestDto.getStartPrice() != null && requestDto.getEndPrice() != null) {
@@ -52,12 +46,36 @@ public class StatisticsServiceImpl implements StatisticsService {
         //총합 추가
         brandList.add(StatisticsEnum.TOTAL.getName());
         dto.addHeaderData(statisticsHeaderResponseDto);
-        dto.addBodyData(repository.getBodyDataListForSales(requestDto, null)
+        dto.addBodyData(repository.getBodyDataListForSales(statisticsRequestDto, null)
                 .stream()
                 .map(BigDecimal::toString)
                 .toList());
 
         return dto;
 
+    }
+
+    @Override
+    public StatisticsResponseDto getStatisticsOfCount(StatisticsRequestDto requestDto) {
+
+        StatisticsResponseDto dto = new StatisticsResponseDto();
+
+        List<String> dateList = repository.getDateList(requestDto);
+        List<String> brandList = repository.getBrandList(requestDto);
+
+        StatisticsHeaderResponseDto statisticsHeaderResponseDto = new StatisticsHeaderResponseDto(dateList, brandList);
+
+        for (String brand : brandList) {
+            dto.addBodyData(repository.getBodyDataListForCount(requestDto, brand));
+
+
+        }
+
+        //총합 추가
+        brandList.add(StatisticsEnum.TOTAL.getName());
+        dto.addHeaderData(statisticsHeaderResponseDto);
+        dto.addBodyData(repository.getBodyDataListForCount(requestDto, null));
+
+        return dto;
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public interface StatisticsMybatisRepository {
     List<String> getDateList(StatisticsRequestDto dto);
     List<String> getBrandList(StatisticsRequestDto dto);
-    List<BigDecimal> getBodyDataListForSales(@Param("dto") StatisticsForSaleRequestDto dto, @Param("brand") String brand);
+    List<BigDecimal> getBodyDataListForSales(@Param("dto") StatisticsRequestDto dto, @Param("brand") String brand);
+    List<String> getBodyDataListForCount(@Param("dto") StatisticsRequestDto dto, @Param("brand") String brand);
 
 }
