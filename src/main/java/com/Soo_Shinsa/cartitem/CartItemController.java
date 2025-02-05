@@ -5,6 +5,8 @@ import com.Soo_Shinsa.cartitem.dto.CartItemDateRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
 import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.CommonResponse;
+import com.Soo_Shinsa.utils.ResponseMessage;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,44 +25,47 @@ public class CartItemController {
     private final CartItemService cartItemService;
 
     @PostMapping
-    public ResponseEntity<CartItemResponseDto> createCart(@AuthenticationPrincipal UserDetails userDetails,
-                                                          @Valid @RequestBody CartItemRequestDto dto) {
+    public ResponseEntity<CommonResponse<CartItemResponseDto>> createCart(@AuthenticationPrincipal UserDetails userDetails,
+                                                                         @Valid @RequestBody CartItemRequestDto dto) {
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto saved = cartItemService.create(user, dto);
-
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_CREATE_SUCCESS, saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
     @GetMapping("/{cartId}")
-    public ResponseEntity<CartItemResponseDto> findById(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<CommonResponse<CartItemResponseDto>> findById(@AuthenticationPrincipal UserDetails userDetails,
                                                         @PathVariable Long cartId){
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto findCart = cartItemService.findById(cartId, user);
-        return new ResponseEntity<>(findCart, HttpStatus.OK);
+        CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_SELECT_SUCCESS, findCart);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
     //유저의 카트들을 모두 검색
     @GetMapping("/users")
-    public ResponseEntity<Page<CartItemResponseDto>> findByIdAll(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<CommonResponse<Page<CartItemResponseDto>>> findByIdAll(@AuthenticationPrincipal UserDetails userDetails,
                                                                  @RequestBody CartItemDateRequestDto requestDto,
                                                                  @RequestParam (defaultValue = "0") int page,
                                                                  @RequestParam (defaultValue = "10") int size){
 
         User user = UserUtils.getUser(userDetails);
         Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user, requestDto, page, size);
-        return new ResponseEntity<>(cartItems, HttpStatus.OK);
+        CommonResponse<Page<CartItemResponseDto>> response = new CommonResponse<>(ResponseMessage.CART_SELECT_SUCCESS, cartItems);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
     @PatchMapping("/{cartId}")
-    public ResponseEntity<CartItemResponseDto> update(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<CommonResponse<CartItemResponseDto>> update(@AuthenticationPrincipal UserDetails userDetails,
                                                       @PathVariable Long cartId,
                                                       @Valid @RequestBody CartItemRequestDto dto){
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto saved = cartItemService.update(cartId, user, dto.getQuantity());
-        return new ResponseEntity<>(saved, HttpStatus.OK);
+        CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_UPDATE_SUCCESS, saved);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{cartId}")
