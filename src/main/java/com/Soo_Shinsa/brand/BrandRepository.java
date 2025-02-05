@@ -4,12 +4,10 @@ import com.Soo_Shinsa.exception.NotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.Soo_Shinsa.exception.ErrorCode.NOT_FOUND_BRAND;
 
-public interface BrandRepository  extends JpaRepository<Brand, Long> {
-    Optional<Brand> findById(Long id);
+public interface BrandRepository extends JpaRepository<Brand, Long>, BrandCustomRepository {
 
     List<Brand> findAllByUserUserId(Long userId);
 
