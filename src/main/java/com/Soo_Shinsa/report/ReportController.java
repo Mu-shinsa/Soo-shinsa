@@ -5,10 +5,13 @@ import com.Soo_Shinsa.report.dto.ReportProcessDto;
 import com.Soo_Shinsa.report.dto.ReportRequestDto;
 import com.Soo_Shinsa.report.dto.ReportResponseDto;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.utils.CommonResponse;
+import com.Soo_Shinsa.utils.ResponseMessage;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,11 +24,12 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping
-    public ResponseEntity<ReportResponseDto> createReport(@Valid @RequestBody ReportRequestDto requestDto,
-                                                          @AuthenticationPrincipal UserDetailsImp userDetails) {
+    public ResponseEntity<CommonResponse<ReportResponseDto>> createReport(@Valid @RequestBody ReportRequestDto requestDto,
+                                                                         @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
         ReportResponseDto report = reportService.createReport(requestDto, user);
-        return ResponseEntity.ok(report);
+        CommonResponse<ReportResponseDto> response = new CommonResponse<>(ResponseMessage.REPORT_CREATE_SUCCESS, report);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{reportId}/status")
@@ -38,11 +42,12 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}")
-    public ResponseEntity<ReportResponseDto> getReport(@PathVariable Long reportId,
+    public ResponseEntity<CommonResponse<ReportResponseDto>> getReport(@PathVariable Long reportId,
                                                        @AuthenticationPrincipal UserDetailsImp userDetails) {
         User user = UserUtils.getUser(userDetails);
         ReportResponseDto report = reportService.getReport(reportId, user);
-        return ResponseEntity.ok(report);
+        CommonResponse<ReportResponseDto> response = new CommonResponse<>(ResponseMessage.REPORT_SELECT_SUCCESS, report);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{reportId}")
@@ -54,11 +59,12 @@ public class ReportController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllReports(@AuthenticationPrincipal UserDetailsImp userDetails,
+    public ResponseEntity<CommonResponse<?>> getAllReports(@AuthenticationPrincipal UserDetailsImp userDetails,
                                            @RequestParam(defaultValue = "0") int page,
                                            @RequestParam(defaultValue = "10") int size) {
         User user = UserUtils.getUser(userDetails);
         Page<ReportResponseDto> reports = reportService.getAllReports(user, page, size);
-        return ResponseEntity.ok(reports);
+        CommonResponse< Page<ReportResponseDto>> response = new CommonResponse<>(ResponseMessage.REPORT_SELECT_SUCCESS, reports);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

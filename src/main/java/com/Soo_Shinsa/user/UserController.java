@@ -3,6 +3,8 @@ package com.Soo_Shinsa.user;
 import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.user.dto.*;
+import com.Soo_Shinsa.utils.CommonResponse;
+import com.Soo_Shinsa.utils.ResponseMessage;
 import com.Soo_Shinsa.utils.UserUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,13 +27,17 @@ public class UserController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<UserResponseDto> registerUser(@RequestBody SignInRequestDto dto) {
-        return ResponseEntity.ok(userService.create(dto));
+    public ResponseEntity<CommonResponse<UserResponseDto>> registerUser(@RequestBody SignInRequestDto dto) {
+        UserResponseDto saved = userService.create(dto);
+        CommonResponse<UserResponseDto> response = new CommonResponse<>(ResponseMessage.USER_SIGN_IN_SUCCESS, saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtAuthResponseDto> login(@RequestBody LoginRequestDto dto) {
-        return ResponseEntity.ok(userService.login(dto));
+    public ResponseEntity<CommonResponse<JwtAuthResponseDto>> login(@RequestBody LoginRequestDto dto) {
+        JwtAuthResponseDto login = userService.login(dto);
+        CommonResponse<JwtAuthResponseDto> response = new CommonResponse<>(ResponseMessage.USER_LOG_IN_SUCCESS, login);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/logout")
@@ -52,15 +58,17 @@ public class UserController {
 
 
     @GetMapping
-    public ResponseEntity<UserDetailResponseDto> getUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<CommonResponse<UserDetailResponseDto>> getUser(@AuthenticationPrincipal UserDetails userDetails) {
         UserDetailResponseDto userDetailResponseDto = userService.getUser(UserUtils.getUser(userDetails));
-        return ResponseEntity.ok(userDetailResponseDto);
+        CommonResponse<UserDetailResponseDto> response = new CommonResponse<>(ResponseMessage.USER_SELECT_SUCCESS,userDetailResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     @PatchMapping
-    public ResponseEntity<UserDetailResponseDto> updateUser(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<CommonResponse<UserDetailResponseDto>> updateUser(@AuthenticationPrincipal UserDetails userDetails,
                                                             @Valid @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
         UserDetailResponseDto userDetailResponseDto = userService.updateUser(UserUtils.getUser(userDetails),userUpdateRequestDto);
-        return ResponseEntity.ok(userDetailResponseDto);
+        CommonResponse<UserDetailResponseDto> response = new CommonResponse<>(ResponseMessage.USER_SELECT_SUCCESS,userDetailResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("/leave")
