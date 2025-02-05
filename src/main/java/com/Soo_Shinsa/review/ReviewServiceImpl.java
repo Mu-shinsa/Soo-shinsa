@@ -11,22 +11,17 @@ import com.Soo_Shinsa.review.dto.ReviewRateDto;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
-import com.Soo_Shinsa.review.model.QReview;
 import com.Soo_Shinsa.review.model.Review;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +31,6 @@ public class ReviewServiceImpl implements ReviewService {
     private final OrderItemRepository orderItemRepository;
     private final ImageService imageService;
     private final ProductRepository productRepository;
-    private final JPAQueryFactory queryFactory;
 
     /**
      * 리뷰 생성
@@ -122,42 +116,13 @@ public class ReviewServiceImpl implements ReviewService {
      * @param size      페이지 크기
      * @return reviews.map(ReviewResponseDto : : toDto);
      */
+    @Override
     public Page<ReviewResponseDto> getReviewsByProductId(Long productId, ReviewRateDto reviewRateDto, int page, int size) {
-        // Pageable 객체를 Service에서 생성
+
+        // 제품 존재 여부 확인 (예외 처리 포함)
         Product product = productRepository.findByIdOrElseThrow(productId);
-        QReview review = QReview.review;
         Pageable pageable = PageRequest.of(page, size);
-
-        BooleanBuilder builder = new BooleanBuilder();
-        builder.and(review.product.id.eq(productId));
-
-        if (reviewRateDto.getMinRate() != null) {
-            builder.and(review.rate.goe(reviewRateDto.getMinRate()));
-        }
-
-        if (reviewRateDto.getMaxRate() != null) {
-            builder.and(review.rate.loe(reviewRateDto.getMaxRate()));
-        }
-
-        List<Review> reviews = queryFactory
-                .selectFrom(review)
-                .where(builder)
-                .orderBy(review.rate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        long total = queryFactory
-                .selectFrom(review)
-                .where(review.product.id.eq(productId))
-                .fetch()
-                .size();
-
-        List<ReviewResponseDto> reviewResponseDtos = reviews.stream()
-                .map(ReviewResponseDto::toDto)
-                .toList();
-
-        return new PageImpl<>(reviewResponseDtos, pageable, total);
+        return reviewRepository.getReviewsAllByProductId(product.getId(), reviewRateDto, pageable);
     }
 
 
