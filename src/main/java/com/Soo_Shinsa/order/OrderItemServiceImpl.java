@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.order;
 
-import com.Soo_Shinsa.constant.OrdersStatus;
+import com.Soo_Shinsa.exception.InternalServerException;
 import com.Soo_Shinsa.order.dto.OrderDateRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemRequestDto;
 import com.Soo_Shinsa.order.dto.OrderItemResponseDto;
@@ -22,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
+import static com.Soo_Shinsa.constant.OrdersStatus.BEFOREPAYMENT;
+import static com.Soo_Shinsa.exception.ErrorCode.ONLY_BEFORE_PAYMENT;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         if(findOrder==null) {
 
-            Orders order = new Orders(BigDecimal.ZERO, OrdersStatus.BEFOREPAYMENT, user);
+            Orders order = new Orders(BigDecimal.ZERO, BEFOREPAYMENT, user);
             ordersRepository.save(order);
             OrderItem orderItem = new OrderItem(
                     requestDto.getQuantity(),
@@ -52,7 +55,9 @@ public class OrderItemServiceImpl implements OrderItemService {
             order.addOrderItem(orderItem);orderItemRepository.save(orderItem);
             Orders saveOrder = ordersRepository.save(order);
             return OrdersResponseDto.toDto(saveOrder);
-
+        }
+        if(!findOrder.getStatus().equals(BEFOREPAYMENT)){
+            throw new InternalServerException(ONLY_BEFORE_PAYMENT);
         }
         EntityValidator.validateAndOrders(findOrder, findUser.getUserId());
         OrderItem orderItem = new OrderItem(
@@ -89,8 +94,6 @@ public class OrderItemServiceImpl implements OrderItemService {
     public OrderItemResponseDto update(Long orderItemsId, Integer quantity, User user) {
         User findUser = userRepository.findByIdOrElseThrow(user.getUserId());
         OrderItem findOrderItem = orderItemRepository.findByIdOrElseThrow(orderItemsId);
-
-
         EntityValidator.validateAndOrderItem(findOrderItem, findUser.getUserId());
         findOrderItem.updateOrderItem(quantity);
         OrderItem save = orderItemRepository.save(findOrderItem);

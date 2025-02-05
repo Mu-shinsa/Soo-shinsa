@@ -26,6 +26,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
 
+import static com.Soo_Shinsa.constant.OrdersStatus.PAYMENTCOMPLETED;
+
 
 @Service
 @RequiredArgsConstructor
@@ -68,6 +70,7 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         headers.set("Authorization", "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+
         Payment findPayment = paymentRepository.findByOrderId(orderId);
         findPayment.update(TossPayStatus.DONE, paymentKey);
         paymentRepository.save(findPayment);
@@ -76,6 +79,10 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
+
+        Orders findOrder = ordersRepository.findByOrderId(orderId);
+        findOrder.updateStatus(PAYMENTCOMPLETED);
+        ordersRepository.save(findOrder);
     }
 
     @Transactional
