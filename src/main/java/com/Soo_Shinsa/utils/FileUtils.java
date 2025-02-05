@@ -1,5 +1,9 @@
 package com.Soo_Shinsa.utils;
 
+import com.Soo_Shinsa.exception.InvalidInputException;
+
+import static com.Soo_Shinsa.exception.ErrorCode.NO_EXTENSION;
+
 public class FileUtils {
 
     /**
@@ -12,7 +16,7 @@ public class FileUtils {
     public static String extractFileExtension(String originName) {
         int dotIndex = originName.lastIndexOf(".");
         if (dotIndex == -1 || dotIndex == originName.length() - 1) {
-            throw new IllegalArgumentException("확장자가 없는 파일은 업로드할 수 없습니다.");
+            throw new InvalidInputException(NO_EXTENSION);
         }
         return originName.substring(dotIndex + 1).toLowerCase();
     }

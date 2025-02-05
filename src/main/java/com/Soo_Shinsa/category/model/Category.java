@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.category;
+package com.Soo_Shinsa.category.model;
 
 import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Entity
 @Getter
@@ -29,32 +27,21 @@ public class Category extends BaseTimeEntity {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> children = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
 
     @Builder
-    public Category(Brand brand, Category parent, String name) {
+    public Category(Brand brand, Category parent, String name, List<Category> children) {
         this.brand = brand;
         this.parent = parent;
         this.name = name;
+        this.children = children;
     }
 
-    public void addChild(Category child) {
-        this.children.add(child);
-    }
-
-    public static List<Long> getChildByParentId(Category category) {
-
-        if (category.getChildren() == null || category.getChildren().isEmpty()) {
-            return List.of(category.getId());
-        }
-        return category.getChildren()
-                .stream()
-                .map(Category::getChildByParentId)
-                .flatMap(List::stream)
-                .collect(toList());
+    public void update(String name) {
+        this.name = name;
     }
 }

@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.user.dto;
 
+import com.Soo_Shinsa.constant.GradeType;
 import com.Soo_Shinsa.constant.Role;
 import com.Soo_Shinsa.constant.UserStatus;
 import com.Soo_Shinsa.user.model.User;
@@ -26,10 +27,19 @@ public class SignInRequestDto {
     private String name;
 
     @NotBlank(message = "역할을 입력해주세요.")
-    private String role;
+    private Role role;
 
 
-    private String grade;
+    private GradeType grade;
+
+    public SignInRequestDto(String email, String phoneNum, String password, String name, Role role, GradeType grade) {
+        this.email = email;
+        this.phoneNum = phoneNum;
+        this.password = password;
+        this.name = name;
+        this.role = role;
+        this.grade = grade;
+    }
 
     public User toEntity(String password) {
         return User.builder()
@@ -38,7 +48,7 @@ public class SignInRequestDto {
                 .password(password)
                 .name(name)
                 .status(UserStatus.ACTIVE)
-                .role(Role.of(role))
+                .role(role)
                 .build();
     }
 }

@@ -3,9 +3,12 @@ package com.Soo_Shinsa.brand;
 import com.Soo_Shinsa.brand.dto.BrandRequestDto;
 import com.Soo_Shinsa.brand.dto.BrandResponseDto;
 import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.user.UserService;
+import com.Soo_Shinsa.brand.dto.FindBrandAllResponseDto;
+import com.Soo_Shinsa.utils.CommonResponse;
+import com.Soo_Shinsa.utils.ResponseMessage;
 import com.Soo_Shinsa.utils.UserUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,20 +22,20 @@ import java.util.List;
 @RequestMapping("/brands")
 public class BrandController {
 
-    private final UserService userService;
     private final BrandService brandService;
 
     @PostMapping
-    public ResponseEntity<BrandResponseDto> createBrand(
+    public ResponseEntity<CommonResponse<BrandResponseDto>> createBrand(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody BrandRequestDto brandRequestDto
     ) {
-        BrandResponseDto brandResponseDto = brandService.create(UserUtils.getUser(userDetails),brandRequestDto);
-        return ResponseEntity.ok(brandResponseDto);
+        BrandResponseDto brandResponseDto = brandService.create(UserUtils.getUser(userDetails), brandRequestDto);
+        CommonResponse<BrandResponseDto> response = new CommonResponse<>(ResponseMessage.BRAND_CREATE_SUCCESS, brandResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PatchMapping("/{brandId}")
-    public ResponseEntity<BrandUpdateResponseDto> updateBrand(
+    public ResponseEntity<CommonResponse<BrandUpdateResponseDto>> updateBrand(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody BrandRequestDto brandRequestDto,
             @PathVariable Long brandId
@@ -41,31 +44,29 @@ public class BrandController {
                 UserUtils.getUser(userDetails),
                 brandRequestDto,
                 brandId);
-        return new ResponseEntity<>(brandRefuseResponseDto, HttpStatus.OK);
+        CommonResponse<BrandUpdateResponseDto> response = new CommonResponse<>(ResponseMessage.BRAND_UPDATE_SUCCESS, brandRefuseResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{brandId}")
-    public ResponseEntity<BrandResponseDto> getBrand(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable Long brandId
-    ) {
-        BrandResponseDto findBrand = brandService.findBrandById(UserUtils.getUser(userDetails),brandId);
-        return new ResponseEntity<>(findBrand, HttpStatus.OK);
+    public ResponseEntity<CommonResponse<BrandResponseDto>> getBrand(@PathVariable Long brandId) {
+        BrandResponseDto findBrand = brandService.findBrandById(brandId);
+        CommonResponse<BrandResponseDto> response = new CommonResponse<>(ResponseMessage.BRAND_SELECT_SUCCESS, findBrand);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/owners")
-    public ResponseEntity<List<BrandResponseDto>> getAllBrandByUserId(
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
+    public ResponseEntity<CommonResponse<List<BrandResponseDto>>> getAllBrandByUserId(@AuthenticationPrincipal UserDetails userDetails) {
         List<BrandResponseDto> getAllBrand = brandService.getAllByUserId(UserUtils.getUser(userDetails));
-        return new ResponseEntity<>(getAllBrand, HttpStatus.OK);
+        CommonResponse<List<BrandResponseDto>> response = new CommonResponse<>(ResponseMessage.BRAND_SELECT_SUCCESS, getAllBrand);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<List<BrandResponseDto>> getAllBrands(
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        List<BrandResponseDto> getAllBrand = brandService.getAll(UserUtils.getUser(userDetails));
-        return new ResponseEntity<>(getAllBrand, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<CommonResponse<Page<FindBrandAllResponseDto>>> getAllBrands(@RequestParam(defaultValue = "0") int page,
+                                                                      @RequestParam(defaultValue = "10") int size) {
+        Page<FindBrandAllResponseDto> getAllBrand = brandService.getAll(page, size);
+        CommonResponse<Page<FindBrandAllResponseDto>> response = new CommonResponse<>(ResponseMessage.BRAND_SELECT_SUCCESS, getAllBrand);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.image;
 
 import com.Soo_Shinsa.constant.TargetType;
+import com.Soo_Shinsa.exception.InvalidInputException;
 import com.Soo_Shinsa.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
+import static com.Soo_Shinsa.exception.ErrorCode.FAIL_UPLOAD_FILE;
 
 @Slf4j
 @Service
@@ -37,7 +40,7 @@ public class ImageServiceImpl implements ImageService {
             log.error("이미지 업로드 실패: {}", e.getMessage());
 
             // 적절한 사용자 정의 예외 던지기
-            throw new RuntimeException("이미지 업로드 중 오류가 발생했습니다.");
+            throw new InvalidInputException(FAIL_UPLOAD_FILE);
         }
     }
 
@@ -62,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
             return imageRepository.save(image);
         } catch (IOException e) {
             log.error("이미지 업데이트 실패: {}", e.getMessage());
-            throw new RuntimeException("이미지 업데이트 중 오류가 발생했습니다.");
+            throw new InvalidInputException(FAIL_UPLOAD_FILE);
         }
     }
 }

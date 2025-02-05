@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.utils;
 
-import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.persistence.EntityNotFoundException;
@@ -86,8 +86,7 @@ public class JwtProvider {
      * @throws EntityNotFoundException 해당 이메일에 해당하는 사용자를 찾지 못했을 경우
      */
     private String generateTokenBy(String email) throws EntityNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("해당 email에 맞는 값이 존재하지 않습니다."));
+        User user = userRepository.findByEmailOrElseThrow(email);
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + this.expiryMillis);
 

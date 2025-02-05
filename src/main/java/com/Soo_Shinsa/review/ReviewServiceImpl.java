@@ -5,6 +5,9 @@ import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.image.ImageService;
 import com.Soo_Shinsa.order.OrderItemRepository;
 import com.Soo_Shinsa.order.model.OrderItem;
+import com.Soo_Shinsa.product.ProductRepository;
+import com.Soo_Shinsa.product.model.Product;
+import com.Soo_Shinsa.review.dto.ReviewRateDto;
 import com.Soo_Shinsa.review.dto.ReviewRequestDto;
 import com.Soo_Shinsa.review.dto.ReviewResponseDto;
 import com.Soo_Shinsa.review.dto.ReviewUpdateDto;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -26,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
     private final ImageService imageService;
+    private final ProductRepository productRepository;
 
     /**
      * 리뷰 생성
@@ -39,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ReviewResponseDto createReview(Long orderItemId, ReviewRequestDto requestDto, User user, MultipartFile imageFile) {
         OrderItem orderItem = orderItemRepository.findByIdOrElseThrow(orderItemId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId(), "리뷰 생성 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId());
 
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -70,7 +75,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional(readOnly = true)
     @Override
     public ReviewResponseDto getReview(Long reviewId) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
         return ReviewResponseDto.toDto(review);
     }
@@ -85,9 +90,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewUpdateDto updateReview(Long reviewId, ReviewUpdateDto updateDto, User user, MultipartFile imageFile) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 수정 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId());
 
         String newImageUrl = review.getImageUrl(); // 기존 이미지 URL 유지
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -102,19 +107,22 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     /**
-     * 상품 리뷰 조회
+     * 상품 리뷰 조회 (별점 순)
      *
      * @param productId
      * @param productId 상품 ID
+     * @param reviewRateDto 리뷰 별점 필터링 DTO
      * @param page      페이지 번호
      * @param size      페이지 크기
      * @return reviews.map(ReviewResponseDto : : toDto);
      */
-    public Page<ReviewResponseDto> getReviewsByProductId(Long productId, int page, int size) {
-        // Pageable 객체를 Service에서 생성
+    @Override
+    public Page<ReviewResponseDto> getReviewsByProductId(Long productId, ReviewRateDto reviewRateDto, int page, int size) {
+
+        // 제품 존재 여부 확인 (예외 처리 포함)
+        Product product = productRepository.findByIdOrElseThrow(productId);
         Pageable pageable = PageRequest.of(page, size);
-        Page<Review> reviews = reviewRepository.findAllByProductId(productId, pageable);
-        return reviews.map(ReviewResponseDto::toDto);
+        return reviewRepository.getReviewsAllByProductId(product.getId(), reviewRateDto, pageable);
     }
 
 
@@ -126,9 +134,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public void delete(Long reviewId, User user) {
-        Review review = reviewRepository.findById(reviewId, "존재하지 않는 리뷰입니다.");
+        Review review = reviewRepository.findByIdOrElseThrow(reviewId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId(), "리뷰 삭제 권한이 없습니다.");
+        EntityValidator.validateUserOwnership(user.getUserId(), review.getUser().getUserId());
 
         if (review.getImageUrl() != null) {
             imageService.deleteImage(review.getImageUrl()); // URL을 사용해 이미지 삭제

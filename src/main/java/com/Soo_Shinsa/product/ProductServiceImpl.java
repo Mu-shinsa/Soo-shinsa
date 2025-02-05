@@ -2,15 +2,16 @@ package com.Soo_Shinsa.product;
 
 import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.brand.BrandRepository;
+import com.Soo_Shinsa.category.CategoryRepository;
+import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.constant.TargetType;
 import com.Soo_Shinsa.image.Image;
 import com.Soo_Shinsa.image.ImageService;
-import com.Soo_Shinsa.product.dto.FindProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductRequestDto;
-import com.Soo_Shinsa.product.dto.ProductResponseDto;
-import com.Soo_Shinsa.product.dto.ProductUpdateDto;
+import com.Soo_Shinsa.order.OrderItemRepository;
+import com.Soo_Shinsa.product.dto.*;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.model.ProductOption;
+import com.Soo_Shinsa.review.ReviewRepository;
 import com.Soo_Shinsa.user.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
@@ -33,16 +34,17 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ImageService imageService;
     private final ProductOptionRepository productOptionRepository;
+    private final CategoryRepository categoryRepository;
+    private final ReviewRepository reviewRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Transactional
     @Override
     public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
-        User userById = userRepository.findById(user.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-
-        Brand brand = brandRepository.findById(brandId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 브랜드입니다."));
+        User userById = userRepository.findByIdOrElseThrow(user.getUserId());
+        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
+        Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
 
         EntityValidator.validateAdminOrVendorAccess(userById);
 
@@ -57,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
                 .name(dto.getName())
                 .productStatus(dto.getStatus())
                 .brand(brand)
+                .category(category)
                 .imageUrl(imageUrl)
                 .build();
 
@@ -70,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductUpdateDto updateProduct(User user, ProductUpdateDto dto, Long productId, MultipartFile imageFile) {
 
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         EntityValidator.validateAdminOrVendorAccess(user);
 
@@ -89,7 +92,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public FindProductResponseDto findProduct(Long productId) {
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
         List<ProductOption> productOptions = productOptionRepository.findProductOptionByProductId(productId);
 
@@ -97,20 +100,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductResponseDto> findAllProduct(Long brandId, int page, int size) {
-        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> products = productRepository.findAllByBrand(brand.getId(), pageable);
-
-        return products.map(ProductResponseDto::toDto);
+    public Page<ProductResponseDto> findAllProduct(Long brandId, FindProductRequestDto requestDto, int page, int size) {
+         Pageable pageable = PageRequest.of(page, size);
+         return productRepository.findAllProduct(brandId, requestDto, pageable);
     }
 
     @Transactional
     public void deleteProduct(Long productId, User user) {
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        Product product = productRepository.findById(productId, "존재하지 않는 상품입니다.");
+        Product product = productRepository.findByIdOrElseThrow(productId);
 
+        reviewRepository.deleteAllByProductId(productId);
+        orderItemRepository.deleteAllByProductId(productId);
         productOptionRepository.deleteAllByProductId(productId);
 
         productRepository.delete(product);

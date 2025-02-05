@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.auth;
 
-import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

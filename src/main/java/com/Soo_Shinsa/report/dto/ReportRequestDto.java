@@ -2,10 +2,6 @@ package com.Soo_Shinsa.report.dto;
 
 import com.Soo_Shinsa.constant.ReportStatus;
 import com.Soo_Shinsa.constant.TargetType;
-
-import com.Soo_Shinsa.report.model.Report;
-import com.Soo_Shinsa.user.model.User;
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +21,10 @@ public class ReportRequestDto {
 
     private String content;
 
-    public Report toEntity(User user) {
-        return Report.builder()
-                .targetId(targetId)
-                .targetType(targetType)
-                .status(ReportStatus.OPEN)
-                .content(content)
-                .user(user)
-                .build();
+    public ReportRequestDto(Long targetId, TargetType targetType, ReportStatus status, String content) {
+        this.targetId = targetId;
+        this.targetType = targetType;
+        this.status = status;
+        this.content = content;
     }
 }

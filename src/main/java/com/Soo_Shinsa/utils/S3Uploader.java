@@ -2,6 +2,7 @@ package com.Soo_Shinsa.utils;
 
 import com.Soo_Shinsa.constant.FilePath;
 import com.Soo_Shinsa.constant.FileType;
+import com.Soo_Shinsa.exception.InvalidInputException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -17,6 +18,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 import java.util.UUID;
+
+import static com.Soo_Shinsa.exception.ErrorCode.FAIl_IMAGE_DELETE;
+import static com.Soo_Shinsa.exception.ErrorCode.MAX_10MB_SIZE;
 
 @Slf4j
 @Component
@@ -101,9 +105,9 @@ public class S3Uploader {
      * @param uploadFile
      */
     private void removeNewFile(File uploadFile) {
-        if (uploadFile.delete()) {
+        if (!uploadFile.delete()) {
             log.info("로컬 파일이 삭제되었습니다.");
-            throw new IllegalStateException("로컬 파일 삭제에 실패했습니다.");
+            throw new InvalidInputException(FAIl_IMAGE_DELETE);
         }
         log.error("로컬 파일이 삭제되지 않았습니다.");
     }
@@ -120,7 +124,7 @@ public class S3Uploader {
             throw new IllegalArgumentException("잘못된 파일명입니다: " + originName);
         }
         if (file.getSize() > MAX_FILE_SIZE_BYTES) {
-            throw new IllegalArgumentException("파일 크기가 10MB를 초과할 수 없습니다.");
+            throw new InvalidInputException(MAX_10MB_SIZE);
         }
 
         String extension = FileUtils.extractFileExtension(originName);

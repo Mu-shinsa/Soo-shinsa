@@ -1,7 +1,7 @@
 package com.Soo_Shinsa.report.dto;
 
 import com.Soo_Shinsa.constant.ReportStatus;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReportProcessDto {
 
-    @NotBlank(message = "신고 값은 필수입니다.")
+    @NotNull(message = "신고 값은 필수입니다.")
     private ReportStatus status;
 
     private String rejectReason;

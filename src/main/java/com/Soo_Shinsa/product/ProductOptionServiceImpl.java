@@ -1,5 +1,7 @@
 package com.Soo_Shinsa.product;
 
+import com.Soo_Shinsa.exception.ErrorCode;
+import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.product.dto.FindProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionRequestDto;
 import com.Soo_Shinsa.product.dto.ProductOptionResponseDto;
@@ -27,11 +29,15 @@ public class ProductOptionServiceImpl implements ProductOptionService {
     public ProductOptionResponseDto createOption(User user, ProductOptionRequestDto dto, Long productId) {
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        Product findProduct = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Product findProduct = productRepository.findByIdOrElseThrow(productId);
 
 
-        ProductOption option = dto.toEntity(findProduct);
+        ProductOption option = ProductOption.builder()
+                .product(findProduct)
+                .size(dto.getSize())
+                .color(dto.getColor())
+                .product(findProduct)
+                .build();
 
         ProductOption savedOption = productOptionRepository.save(option);
 
@@ -44,12 +50,12 @@ public class ProductOptionServiceImpl implements ProductOptionService {
 
         EntityValidator.validateAdminOrVendorAccess(user);
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId, "존재하지 않는 옵션입니다.");
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         Product associatedProduct = findOption.getProduct();
 
         if (associatedProduct == null) {
-            throw new IllegalArgumentException("옵션에 연관된 상품이 없습니다.");
+            throw new NotFoundException(ErrorCode.NOT_FOUND_PRODUCT);
         }
 
         findOption.update(dto.getSize(), dto.getColor(), dto.getStatus());
@@ -58,29 +64,18 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return ProductOptionResponseDto.toDto(findOption);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public ProductOptionResponseDto findOption(Long productOptionId) {
 
-        ProductOption findOption = productOptionRepository.findById(productOptionId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 옵션입니다."));
+        ProductOption findOption = productOptionRepository.findByIdOrElseThrow(productOptionId);
 
         return ProductOptionResponseDto.toDto(findOption);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
-
-        if (requestDto.getColor() == null && requestDto.getSize() == null) {
-            throw new IllegalArgumentException("색상과 사이즈 중 하나는 필수입니다.");
-        }
-
         Pageable pageable = PageRequest.of(page, size);
-        Page<ProductOption> options = productOptionRepository.findProductsByOptionalSizeAndColor(requestDto.getSize(), requestDto.getColor(), pageable);
-
-        return options.map(ProductOptionResponseDto::toDto);
+        return productOptionRepository.findProductsByOptionalSizeAndColor(requestDto, pageable);
     }
-
 }
 

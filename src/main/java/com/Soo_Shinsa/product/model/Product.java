@@ -1,6 +1,7 @@
 package com.Soo_Shinsa.product.model;
 
 import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.category.model.Category;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.ProductStatus;
 import jakarta.persistence.*;
@@ -33,13 +34,18 @@ public class Product extends BaseTimeEntity {
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @Builder
-    public Product(String name, BigDecimal price, String imageUrl, ProductStatus productStatus, Brand brand) {
+    public Product(String name, BigDecimal price, String imageUrl, ProductStatus productStatus, Brand brand, Category category) {
         this.name = name;
         this.price = price;
         this.imageUrl = imageUrl;
         this.productStatus = productStatus;
         this.brand = brand;
+        this.category = category;
     }
 
     public void update(String name, BigDecimal price, ProductStatus productStatus, String imageUrl) {

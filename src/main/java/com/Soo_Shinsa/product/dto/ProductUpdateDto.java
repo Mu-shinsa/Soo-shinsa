@@ -1,6 +1,5 @@
 package com.Soo_Shinsa.product.dto;
 
-import com.Soo_Shinsa.brand.Brand;
 import com.Soo_Shinsa.constant.ProductStatus;
 import com.Soo_Shinsa.product.model.Product;
 import lombok.Builder;
@@ -17,16 +16,16 @@ public class ProductUpdateDto {
     private String name;
     private BigDecimal price;
     private ProductStatus status;
-    private Brand brand;
+    private Long brandId;
     private String imageUrl;
 
     @Builder
-    public ProductUpdateDto(Long id, String name, BigDecimal price, ProductStatus status, Brand brand, String imageUrl) {
+    public ProductUpdateDto(Long id, String name, BigDecimal price, ProductStatus status, Long brandId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.status = status;
-        this.brand = brand;
+        this.brandId = brandId;
         this.imageUrl = imageUrl;
     }
 
@@ -36,7 +35,7 @@ public class ProductUpdateDto {
                 .name(product.getName())
                 .price(product.getPrice())
                 .status(product.getProductStatus())
-                .brand(product.getBrand())
+                .brandId(product.getBrand().getId())
                 .imageUrl(product.getImageUrl())
                 .build();
     }
