@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.repository;
 
 import com.Soo_Shinsa.exception.NotFoundException;
 import com.Soo_Shinsa.user.model.User;

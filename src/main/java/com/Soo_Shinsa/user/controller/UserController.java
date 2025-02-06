@@ -1,7 +1,8 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.controller;
 
 import com.Soo_Shinsa.auth.UserDetailsImp;
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
+import com.Soo_Shinsa.user.service.UserService;
 import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.utils.CommonResponse;
 import com.Soo_Shinsa.utils.ResponseMessage;

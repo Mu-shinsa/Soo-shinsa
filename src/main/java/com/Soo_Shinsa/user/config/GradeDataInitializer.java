@@ -1,7 +1,8 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.config;
 
 import com.Soo_Shinsa.constant.GradeType;
 import com.Soo_Shinsa.user.model.Grade;
+import com.Soo_Shinsa.user.repository.GradeRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

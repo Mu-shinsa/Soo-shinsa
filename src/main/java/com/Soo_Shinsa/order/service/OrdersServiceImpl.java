@@ -14,7 +14,7 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.repository.OrdersRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.repository.ProductRepository;
-import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
