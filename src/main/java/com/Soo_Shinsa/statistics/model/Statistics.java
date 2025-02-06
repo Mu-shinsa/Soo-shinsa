@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.statistics;
+package com.Soo_Shinsa.statistics.model;
 
 import com.Soo_Shinsa.statistics.dto.OrderHistoryForStatistic;
 import jakarta.persistence.*;
