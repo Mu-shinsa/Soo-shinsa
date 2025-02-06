@@ -1,13 +1,11 @@
 package com.Soo_Shinsa.brand.controller;
 
-import com.Soo_Shinsa.brand.dto.BrandRequestDto;
-import com.Soo_Shinsa.brand.dto.BrandResponseDto;
-import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.brand.dto.FindBrandAllResponseDto;
+import com.Soo_Shinsa.brand.dto.*;
 import com.Soo_Shinsa.brand.service.BrandService;
 import com.Soo_Shinsa.utils.CommonResponse;
 import com.Soo_Shinsa.utils.ResponseMessage;
 import com.Soo_Shinsa.utils.UserUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -28,7 +26,7 @@ public class BrandController {
     @PostMapping
     public ResponseEntity<CommonResponse<BrandResponseDto>> createBrand(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody BrandRequestDto brandRequestDto
+            @Valid @RequestBody BrandRequestDto brandRequestDto
     ) {
         BrandResponseDto brandResponseDto = brandService.create(UserUtils.getUser(userDetails), brandRequestDto);
         CommonResponse<BrandResponseDto> response = new CommonResponse<>(ResponseMessage.BRAND_CREATE_SUCCESS, brandResponseDto);
@@ -38,7 +36,7 @@ public class BrandController {
     @PatchMapping("/{brandId}")
     public ResponseEntity<CommonResponse<BrandUpdateResponseDto>> updateBrand(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody BrandRequestDto brandRequestDto,
+            @Valid @RequestBody BrandUpdateRequestDto brandRequestDto,
             @PathVariable Long brandId
     ) {
         BrandUpdateResponseDto brandRefuseResponseDto = brandService.update(
