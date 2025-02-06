@@ -10,7 +10,7 @@ import com.Soo_Shinsa.coupon.model.Coupon;
 import com.Soo_Shinsa.coupon.model.CouponBrandRelation;
 import com.Soo_Shinsa.coupon.repository.CouponRepository;
 import com.Soo_Shinsa.coupon.repository.CouponUserRepository;
-import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

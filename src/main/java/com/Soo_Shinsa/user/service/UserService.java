@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.service;
 
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.user.dto.*;

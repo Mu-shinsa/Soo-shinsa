@@ -10,7 +10,7 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.model.Payment;
 import com.Soo_Shinsa.order.repository.OrdersRepository;
 import com.Soo_Shinsa.order.repository.PaymentRepository;
-import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

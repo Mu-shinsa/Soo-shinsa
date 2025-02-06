@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.service;
 
 import com.Soo_Shinsa.auth.dto.JwtAuthResponseDto;
 import com.Soo_Shinsa.constant.AuthenticationScheme;
@@ -12,6 +12,9 @@ import com.Soo_Shinsa.user.dto.*;
 import com.Soo_Shinsa.user.model.Grade;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.model.UserGrade;
+import com.Soo_Shinsa.user.repository.GradeRepository;
+import com.Soo_Shinsa.user.repository.UserGradeRepository;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.utils.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

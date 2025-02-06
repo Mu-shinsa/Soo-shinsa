@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.utils;
 
-import com.Soo_Shinsa.user.UserRepository;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

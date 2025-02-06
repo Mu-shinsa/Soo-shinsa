@@ -1,4 +1,4 @@
-package com.Soo_Shinsa.user;
+package com.Soo_Shinsa.user.repository;
 
 import com.Soo_Shinsa.constant.GradeType;
 import com.Soo_Shinsa.user.model.Grade;
