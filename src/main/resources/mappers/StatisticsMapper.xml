@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.Soo_Shinsa.statistics.StatisticsMybatisRepository">
+<mapper namespace="com.Soo_Shinsa.statistics.repository.StatisticsMybatisRepository">
 
     <select id="getBrandList" parameterType="com.Soo_Shinsa.statistics.dto.StatisticsRequestDto" resultType="string">
         select distinct brand_name

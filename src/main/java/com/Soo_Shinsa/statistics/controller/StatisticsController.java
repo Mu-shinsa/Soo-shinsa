@@ -1,5 +1,6 @@
-package com.Soo_Shinsa.statistics;
+package com.Soo_Shinsa.statistics.controller;
 
+import com.Soo_Shinsa.statistics.service.StatisticsService;
 import com.Soo_Shinsa.statistics.dto.StatisticsRequestDto;
 import com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto;
 import com.Soo_Shinsa.statistics.dto.StatisticsResponseDto;

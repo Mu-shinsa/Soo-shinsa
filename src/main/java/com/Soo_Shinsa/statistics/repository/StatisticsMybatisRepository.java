@@ -1,7 +1,6 @@
-package com.Soo_Shinsa.statistics;
+package com.Soo_Shinsa.statistics.repository;
 
 import com.Soo_Shinsa.statistics.dto.StatisticsRequestDto;
-import com.Soo_Shinsa.statistics.dto.StatisticsForSaleRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

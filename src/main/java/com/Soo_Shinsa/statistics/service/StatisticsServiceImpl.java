@@ -1,7 +1,8 @@
-package com.Soo_Shinsa.statistics;
+package com.Soo_Shinsa.statistics.service;
 
 import com.Soo_Shinsa.constant.StatisticsEnum;
 import com.Soo_Shinsa.statistics.dto.*;
+import com.Soo_Shinsa.statistics.repository.StatisticsMybatisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
