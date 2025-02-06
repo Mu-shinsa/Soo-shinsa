@@ -1,5 +1,6 @@
 package com.Soo_Shinsa.order.service;
 
+import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.constant.TossPayMethod;
 import com.Soo_Shinsa.constant.TossPayStatus;
 import com.Soo_Shinsa.order.dto.PayloadRequestDto;
@@ -94,6 +95,11 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Payment findPayment = paymentRepository.findByPaymentKey(paymentKey);
+
+        String orderId = findPayment.getOrderId();
+        Orders findOrder = ordersRepository.findByOrderId(orderId);
+        findOrder.updateStatus(OrdersStatus.RETURN);
+        ordersRepository.save(findOrder);
 
         findPayment.update(TossPayStatus.CANCELED, paymentKey);
         paymentRepository.save(findPayment);
