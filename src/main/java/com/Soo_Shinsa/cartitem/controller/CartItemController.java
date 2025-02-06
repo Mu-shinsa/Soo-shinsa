@@ -1,9 +1,8 @@
-package com.Soo_Shinsa.cartitem;
+package com.Soo_Shinsa.cartitem.controller;
 
 
-import com.Soo_Shinsa.cartitem.dto.CartItemDateRequestDto;
-import com.Soo_Shinsa.cartitem.dto.CartItemRequestDto;
-import com.Soo_Shinsa.cartitem.dto.CartItemResponseDto;
+import com.Soo_Shinsa.cartitem.dto.*;
+import com.Soo_Shinsa.cartitem.service.CartItemService;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.CommonResponse;
 import com.Soo_Shinsa.utils.ResponseMessage;
@@ -26,7 +25,7 @@ public class CartItemController {
 
     @PostMapping
     public ResponseEntity<CommonResponse<CartItemResponseDto>> createCart(@AuthenticationPrincipal UserDetails userDetails,
-                                                                         @Valid @RequestBody CartItemRequestDto dto) {
+                                                                          @Valid @RequestBody CartItemRequestDto dto) {
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto saved = cartItemService.create(user, dto);
         CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_CREATE_SUCCESS, saved);
@@ -36,7 +35,7 @@ public class CartItemController {
 
     @GetMapping("/{cartId}")
     public ResponseEntity<CommonResponse<CartItemResponseDto>> findById(@AuthenticationPrincipal UserDetails userDetails,
-                                                        @PathVariable Long cartId){
+                                                                        @PathVariable Long cartId) {
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto findCart = cartItemService.findById(cartId, user);
         CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_SELECT_SUCCESS, findCart);
@@ -47,9 +46,9 @@ public class CartItemController {
     //유저의 카트들을 모두 검색
     @GetMapping("/users")
     public ResponseEntity<CommonResponse<Page<CartItemResponseDto>>> findByIdAll(@AuthenticationPrincipal UserDetails userDetails,
-                                                                 @RequestBody CartItemDateRequestDto requestDto,
-                                                                 @RequestParam (defaultValue = "0") int page,
-                                                                 @RequestParam (defaultValue = "10") int size){
+                                                                                 @RequestBody CartItemDateRequestDto requestDto,
+                                                                                 @RequestParam(defaultValue = "0") int page,
+                                                                                 @RequestParam(defaultValue = "10") int size) {
 
         User user = UserUtils.getUser(userDetails);
         Page<CartItemResponseDto> cartItems = cartItemService.findByAll(user, requestDto, page, size);
@@ -60,8 +59,8 @@ public class CartItemController {
 
     @PatchMapping("/{cartId}")
     public ResponseEntity<CommonResponse<CartItemResponseDto>> update(@AuthenticationPrincipal UserDetails userDetails,
-                                                      @PathVariable Long cartId,
-                                                      @Valid @RequestBody CartItemRequestDto dto){
+                                                                      @PathVariable Long cartId,
+                                                                      @Valid @RequestBody CartItemRequestDto dto) {
         User user = UserUtils.getUser(userDetails);
         CartItemResponseDto saved = cartItemService.update(cartId, user, dto.getQuantity());
         CommonResponse<CartItemResponseDto> response = new CommonResponse<>(ResponseMessage.CART_UPDATE_SUCCESS, saved);
@@ -70,9 +69,19 @@ public class CartItemController {
 
     @DeleteMapping("/{cartId}")
     public ResponseEntity<Void> delete(@AuthenticationPrincipal UserDetails userDetails,
-                                       @PathVariable Long cartId){
+                                       @PathVariable Long cartId) {
         User user = UserUtils.getUser(userDetails);
         cartItemService.delete(cartId, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("{cartId}/apply-coupon")
+    public ResponseEntity<CommonResponse<ApplyCouponCartResponseDto>> applyCoupon(@AuthenticationPrincipal UserDetails userDetails,
+                                                                                  @PathVariable Long cartId,
+                                                                                  @RequestBody ApplyCouponCartRequestDto requestDto) {
+        User user = UserUtils.getUser(userDetails);
+        ApplyCouponCartResponseDto saved = cartItemService.applyCoupon(cartId, requestDto, user);
+        CommonResponse<ApplyCouponCartResponseDto> response = new CommonResponse<>(ResponseMessage.COUPON_APPLIED, saved);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
