@@ -1,9 +1,6 @@
 package com.Soo_Shinsa.brand.service;
 
-import com.Soo_Shinsa.brand.dto.BrandRequestDto;
-import com.Soo_Shinsa.brand.dto.BrandResponseDto;
-import com.Soo_Shinsa.brand.dto.BrandUpdateResponseDto;
-import com.Soo_Shinsa.brand.dto.FindBrandAllResponseDto;
+import com.Soo_Shinsa.brand.dto.*;
 import com.Soo_Shinsa.brand.model.Brand;
 import com.Soo_Shinsa.brand.repository.BrandRepository;
 import com.Soo_Shinsa.constant.BrandStatus;
@@ -44,7 +41,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Transactional
     @Override
-    public BrandUpdateResponseDto update(User user, BrandRequestDto dto, Long brandId) {
+    public BrandUpdateResponseDto update(User user, BrandUpdateRequestDto dto, Long brandId) {
 
         EntityValidator.validateAdminOrVendorAccess(user);
         Brand findBrand = brandRepository.findByIdOrElseThrow(brandId);

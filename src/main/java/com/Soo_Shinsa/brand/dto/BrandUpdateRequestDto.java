@@ -15,4 +15,11 @@ public class BrandUpdateRequestDto {
     private String context;
 
     private BrandStatus status;
+
+    public BrandUpdateRequestDto(String registrationNum, String name, String context, BrandStatus status) {
+        this.registrationNum = registrationNum;
+        this.name = name;
+        this.context = context;
+        this.status = status;
+    }
 }
