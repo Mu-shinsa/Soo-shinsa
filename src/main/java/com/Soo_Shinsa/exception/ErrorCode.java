@@ -61,7 +61,8 @@ public enum ErrorCode {
     NEED_ID("Id 값이 필요합니다", HttpStatus.BAD_REQUEST),
     INVALID_CART_ITEM_PRICE("적합하지 않은 금액 입니다.", HttpStatus.BAD_REQUEST),
     COUPON_OUT_OF_STOCK("더이상 쿠폰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
-    NOT_FOUND_COUPON("쿠폰을 찾을 수 없습니다", HttpStatus.NOT_FOUND);
+    NOT_FOUND_COUPON("쿠폰을 찾을 수 없습니다", HttpStatus.NOT_FOUND),
+    ONLY_BEFORE_PAYMENT("결제 전 상태만 이용할 수 있습니다.", HttpStatus.BAD_REQUEST);
     private final String message;
     private final HttpStatus httpStatus;
 

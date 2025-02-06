@@ -12,5 +12,5 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrderCust
         return findById(orderId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_ORDER));
     }
-
+    Orders findByOrderId(String orderId);
 }

@@ -10,8 +10,8 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.model.Payment;
 import com.Soo_Shinsa.order.repository.OrdersRepository;
 import com.Soo_Shinsa.order.repository.PaymentRepository;
-import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +27,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
+
+import static com.Soo_Shinsa.constant.OrdersStatus.PAYMENTCOMPLETED;
 
 
 @Service
@@ -78,6 +80,10 @@ public class TossPaymentsServiceImpl implements TossPaymentsService {
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payload), headers);
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
+        Orders findOrder = ordersRepository.findByOrderId(orderId);
+        findOrder.updateStatus(PAYMENTCOMPLETED);
+        ordersRepository.save(findOrder);
+
     }
 
     @Transactional

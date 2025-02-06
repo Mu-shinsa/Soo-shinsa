@@ -14,8 +14,8 @@ import com.Soo_Shinsa.order.model.Orders;
 import com.Soo_Shinsa.order.repository.OrdersRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.repository.ProductRepository;
-import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -173,6 +173,7 @@ public class OrdersServiceImpl implements OrdersService {
     public OrdersResponseDto createOrder(User user) {
 
         Orders order = Orders.builder()
+                .totalPrice(BigDecimal.ZERO)
                 .user(user)
                 .status(OrdersStatus.BEFOREPAYMENT)
                 .build();

@@ -12,8 +12,8 @@ import com.Soo_Shinsa.order.repository.OrderItemRepository;
 import com.Soo_Shinsa.order.repository.OrdersRepository;
 import com.Soo_Shinsa.product.model.Product;
 import com.Soo_Shinsa.product.repository.ProductRepository;
-import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.Soo_Shinsa.constant.OrdersStatus.BEFOREPAYMENT;
+import static com.Soo_Shinsa.exception.ErrorCode.ONLY_BEFORE_PAYMENT;
 
 @Slf4j
 @Service
@@ -40,11 +43,16 @@ public class OrderItemServiceImpl implements OrderItemService {
         User findUser = userRepository.findByIdOrElseThrow(user.getUserId());
         Orders findOrder = ordersRepository.findByIdOrElseThrow(requestDto.getOrderId());
 
+        if(!findOrder.getStatus().equals(BEFOREPAYMENT)){
+            throw new InternalServerException(ONLY_BEFORE_PAYMENT);
+        }
+
         EntityValidator.validateAndOrders(findOrder, findUser.getUserId());
         Product product = productRepository.findByIdOrElseThrow(requestDto.getProductId());
         if (product.getProductStatus().equals(ProductStatus.SOLD_OUT) || product.getProductStatus().equals(ProductStatus.UNAVAILABLE)) {
             throw new InternalServerException(ErrorCode.CAN_NOT_USE_PRODUCT);
         }
+
 
         OrderItem orderItem = OrderItem.builder()
                 .order(findOrder)
@@ -53,6 +61,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                 .build();
 
         findOrder.addOrderItem(orderItem);
+
 
         OrderItem savedOrderItem = orderItemRepository.save(orderItem);
 
