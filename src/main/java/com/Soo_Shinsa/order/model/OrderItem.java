@@ -3,8 +3,11 @@ package com.Soo_Shinsa.order.model;
 import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.product.model.Product;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
@@ -26,10 +29,17 @@ public class OrderItem extends BaseTimeEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public OrderItem(Integer quantity, Orders order, Product product) {
+    private BigDecimal price;
+
+    private BigDecimal discountPrice;
+
+    @Builder
+    public OrderItem(Integer quantity, Orders order, Product product, BigDecimal price, BigDecimal discountPrice) {
         this.quantity = quantity;
         this.order = order;
         this.product = product;
+        this.price = price;
+        this.discountPrice = discountPrice;
     }
 
     public void updateOrderItem(Integer quantity) {

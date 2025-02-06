@@ -15,14 +15,14 @@ public class CartItemResponseDto {
 
     private Long cartItemId;
     private Integer quantity;
-    private String productName;
+    private Long productId;
     private BigDecimal productPrice;
     private List<ProductOptionResponseDto> productOptions;
 
-    public CartItemResponseDto(Long cartItemId, Integer quantity, String productName, BigDecimal productPrice, List<ProductOptionResponseDto> productOptions) {
+    public CartItemResponseDto(Long cartItemId, Integer quantity, Long productId, BigDecimal productPrice, List<ProductOptionResponseDto> productOptions) {
         this.cartItemId = cartItemId;
         this.quantity = quantity;
-        this.productName = productName;
+        this.productId = productId;
         this.productPrice = productPrice;
         this.productOptions = productOptions;
     }
@@ -35,7 +35,7 @@ public class CartItemResponseDto {
         return new CartItemResponseDto(
                 cartItem.getId(),
                 cartItem.getQuantity(),
-                cartItem.getProduct().getName(),
+                cartItem.getProduct().getId(),
                 cartItem.getProduct().getPrice(),
                 optionDtos
         );

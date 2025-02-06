@@ -5,10 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Getter
 @RequiredArgsConstructor
 public class FindCategoryResponseDto {
@@ -21,16 +17,15 @@ public class FindCategoryResponseDto {
 
     private String name;
 
-    private List<FindCategoryResponseDto> children = new ArrayList<>();
-
+    private Long totalCount;
 
     @Builder
-    public FindCategoryResponseDto(Long id, Long brandId, Long parent, String name, List<FindCategoryResponseDto> children) {
+    public FindCategoryResponseDto(Long id, Long brandId, Long parent, String name, Long totalCount) {
         this.id = id;
         this.brandId = brandId;
         this.parent = parent;
         this.name = name;
-        this.children = children;
+        this.totalCount = totalCount;
     }
 
     public static FindCategoryResponseDto of(Category category) {
@@ -39,7 +34,6 @@ public class FindCategoryResponseDto {
                 .brandId(category.getBrand().getId())
                 .name(category.getName())
                 .parent(category.getParent().getId())
-                .children(category.getChildren().stream().map(FindCategoryResponseDto::of).collect(Collectors.toList()))
                 .build();
     }
 }

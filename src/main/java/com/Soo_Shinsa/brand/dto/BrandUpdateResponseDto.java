@@ -1,8 +1,12 @@
 package com.Soo_Shinsa.brand.dto;
 
-import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.brand.model.Brand;
 import com.Soo_Shinsa.constant.BrandStatus;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
 public class BrandUpdateResponseDto {
 
     private Long id;

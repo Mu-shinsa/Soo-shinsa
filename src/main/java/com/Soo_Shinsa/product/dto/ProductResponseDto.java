@@ -12,24 +12,28 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ProductResponseDto {
 
+
     private Long id;
     private String name;
     private BigDecimal price;
+    private String imageUrl; // 추가된 필드
     private ProductStatus status;
     private Long brandId;
     private Long categoryId;
-    private String imageUrl;
+    private Long count; // 추가된 필드
 
     @Builder
-    public ProductResponseDto(Long id, String name, BigDecimal price, ProductStatus status, Long brandId, Long categoryId, String imageUrl) {
+    public ProductResponseDto(Long id, String name, BigDecimal price, String imageUrl, ProductStatus status, Long brandId, Long categoryId, Long count) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.imageUrl = imageUrl; // 추가된 필드 초기화
         this.status = status;
         this.brandId = brandId;
         this.categoryId = categoryId;
-        this.imageUrl = imageUrl;
+        this.count = count; // 추가된 필드 초기화
     }
+
 
     public static ProductResponseDto toDto(Product product) {
         return ProductResponseDto.builder()
@@ -39,7 +43,6 @@ public class ProductResponseDto {
                 .status(product.getProductStatus())
                 .brandId(product.getBrand().getId())
                 .categoryId(product.getCategory().getId())
-                .imageUrl(product.getImageUrl())
                 .build();
     }
 }
