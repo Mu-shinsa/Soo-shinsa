@@ -8,14 +8,23 @@
         select distinct brand_name
         from statistics
         where 1=1
-        and date_format(order_date,#{periodType.dateFormat}) between date_format(#{startDate},#{periodType.dateFormat}) and date_format(#{endDate},
-       #{periodType.dateFormat})
+        and date_format(order_date,#{periodType.dateFormat}) between date_format(#{startDate},#{periodType.dateFormat})
+        and date_format(#{endDate},
+        #{periodType.dateFormat})
 
-        <if test="categoryList != null">
-            and category_name in #{categoryList}
+        <if test="categoryList != null and categoryList.size!=0">
+            and category_name in
+            <foreach collection='categoryList' item='category' open='(' separator=',' close=')'>
+                #{category}
+            </foreach>
         </if>
-        <if test="brandList != null">
-            and brand_name in #{brandList}
+
+
+        <if test="brandList != null and brandList.size()!=0">
+            and brand_name in
+            <foreach collection='brandList' item='brand' open='(' separator=',' close=')'>
+                #{brand}
+            </foreach>
         </if>
         <if test="orderStatus != null">
             and order_status = #{orderStatus}
@@ -23,18 +32,26 @@
 
         order by 1;
     </select>
-    <select id="getDateList"  parameterType="com.Soo_Shinsa.statistics.dto.StatisticsRequestDto" resultType="string">
+    <select id="getDateList" parameterType="com.Soo_Shinsa.statistics.dto.StatisticsRequestDto" resultType="string">
         select distinct date_format(order_date,#{periodType.dateFormat})
         from statistics
         where 1=1
-        and date_format(order_date,#{periodType.dateFormat}) between date_format(#{startDate},#{periodType.dateFormat}) and date_format(#{endDate},
-       #{periodType.dateFormat})
+        and date_format(order_date,#{periodType.dateFormat}) between date_format(#{startDate},#{periodType.dateFormat})
+        and date_format(#{endDate},
+        #{periodType.dateFormat})
 
-        <if test="categoryList != null">
-            and category_name in #{categoryList}
+        <if test="categoryList != null and categoryList.size!=0">
+            and category_name in
+            <foreach collection='categoryList' item='category' open='(' separator=',' close=')'>
+                #{category}
+            </foreach>
+
         </if>
-        <if test="brandList != null">
-            and brand_name in #{brandList}
+        <if test="brandList != null and brandList.size!=0">
+            and brand_name in
+            <foreach collection='brandList' item='brand' open='(' separator=',' close=')'>
+                #{brand}
+            </foreach>
         </if>
         <if test="orderStatus != null">
             and order_status = #{orderStatus}
@@ -56,9 +73,11 @@
         from statistics) d
         on date_format(t.order_date, #{dto.periodType.dateFormat}) = d.order_date
 
-
-        <if test="dto.categoryList != null">
-            and category_name in #{dto.categoryList}
+        <if test="dto.categoryList != null and dto.categoryList.size!=0">
+            and category_name in
+            <foreach collection='categoryList' item='category' open='(' separator=',' close=')'>
+                #{category}
+            </foreach>
         </if>
         <if test="dto.orderStatus != null">
             and order_status = #{dto.orderStatus}
@@ -82,10 +101,14 @@
         from statistics) d
         on date_format(t.order_date, #{dto.periodType.dateFormat}) = d.order_date
 
-
-        <if test="dto.categoryList != null">
-            and category_name in #{dto.categoryList}
+        <if test="dto.categoryList != null and dto.categoryList.size!=0">
+            and category_name in
+            <foreach collection='categoryList' item='category' open='(' separator=',' close=')'>
+                #{category}
+            </foreach>
         </if>
+
+
         <if test="dto.orderStatus != null">
             and order_status = #{dto.orderStatus}
         </if>
