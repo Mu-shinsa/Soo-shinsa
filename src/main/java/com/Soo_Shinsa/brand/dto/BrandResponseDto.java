@@ -1,6 +1,6 @@
 package com.Soo_Shinsa.brand.dto;
 
-import com.Soo_Shinsa.brand.Brand;
+import com.Soo_Shinsa.brand.model.Brand;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -53,4 +53,8 @@ public class ResponseMessage {
     public static final String REPORT_SELECT_SUCCESS = "신고 조회에 성공했습니다.";
     public static final String REPORT_UPDATE_SUCCESS = "신고 수정에 성공했습니다.";
     public static final String REPORT_DELETE_SUCCESS = "신고 삭제에 성공했습니다.";
+
+    //coupon
+    public static final String COUPON_APPLIED = "쿠폰이 적용되었습니다.";
+    public static final String COUPON_CREATE_SUCCESS = "쿠폰 생성에 성공했습니다.";
 }

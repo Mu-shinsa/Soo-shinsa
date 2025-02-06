@@ -16,15 +16,18 @@ public class OrderItemResponseDto {
     private String productName;
     private Integer quantity;
     private BigDecimal price;
+    private BigDecimal discountPrice;
 
     @Builder
-    public OrderItemResponseDto(Long orderItemId, Long productId, String productName, Integer quantity, BigDecimal price) {
+    public OrderItemResponseDto(Long orderItemId, Long productId, String productName, Integer quantity, BigDecimal price, BigDecimal discountPrice) {
         this.orderItemId = orderItemId;
         this.productId = productId;
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;
+        this.discountPrice = discountPrice;
     }
+
 
     public static OrderItemResponseDto toDto(OrderItem orderItem) {
         return OrderItemResponseDto.builder()
@@ -33,6 +36,7 @@ public class OrderItemResponseDto {
                 .productName(orderItem.getProduct().getName())
                 .quantity(orderItem.getQuantity())
                 .price(orderItem.getProduct().getPrice())
+                .discountPrice(orderItem.getPrice())
                 .build();
     }
 }

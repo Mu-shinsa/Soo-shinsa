@@ -52,7 +52,16 @@ public enum ErrorCode {
     FAIL_UPLOAD_FILE("이미지 업로드 중 오류가 발생했습니다.",HttpStatus.BAD_REQUEST),
     CAN_NOT_USE_PRODUCT("해당 상품을 사용할 수 없습니다.",HttpStatus.BAD_REQUEST),
     NOT_ACTIVE_USER("활동이 정지된 회원 입니다", HttpStatus.BAD_REQUEST),
-    ONLY_BEFORE_PAYMENT("결제 전 상태만 이용할 수 있습니다.", HttpStatus.BAD_REQUEST);
+    DUPLICATED_COUPON("이미 쿠폰을 발급 받으셨습니다", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_COUPON_COUNT("발급 가능한 쿠폰이 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_APPROPRIATE_COUPON("해당 쿠폰은 여기에 사용할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_USED_COUPON("이미 사용된 쿠폰 입니다.", HttpStatus.BAD_REQUEST),
+    EXPIRED_COUPON("기간이 만료된 쿠폰입니다.", HttpStatus.BAD_REQUEST),
+    NOT_APPROPRIATE_PERCENTAGE("할인율은 0%에서 100% 사이여야 합니다.", HttpStatus.BAD_REQUEST),
+    NEED_ID("Id 값이 필요합니다", HttpStatus.BAD_REQUEST),
+    INVALID_CART_ITEM_PRICE("적합하지 않은 금액 입니다.", HttpStatus.BAD_REQUEST),
+    COUPON_OUT_OF_STOCK("더이상 쿠폰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_COUPON("쿠폰을 찾을 수 없습니다", HttpStatus.NOT_FOUND);
     private final String message;
     private final HttpStatus httpStatus;
 

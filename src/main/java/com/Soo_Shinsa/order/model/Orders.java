@@ -5,6 +5,7 @@ import com.Soo_Shinsa.constant.BaseTimeEntity;
 import com.Soo_Shinsa.constant.OrdersStatus;
 import com.Soo_Shinsa.user.model.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -39,24 +40,35 @@ public class Orders extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    private BigDecimal discountPrice;
 
+    @Builder
+    public Orders(String orderId, BigDecimal totalPrice, OrdersStatus status, User user, List<OrderItem> orderItems, BigDecimal discountPrice) {
+        this.orderId = createOrderNumber();
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.user = user;
+        this.orderItems = new ArrayList<>(); // Null 체크 후 초기화
+        this.discountPrice = discountPrice;
+    }
 
-
+    @Builder
     public Orders(BigDecimal totalPrice, OrdersStatus status, User user) {
         this.orderId = createOrderNumber();
         this.totalPrice = totalPrice;
         this.status = status;
         this.user = user;
-        this.orderItems = new ArrayList<>(); // 명시적으로 초기화
+        this.orderItems = new ArrayList<>(); // 명시적 초기화
     }
 
-
-
+    @Builder
     public Orders(OrdersStatus status, User user) {
         this.orderId = createOrderNumber();
         this.status = status;
         this.user = user;
+        this.orderItems = new ArrayList<>(); // 명시적 초기화
     }
+
 
     // 연관관계 오더 아이템 추가
     public void addOrderItem(OrderItem orderItem) {
@@ -64,6 +76,7 @@ public class Orders extends BaseTimeEntity {
         calculateTotalPrice();
         // 생성자에서 이미 order 설정 완료, 별도의 set 호출 필요 없음
     }
+
     //연관관계 오더 아이템 제거
     public void removeOrderItem(OrderItem orderItem) {
         this.orderItems.remove(orderItem);
@@ -71,14 +84,20 @@ public class Orders extends BaseTimeEntity {
         // 삭제 시에도 연관 관계를 직접 null로 설정하지 않아도 됨
 
     }
-    //총 결제 금액 계산
+
+    // 총 결제 금액 계산
     public void calculateTotalPrice() {
         this.totalPrice = orderItems.stream()
-                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .map(item -> {
+                    BigDecimal effectivePrice = (item.getDiscountPrice() != null && item.getDiscountPrice().compareTo(BigDecimal.ZERO) > 0)
+                            ? item.getDiscountPrice()
+                            : item.getProduct().getPrice();
+                    return effectivePrice.multiply(BigDecimal.valueOf(item.getQuantity()));
+                })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private String createOrderNumber(){
+    private String createOrderNumber() {
         return orderId = "ORD-" + UUID.randomUUID();
     }
 
