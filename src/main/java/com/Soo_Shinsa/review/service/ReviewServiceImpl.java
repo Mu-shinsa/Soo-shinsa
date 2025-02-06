@@ -119,11 +119,18 @@ public class ReviewServiceImpl implements ReviewService {
      */
     @Override
     public Page<ReviewResponseDto> getReviewsByProductId(Long productId, ReviewRateDto reviewRateDto, int page, int size) {
-
-        // 제품 존재 여부 확인 (예외 처리 포함)
+        // 제품 존재 여부 확인
         Product product = productRepository.findByIdOrElseThrow(productId);
+
         Pageable pageable = PageRequest.of(page, size);
-        return reviewRepository.getReviewsAllByProductId(product.getId(), reviewRateDto, pageable);
+
+        // JPQL 쿼리 호출
+        return reviewRepository.getReviewsAllByProductId(
+                product.getId(),
+                reviewRateDto != null ? reviewRateDto.getMinRate() : null,
+                reviewRateDto != null ? reviewRateDto.getMaxRate() : null,
+                pageable
+        );
     }
 
 
