@@ -49,9 +49,19 @@ jobs:
             pkill -f 'java -jar' || true  # 기존 애플리케이션 종료
             
             # RDS 환경 변수 설정
-            export SPRING_DATASOURCE_URL="jdbc:mysql://${{ secrets.RDS_HOST }}:${{ secrets.RDS_PORT }}/${{ secrets.RDS_DATABASE }}?serverTimezone=Asia/Seoul"
-            export SPRING_DATASOURCE_USERNAME="${{ secrets.RDS_USERNAME }}"
-            export SPRING_DATASOURCE_PASSWORD="${{ secrets.RDS_PASSWORD }}"
+            export SPRING_DATASOURCE_URL="${{ secrets.SPRING_DATASOURCE_URL }}"
+            export SPRING_DATASOURCE_USERNAME="${{ secrets.SPRING_DATASOURCE_USERNAME }}"
+            export SPRING_DATASOURCE_PASSWORD="${{ secrets.SPRING_DATASOURCE_PASSWORD }}"
+            export REDIS_HOST="${{ secrets.REDIS_HOST }}"
+            export REDIS_PORT="${{ secrets.REDIS_PORT }}"
+            export AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}"
+            export AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}"
+            export AWS_S3_REGION="${{ secrets.AWS_S3_REGION }}"
+            export AWS_S3_BUCKET="${{ secrets.AWS_S3_BUCKET }}"
+            export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            export JWT_EXPIRY="${{ secrets.JWT_EXPIRY }}"
+            export TOSS_SECRET_KEY="${{ secrets.TOSS_SECRET_KEY }}"
+            export TOSS_CLIENT_KEY="${{ secrets.TOSS_CLIENT_KEY }}"
             
             # JAR 실행
             nohup java -jar $(ls -t *.jar | head -n 1) > app.log 2>&1 &
