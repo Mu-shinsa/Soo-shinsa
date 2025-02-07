@@ -13,6 +13,7 @@ import com.Soo_Shinsa.product.repository.ProductRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -75,6 +76,7 @@ public class ProductOptionServiceImpl implements ProductOptionService {
         return ProductOptionResponseDto.toDto(findOption);
     }
 
+    @Cacheable(cacheNames = "findProductOptions", key = "'product:options:size:' + #requestDto.size + ':color:' + #requestDto.color + ':page:' + #page + ':size:' + #size")
     @Override
     public Page<ProductOptionResponseDto> findProductsByOptionalSizeAndColor(FindProductOptionRequestDto requestDto, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

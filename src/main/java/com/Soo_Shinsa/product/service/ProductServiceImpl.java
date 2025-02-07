@@ -14,10 +14,11 @@ import com.Soo_Shinsa.product.model.ProductOption;
 import com.Soo_Shinsa.product.repository.ProductOptionRepository;
 import com.Soo_Shinsa.product.repository.ProductRepository;
 import com.Soo_Shinsa.review.repository.ReviewRepository;
-import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.user.model.User;
+import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -91,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
         return ProductUpdateDto.toDto(product);
     }
 
+    @Cacheable(cacheNames = "findProduct", key = "'product:' + #productId")
     @Override
     public FindProductResponseDto findProduct(Long productId) {
 
@@ -101,6 +103,7 @@ public class ProductServiceImpl implements ProductService {
         return FindProductResponseDto.toDto(product, productOptions);
     }
 
+    @Cacheable(cacheNames = "findAllProduct", key = "'product:brand:' + #brandId + ':page:' + #page + ':size:' + #size")
     @Override
     public Page<ProductResponseDto> findAllProduct(Long brandId, FindProductRequestDto requestDto, int page, int size) {
          Pageable pageable = PageRequest.of(page, size);
