@@ -46,7 +46,7 @@ public enum ErrorCode {
     FAIl_IMAGE_DELETE("로컬 파일 삭제에 실패했습니다.", HttpStatus.BAD_REQUEST),
     MAX_10MB_SIZE("파일 크기가 10MB를 초과할 수 없습니다.", HttpStatus.BAD_REQUEST),
     NO_EXTENSION("확장자가 없는 파일은 업로드할 수 없습니다.", HttpStatus.BAD_REQUEST),
-    NO_AUTHORITY("관리자 또는 판매자만 접근 가능합니다.", HttpStatus.UNAUTHORIZED),
+    NO_AUTHORITY("권헌이 없습니다.", HttpStatus.UNAUTHORIZED),
     NO_CONNECT("수정 또는 삭제할 권한이 없습니다.", HttpStatus.UNAUTHORIZED),
     SELECT_COLOR_OR_SIZE("색상과 사이즈 중 하나는 필수입니다.",HttpStatus.BAD_REQUEST),
     FAIL_UPLOAD_FILE("이미지 업로드 중 오류가 발생했습니다.",HttpStatus.BAD_REQUEST),
