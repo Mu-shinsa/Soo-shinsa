@@ -16,12 +16,16 @@ import com.Soo_Shinsa.review.repository.ReviewRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -32,6 +36,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final OrderItemRepository orderItemRepository;
     private final ImageService imageService;
     private final ProductRepository productRepository;
+    private final RedissonClient redissonClient;
 
     /**
      * 리뷰 생성
@@ -43,28 +48,45 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     @Override
     public ReviewResponseDto createReview(Long orderItemId, ReviewRequestDto requestDto, User user, MultipartFile imageFile) {
-        OrderItem orderItem = orderItemRepository.findByIdOrElseThrow(orderItemId);
 
-        EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId());
+        String lockKey = "lock:review:" + requestDto;
+        RLock lock = redissonClient.getLock(lockKey);
 
-        String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, TargetType.REVIEW, orderItemId);
-            imageUrl = uploaded.getPath();
+        try {
+            if (!lock.tryLock(10, 30, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("현재 리뷰생성 요청이 많아 잠시 후 다시 시도해주세요.");
+            }
+
+            OrderItem orderItem = orderItemRepository.findByIdOrElseThrow(orderItemId);
+
+            EntityValidator.validateUserOwnership(user.getUserId(), orderItem.getOrder().getUser().getUserId());
+
+            String imageUrl = null;
+            if (imageFile != null && !imageFile.isEmpty()) {
+                Image uploaded = imageService.uploadImage(imageFile, TargetType.REVIEW, orderItemId);
+                imageUrl = uploaded.getPath();
+            }
+
+            Review review = Review.builder()
+                    .rate(requestDto.getRate())
+                    .content(requestDto.getContent())
+                    .product(orderItem.getProduct())
+                    .user(user)
+                    .orderItem(orderItem)
+                    .imageUrl(imageUrl)
+                    .build();
+
+            Review saveReview = reviewRepository.save(review);
+
+            return ReviewResponseDto.toDto(saveReview);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("리뷰 생성 중 오류가 발생했습니다.", e);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
-
-        Review review = Review.builder()
-                .rate(requestDto.getRate())
-                .content(requestDto.getContent())
-                .product(orderItem.getProduct())
-                .user(user)
-                .orderItem(orderItem)
-                .imageUrl(imageUrl)
-                .build();
-
-        Review saveReview = reviewRepository.save(review);
-
-        return ReviewResponseDto.toDto(saveReview);
     }
 
     /**
@@ -111,10 +133,10 @@ public class ReviewServiceImpl implements ReviewService {
      * 상품 리뷰 조회 (별점 순)
      *
      * @param productId
-     * @param productId 상품 ID
+     * @param productId     상품 ID
      * @param reviewRateDto 리뷰 별점 필터링 DTO
-     * @param page      페이지 번호
-     * @param size      페이지 크기
+     * @param page          페이지 번호
+     * @param size          페이지 크기
      * @return reviews.map(ReviewResponseDto : : toDto);
      */
     @Override
