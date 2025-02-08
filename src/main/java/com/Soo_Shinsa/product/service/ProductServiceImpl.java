@@ -45,8 +45,7 @@ public class ProductServiceImpl implements ProductService {
     private final RedissonClient redissonClient;
 
     @Transactional
-    @Override
-    public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
+    public ProductResponseDto productLock(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
         String lockKey = "lock:product:" + dto.getName();
         RLock lock = redissonClient.getLock(lockKey);
@@ -55,30 +54,9 @@ public class ProductServiceImpl implements ProductService {
             if (!lock.tryLock(10, 30, TimeUnit.SECONDS)) {
                 throw new IllegalStateException("현재 상품 생성 요청이 많아 잠시 후 다시 시도해주세요.");
             }
-            User userById = userRepository.findByIdOrElseThrow(user.getUserId());
-            Brand brand = brandRepository.findByIdOrElseThrow(brandId);
-            Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
 
-            EntityValidator.validateAdminOrVendorAccess(userById);
+            return createProduct(user, dto, brandId, imageFile);
 
-            String imageUrl = null;
-            if (imageFile != null && !imageFile.isEmpty()) {
-                Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
-                imageUrl = uploaded.getPath();
-            }
-
-            Product product = Product.builder()
-                    .price(dto.getPrice())
-                    .name(dto.getName())
-                    .productStatus(dto.getStatus())
-                    .brand(brand)
-                    .category(category)
-                    .imageUrl(imageUrl)
-                    .build();
-
-            Product savedProduct = productRepository.save(product);
-
-            return ProductResponseDto.toDto(savedProduct);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException("상품 생성 중 오류가 발생했습니다.", e);
@@ -88,6 +66,36 @@ public class ProductServiceImpl implements ProductService {
             }
         }
     }
+
+    @Transactional
+    @Override
+    public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
+        User userById = userRepository.findByIdOrElseThrow(user.getUserId());
+        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
+        Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
+
+        EntityValidator.validateAdminOrVendorAccess(userById);
+
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
+            imageUrl = uploaded.getPath();
+        }
+
+        Product product = Product.builder()
+                .price(dto.getPrice())
+                .name(dto.getName())
+                .productStatus(dto.getStatus())
+                .brand(brand)
+                .category(category)
+                .imageUrl(imageUrl)
+                .build();
+
+        Product savedProduct = productRepository.save(product);
+
+        return ProductResponseDto.toDto(savedProduct);
+    }
+
 
 
     @Transactional
