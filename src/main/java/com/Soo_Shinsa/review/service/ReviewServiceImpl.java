@@ -16,7 +16,6 @@ import com.Soo_Shinsa.review.repository.ReviewRepository;
 import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.concurrent.TimeUnit;
+
 
 
 @Service
@@ -49,13 +48,6 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponseDto createReview(Long orderItemId, ReviewRequestDto requestDto, User user, MultipartFile imageFile) {
 
-        String lockKey = "lock:review:" + requestDto;
-        RLock lock = redissonClient.getLock(lockKey);
-
-        try {
-            if (!lock.tryLock(10, 30, TimeUnit.SECONDS)) {
-                throw new IllegalStateException("현재 리뷰생성 요청이 많아 잠시 후 다시 시도해주세요.");
-            }
 
             OrderItem orderItem = orderItemRepository.findByIdOrElseThrow(orderItemId);
 
@@ -79,15 +71,8 @@ public class ReviewServiceImpl implements ReviewService {
             Review saveReview = reviewRepository.save(review);
 
             return ReviewResponseDto.toDto(saveReview);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException("리뷰 생성 중 오류가 발생했습니다.", e);
-        } finally {
-            if (lock.isHeldByCurrentThread()) {
-                lock.unlock();
-            }
         }
-    }
+
 
     /**
      * 리뷰 조회
