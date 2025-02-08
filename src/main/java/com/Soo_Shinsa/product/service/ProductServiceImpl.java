@@ -18,6 +18,8 @@ import com.Soo_Shinsa.user.model.User;
 import com.Soo_Shinsa.user.repository.UserRepository;
 import com.Soo_Shinsa.utils.EntityValidator;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -39,36 +42,53 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ReviewRepository reviewRepository;
     private final OrderItemRepository orderItemRepository;
+    private final RedissonClient redissonClient;
 
     @Transactional
     @Override
     public ProductResponseDto createProduct(User user, ProductRequestDto dto, Long brandId, MultipartFile imageFile) {
 
-        User userById = userRepository.findByIdOrElseThrow(user.getUserId());
-        Brand brand = brandRepository.findByIdOrElseThrow(brandId);
-        Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
+        String lockKey = "lock:product:" + dto.getName();
+        RLock lock = redissonClient.getLock(lockKey);
 
-        EntityValidator.validateAdminOrVendorAccess(userById);
+        try {
+            if (!lock.tryLock(10, 30, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("현재 상품 생성 요청이 많아 잠시 후 다시 시도해주세요.");
+            }
+            User userById = userRepository.findByIdOrElseThrow(user.getUserId());
+            Brand brand = brandRepository.findByIdOrElseThrow(brandId);
+            Category category = categoryRepository.findByIdOrElseThrow(dto.getCategoryId());
 
-        String imageUrl = null;
-        if (imageFile != null && !imageFile.isEmpty()) {
-            Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
-            imageUrl = uploaded.getPath();
+            EntityValidator.validateAdminOrVendorAccess(userById);
+
+            String imageUrl = null;
+            if (imageFile != null && !imageFile.isEmpty()) {
+                Image uploaded = imageService.uploadImage(imageFile, TargetType.PRODUCT, null);
+                imageUrl = uploaded.getPath();
+            }
+
+            Product product = Product.builder()
+                    .price(dto.getPrice())
+                    .name(dto.getName())
+                    .productStatus(dto.getStatus())
+                    .brand(brand)
+                    .category(category)
+                    .imageUrl(imageUrl)
+                    .build();
+
+            Product savedProduct = productRepository.save(product);
+
+            return ProductResponseDto.toDto(savedProduct);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("상품 생성 중 오류가 발생했습니다.", e);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
+            }
         }
-
-        Product product = Product.builder()
-                .price(dto.getPrice())
-                .name(dto.getName())
-                .productStatus(dto.getStatus())
-                .brand(brand)
-                .category(category)
-                .imageUrl(imageUrl)
-                .build();
-
-        Product savedProduct = productRepository.save(product);
-
-        return ProductResponseDto.toDto(savedProduct);
     }
+
 
     @Transactional
     @Override
