@@ -314,7 +314,7 @@ Orders findOrder = ordersRepository.findByOrderId(orderId);
 findOrder.updateStatus(PAYMENTCOMPLETED);
 ordersRepository.save(findOrder);
 ```
-  - 주문시 쿠폰 적용후 할인 금액이 totalAmount에 들어가지 않는 상황
+   - 주문시 쿠폰 적용후 할인 금액이 totalAmount에 들어가지 않는 상황
     ```
         // 총 결제 금액 계산
     public void calculateTotalPrice() {
