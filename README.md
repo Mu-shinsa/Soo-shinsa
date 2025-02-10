@@ -315,6 +315,7 @@ findOrder.updateStatus(PAYMENTCOMPLETED);
 ordersRepository.save(findOrder);
 ```
    - 주문시 쿠폰 적용후 할인 금액이 totalAmount에 들어가지 않는 상황
+
     ```
         // 총 결제 금액 계산
     public void calculateTotalPrice() {
@@ -328,9 +329,10 @@ ordersRepository.save(findOrder);
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     ```
-    계산 로직에 DiscountPrice가 적용되지 않았었고, OrderItems에 discountPrice 필드가 적용되지 않았었다.
-    그래서 카트 아이템에서 쿠폰을 적용하더라도, 총 금액에 할인 율이 적용이 되지 않았음. 그래서 해당 코드를 위와 같이 변경 후
-    할인 금액이 적용 되었음. 
+
+  계산 로직에 DiscountPrice가 적용되지 않았었고, OrderItems에 discountPrice 필드가 적용되지 않았었다.
+  그래서 카트 아이템에서 쿠폰을 적용하더라도, 총 금액에 할인 율이 적용이 되지 않았음. 그래서 해당 코드를 위와 같이 변경 후
+  할인 금액이 적용 되었음. 
 
 ## 🫠 MVP2에서 해야 할 것들 
 1. Token 형성시 RefreshToken과 BlakcList에 대한 해당 기능 들이 없다. 로그아웃 시 해당 토큰을 삭제하는 것이 아닌 따로 관리 해줄 필요가 있다. 
